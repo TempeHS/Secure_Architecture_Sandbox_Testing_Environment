@@ -1,0 +1,278 @@
+# SAST Quick Reference Guide
+
+## 🚀 Quick Start Commands
+
+### Basic Analysis
+```bash
+# Simple analysis
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app
+
+# With educational explanations
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
+
+# Verbose output for debugging
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --verbose
+
+# JSON output for automation
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output json
+```
+
+### Application-Specific Commands
+```bash
+# Analyze Flask application
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
+
+# Analyze Progressive Web App
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
+```
+
+## 🎯 OWASP Top 10 Quick Reference
+
+| Rank | Vulnerability | Description | Detection Tools |
+|------|---------------|-------------|-----------------|
+| A01 | Broken Access Control | Missing authorization checks | Semgrep |
+| A02 | Cryptographic Failures | Weak encryption/hashing | Bandit |
+| A03 | Injection | SQL injection, XSS, etc. | Bandit, Semgrep |
+| A04 | Insecure Design | Architectural flaws | Manual Review |
+| A05 | Security Misconfiguration | Debug mode, default configs | Bandit |
+| A06 | Vulnerable Components | Outdated dependencies | Safety |
+| A07 | Authentication Failures | Weak login mechanisms | Bandit, Semgrep |
+| A08 | Software Integrity Failures | Insecure CI/CD | Manual Review |
+| A09 | Logging Failures | Missing security logging | Bandit |
+| A10 | Server-Side Request Forgery | SSRF vulnerabilities | Semgrep |
+
+## 🔍 Vulnerability Severity Guide
+
+### Critical (Fix Immediately)
+- **SQL Injection**: Can expose entire database
+- **Remote Code Execution**: Can compromise server
+- **Authentication Bypass**: Can access any account
+
+### High (Fix Soon)
+- **Cross-Site Scripting (XSS)**: Can steal user sessions
+- **Insecure Direct Object References**: Can access other users' data
+- **Broken Authentication**: Can compromise user accounts
+
+### Medium (Fix in Next Release)
+- **Security Misconfigurations**: Can expose sensitive information
+- **Cross-Site Request Forgery (CSRF)**: Can perform unwanted actions
+- **Insecure Cryptographic Storage**: Can expose sensitive data
+
+### Low (Fix When Convenient)
+- **Information Disclosure**: Can reveal system details
+- **Missing Security Headers**: Can enable attacks
+- **Insecure Randomness**: Can make tokens predictable
+
+## 🛠️ Tool-Specific Quick Reference
+
+### Bandit (Python Security)
+**What it finds:**
+- SQL injection patterns
+- Hardcoded passwords
+- Insecure random functions
+- Debug mode enabled
+- Insecure crypto usage
+
+**Common findings:**
+- `B608`: Hardcoded SQL expressions
+- `B201`: Flask debug mode
+- `B301`: Pickle usage (unsafe)
+- `B102`: exec() usage
+
+### Semgrep (Pattern Analysis)
+**What it finds:**
+- Complex security patterns
+- Framework-specific issues
+- Custom rule violations
+- Business logic flaws
+
+**Common patterns:**
+- User input in SQL queries
+- Template injection
+- Insecure redirects
+- Missing validation
+
+### Safety (Python Dependencies)
+**What it finds:**
+- Known CVEs in packages
+- Vulnerable package versions
+- Outdated dependencies
+
+**Output format:**
+- Package name and version
+- CVE identifier
+- Vulnerability description
+- Recommended fixes
+
+## 📊 Reading Analysis Reports
+
+### Report Structure:
+```
+🛡️ SECURITY ANALYSIS REPORT
+============================================================
+📂 Target: [application path]
+⏰ Analysis Time: [timestamp]
+📁 Files Analyzed: [count]
+🔧 Tools Used: [tool list]
+
+📊 FINDINGS SUMMARY:
+   Total: [count]
+   Critical: [count]
+   High: [count]
+   Medium: [count]
+   Low: [count]
+```
+
+### Finding Details:
+```
+🚨 [SEVERITY] ([count] findings)
+
+  [TOOL] [rule_id]
+    📁 File: [file path]
+    📍 Line: [line number]
+    🎓 Educational Note: [explanation]
+    🔧 Remediation: [fix guidance]
+```
+
+## 🎯 Analysis Workflow
+
+### Step 1: Initial Scan
+1. Run basic analysis on target application
+2. Review findings summary for overview
+3. Identify highest priority issues
+
+### Step 2: Deep Dive
+1. Focus on Critical and High severity findings
+2. Examine actual code at reported locations
+3. Understand the vulnerability mechanics
+
+### Step 3: Verification
+1. Validate findings (check for false positives)
+2. Understand exploitability and impact
+3. Research additional context if needed
+
+### Step 4: Remediation Planning
+1. Prioritize fixes based on risk
+2. Group related issues together
+3. Plan implementation approach
+
+### Step 5: Fix Implementation
+1. Apply remediation techniques
+2. Re-run analysis to verify fixes
+3. Document changes made
+
+## 🚨 Common Vulnerability Patterns
+
+### SQL Injection
+```python
+# Vulnerable
+query = f"SELECT * FROM users WHERE id = {user_id}"
+
+# Secure
+query = "SELECT * FROM users WHERE id = ?"
+cursor.execute(query, (user_id,))
+```
+
+### Cross-Site Scripting (XSS)
+```python
+# Vulnerable
+return f"<p>Hello {user_input}</p>"
+
+# Secure
+from markupsafe import escape
+return f"<p>Hello {escape(user_input)}</p>"
+```
+
+### Hardcoded Secrets
+```python
+# Vulnerable
+API_KEY = "sk-1234567890abcdef"
+
+# Secure
+API_KEY = os.environ.get('API_KEY')
+```
+
+### Debug Mode in Production
+```python
+# Vulnerable
+app.run(debug=True)
+
+# Secure
+app.run(debug=False)
+```
+
+## 📋 Exercise Checklist
+
+### Before Starting:
+- [ ] Environment is set up and working
+- [ ] Can run basic analysis commands
+- [ ] Understand report structure
+- [ ] Have worksheets ready
+
+### During Analysis:
+- [ ] Record findings systematically
+- [ ] Understand vulnerability types
+- [ ] Validate high-priority issues
+- [ ] Document questions for discussion
+
+### After Analysis:
+- [ ] Complete remediation planning
+- [ ] Verify fixes work
+- [ ] Update documentation
+- [ ] Reflect on learning
+
+## 🆘 Troubleshooting
+
+### Command Not Found
+```bash
+# Check if you're in the right directory
+pwd
+# Should show: /workspaces/Docker_Sandbox_Demo
+
+# Check if Python can find the module
+python -c "import src.analyzer.analyze_cli"
+```
+
+### No Findings Reported
+- Check if target path is correct
+- Verify files exist in target directory
+- Run with `--verbose` to see detailed output
+- Check if security tools are installed
+
+### Tool Errors
+```bash
+# Check tool availability
+python -c "from src.analyzer.static_analyzer import SecurityToolRunner; print(SecurityToolRunner().check_available_tools())"
+
+# Install missing tools if needed
+pip install bandit safety semgrep
+```
+
+### Permission Errors
+```bash
+# Make sure CLI script is executable
+chmod +x src/analyzer/analyze_cli.py
+
+# Check file permissions
+ls -la src/analyzer/
+```
+
+## 🎓 Key Learning Points
+
+### Remember:
+1. **SAST is one tool** in a comprehensive security strategy
+2. **False positives happen** - always validate findings
+3. **Context matters** - understand the business impact
+4. **Fix systematically** - prioritize by risk, not by count
+5. **Security is ongoing** - not a one-time activity
+
+### Success Metrics:
+- Can explain what SAST is and when to use it
+- Can run analysis tools independently
+- Can interpret and prioritize security findings
+- Can apply basic remediation techniques
+- Can communicate security issues effectively
+
+---
+
+**💡 Pro Tip**: Keep this reference handy during the exercises. The best way to learn cybersecurity is by doing!

@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # Main sandbox container for cybersecurity analysis
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cybersec_sandbox
+    hostname: sandbox
+    networks:
+      - sandbox_network
+    volumes:
+      # Mount workspace for development
+      - ../:/workspace:cached
+      # Persistent volumes for data
+      - sandbox_reports:/workspace/reports
+      - sandbox_logs:/workspace/logs
+    ports:
+      - "8080:8080"   # Main web server
+      - "8000:8000"   # Development server
+      - "3000:3000"   # Node.js apps
+      - "5000:5000"   # Flask apps
+    environment:
+      - PYTHONPATH=/workspace/src
+      - SANDBOX_MODE=educational
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    # Security settings appropriate for educational use
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW      # For nmap and network tools
+      - NET_ADMIN    # For network analysis
+    # Resource limits for Codespaces
+    mem_limit: 1g
+    cpus: 0.8
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Simple vulnerable web application for testing
+  vulnerable-web:
+    image: nginx:alpine
+    container_name: vulnerable_web_app
+    hostname: vulnerable-web
+    networks:
+      - sandbox_network
+    volumes:
+      - /workspaces/Docker_Sandbox_Demo/samples/web-app:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9090:80"
+    environment:
+      - NGINX_HOST=vulnerable-web
+      - NGINX_PORT=80
+    restart: unless-stopped
+    depends_on:
+      - sandbox
+
+networks:
+  sandbox_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+    # Enable isolation for educational security testing
+    internal: false
+
+volumes:
+  sandbox_reports:
+    driver: local
+  sandbox_logs:
+    driver: local
