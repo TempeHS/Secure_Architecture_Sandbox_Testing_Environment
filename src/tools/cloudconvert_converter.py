@@ -18,17 +18,17 @@ Setup:
 4. Install dependencies: pip install cloudconvert
 
 Usage:
-    python src/cloudconvert_converter.py [options]
+    python src/tools/cloudconvert_converter.py [options]
 
 Examples:
     # Convert single file
-    python src/cloudconvert_converter.py --file sast-student-worksheet.md
+    python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md
     
     # Convert all worksheets
-    python src/cloudconvert_converter.py --all
+    python src/tools/cloudconvert_converter.py --all
     
     # Convert with custom output directory
-    python src/cloudconvert_converter.py --all --output-dir ./converted_docs
+    python src/tools/cloudconvert_converter.py --all --output-dir ./converted_docs
 """
 
 import os
@@ -379,7 +379,7 @@ Setup:
 
     # Change to project root directory
     script_dir = Path(__file__).parent
-    project_root = script_dir.parent
+    project_root = script_dir.parent.parent
     os.chdir(project_root)
 
     # Initialize converter

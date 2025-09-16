@@ -56,10 +56,10 @@ requests>=2.31.0       # HTTP requests (✅ Installed)
 pip install python-docx>=1.2.0 markdown>=3.4.0
 
 # Convert all worksheets (✅ Tested - 5 worksheets found)
-python src/worksheet_converter.py --all
+python src/tools/worksheet_converter.py --all
 
 # Convert single worksheet
-python src/worksheet_converter.py --file sast-student-worksheet.md
+python src/tools/worksheet_converter.py --file sast-student-worksheet.md
 ```
 
 ### CloudConvert Converter (Recommended for Production)
@@ -71,13 +71,13 @@ pip install cloudconvert>=2.1.0 requests
 export CLOUDCONVERT_API_KEY="your_api_key_here"
 
 # Check account info (✅ Working)
-python src/cloudconvert_converter.py --account-info
+python src/tools/cloudconvert_converter.py --account-info
 
 # Convert all worksheets (✅ Tested with 5 worksheets)
-python src/cloudconvert_converter.py --all
+python src/tools/cloudconvert_converter.py --all
 
 # Convert single worksheet
-python src/cloudconvert_converter.py --file sast-student-worksheet.md
+python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md
 ```
 
 ---
@@ -150,34 +150,34 @@ python src/cloudconvert_converter.py --file sast-student-worksheet.md
 ### Local Converter Examples
 ```bash
 # List available worksheets
-python src/worksheet_converter.py --list
+python src/tools/worksheet_converter.py --list
 
 # Convert all with verbose output
-python src/worksheet_converter.py --all --verbose
+python src/tools/worksheet_converter.py --all --verbose
 
 # Convert to custom directory
-python src/worksheet_converter.py --all --output-dir ./final_worksheets
+python src/tools/worksheet_converter.py --all --output-dir ./final_worksheets
 
 # Convert specific file
-python src/worksheet_converter.py --file network-student-worksheet.md
+python src/tools/worksheet_converter.py --file network-student-worksheet.md
 ```
 
 ### CloudConvert Examples
 ```bash
 # Check account info and credits
-python src/cloudconvert_converter.py --account-info
+python src/tools/cloudconvert_converter.py --account-info
 
 # List available worksheets
-python src/cloudconvert_converter.py --list
+python src/tools/cloudconvert_converter.py --list
 
 # Convert all with verbose logging
-python src/cloudconvert_converter.py --all --verbose
+python src/tools/cloudconvert_converter.py --all --verbose
 
 # Convert to custom directory
-python src/cloudconvert_converter.py --all --output-dir ./professional_docs
+python src/tools/cloudconvert_converter.py --all --output-dir ./professional_docs
 
 # Convert specific file
-python src/cloudconvert_converter.py --file sast-student-worksheet.md
+python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md
 ```
 
 ---
@@ -254,10 +254,10 @@ echo "API Key format: ${CLOUDCONVERT_API_KEY:0:3}..."
 pip show cloudconvert
 
 # Test API connection
-python src/cloudconvert_converter.py --account-info
+python src/tools/cloudconvert_converter.py --account-info
 
 # Test with single file first
-python src/cloudconvert_converter.py --file sast-student-worksheet.md --verbose
+python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md --verbose
 ```
 
 ### Dependency Verification

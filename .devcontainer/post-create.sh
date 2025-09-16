@@ -31,6 +31,15 @@ sudo apt-get install -y --no-install-recommends \
     build-essential \
     libpcap-dev
 
+# Install Git LFS
+echo "📥 Installing Git LFS..."
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install -y git-lfs
+
+# Initialize Git LFS for the user
+echo "🔧 Initializing Git LFS..."
+git lfs install
+
 # Create necessary directories with proper permissions
 sudo mkdir -p /opt/security-tools
 sudo chown -R vscode:vscode /opt/security-tools

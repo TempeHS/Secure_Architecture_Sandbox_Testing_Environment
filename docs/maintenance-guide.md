@@ -4,7 +4,30 @@
 
 This maintenance guide provides comprehensive instructions for maintaining, updating, and extending the Docker Sandbox Demo project. It covers folder organization, content style guides, Docker requirements, and repository management standards.
 
-## 📁 Project Structure & Folder Organization
+## 📁### Repository Management
+
+### Git LFS (Large File Storage)
+- **Purpose**: Manages large binary files (DOCX, PDF, images) outside main Git repository
+- **Configuration**: `.gitattributes` file defines which file types use LFS
+- **Tracked file types**:
+  - Microsoft Office documents (*.docx, *.xlsx, *.pptx)
+  - PDF files (*.pdf)
+  - Images (*.png, *.jpg, *.jpeg, *.gif)
+  - Archive files (*.zip, *.tar.gz)
+  - Database files (*.db, *.sqlite, *.sqlite3)
+  - Binary executables and large logs
+- **Automatic setup**: Devcontainer post-create script installs and initializes Git LFS
+- **Usage**: Files matching LFS patterns are automatically tracked
+- **Commands**:
+  - `git lfs track` - List tracked file patterns
+  - `git lfs ls-files` - List files currently in LFS
+  - `git lfs pull` - Download LFS files after clone
+
+### Branch Strategy
+- **Main branch**: Stable, production-ready code
+- **Feature branches**: Use descriptive names (feature/new-exercise)
+- **Release branches**: For major version releases
+- **Hotfix branches**: For critical security fixest Structure & Folder Organization
 
 ### Root Directory Structure
 
@@ -12,6 +35,7 @@ This maintenance guide provides comprehensive instructions for maintaining, upda
 Docker_Sandbox_Demo/
 ├── .devcontainer/             # GitHub Codespaces configuration
 ├── .vscode/                   # VS Code workspace settings
+├── .gitattributes            # Git LFS file tracking configuration
 ├── docker/                    # Docker configuration files
 ├── docs/                      # Documentation and educational materials
 ├── reports/                   # Generated security analysis reports
@@ -28,6 +52,7 @@ Docker_Sandbox_Demo/
 #### `.devcontainer/`
 - **Purpose**: GitHub Codespaces and VS Code dev container configuration
 - **Contents**: `devcontainer.json` with container settings, extensions, and post-create commands
+- **Features**: Automatic Git LFS installation and initialization for handling large files
 - **Maintenance**: Update when adding new VS Code extensions or changing container requirements
 
 #### `docker/`
@@ -348,6 +373,7 @@ security(samples): fix overly permissive vulnerable app configuration
 - [ ] Review and rotate generated reports
 - [ ] Test all exercise paths in Codespaces
 - [ ] Update vulnerability database entries
+- [ ] Verify Git LFS tracking and clean up old files
 
 ### Content Reviews (Per Semester)
 - [ ] Review exercise content for curriculum alignment
