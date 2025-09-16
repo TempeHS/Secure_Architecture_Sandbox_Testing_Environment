@@ -19,6 +19,11 @@ jinja2>=3.1.0
 # Report generation
 reportlab>=4.0.0
 
+# Document conversion utilities
+python-docx>=0.8.11
+markdown>=3.4.0
+cloudconvert>=2.8.0
+
 # Data handling
 pyyaml>=6.0
 

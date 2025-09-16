@@ -1,8 +1,20 @@
 # SAST Exercise Student Worksheet
 
-**Student Name:** _________________________ **Date:** _____________
+**Name:** ________________________________ **Date:** ________________
 
-**Class/Section:** _______________________ **Partner(s):** _______________________
+**Lab Partner:** _________________________ **Section:** ______________
+
+---
+
+## 🎯 Learning Objectives
+
+By completing this worksheet, I will be able to:
+- [ ] Understand what Static Application Security Testing (SAST) is and when to use it
+- [ ] Execute automated security analysis using industry-standard tools (Bandit, Semgrep, Safety)
+- [ ] Interpret SAST tool outputs and prioritize security findings by severity
+- [ ] Apply remediation techniques to fix common security vulnerabilities
+- [ ] Understand OWASP Top 10 vulnerabilities through hands-on code analysis
+- [ ] Evaluate the business impact and ethical implications of security findings
 
 ---
 
@@ -295,6 +307,84 @@ _________________________________________________________________
 _________________________________________________________________
 
 **What was the most interesting discovery you made?**
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## ⚖️ Legal and Ethical Considerations
+
+### Professional Responsibility in Code Analysis
+**1. Employment Impact:** How could the vulnerabilities you found affect developers' job security if exploited in production?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Privacy Rights:** What types of personal data could be compromised through the vulnerabilities identified?
+_________________________________________________________________
+_________________________________________________________________
+
+**3. Intellectual Property:** Could the security issues you found expose proprietary business logic or trade secrets?
+_________________________________________________________________
+_________________________________________________________________
+
+### Regulatory Compliance
+**4. Data Protection Laws:** How might the vulnerabilities you found violate regulations like GDPR or CCPA?
+_________________________________________________________________
+_________________________________________________________________
+
+**5. Industry Standards:** What compliance requirements (PCI DSS, HIPAA, SOX) could be affected by these security issues?
+_________________________________________________________________
+_________________________________________________________________
+
+### Ethical Security Testing
+**6. Responsible Disclosure:** If you found these vulnerabilities in a real application, what would be the ethical way to report them?
+_________________________________________________________________
+_________________________________________________________________
+
+**7. Professional Standards:** What responsibilities do cybersecurity professionals have when conducting security assessments?
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## 🔐 Cryptography and Security Assessment
+
+### Understanding Cryptographic Controls
+**1. Encryption Assessment:** Did you find any issues with how the applications handle sensitive data encryption?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Key Management:** What vulnerabilities were identified related to cryptographic key storage or management?
+_________________________________________________________________
+_________________________________________________________________
+
+**3. Cryptographic Best Practices:** Based on your analysis, what cryptographic improvements would you recommend?
+_________________________________________________________________
+_________________________________________________________________
+
+**4. Security by Design:** How does proper cryptography implementation contribute to 'security by design' principles?
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## 💼 Business Impact Assessment
+
+### Enterprise Impact Analysis
+**1. Productivity Impact:** How would the vulnerabilities you found affect daily business operations if exploited?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Financial Impact:** Estimate the potential cost to an organization if these vulnerabilities were exploited:
+- **Direct Costs:** _________________________________________________
+- **Indirect Costs:** ______________________________________________
+- **Regulatory Fines:** ____________________________________________
+
+**3. Reputation Damage:** How could a security breach from these vulnerabilities affect an organization's reputation?
+_________________________________________________________________
+_________________________________________________________________
+
+**4. Business Continuity:** Which vulnerabilities pose the greatest risk to maintaining normal business operations?
 _________________________________________________________________
 _________________________________________________________________
 

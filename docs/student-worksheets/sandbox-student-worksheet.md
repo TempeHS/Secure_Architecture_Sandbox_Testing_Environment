@@ -1,6 +1,71 @@
 # Sandbox Security Analysis - Student Worksheet
 
-**Name**: ________________________  **Date**: ________________________  **Period**: ________
+**Name:** ________________________________ **Date:** ________________
+
+**Lab Partner:** _________________________ **Section:** ______________
+
+---
+
+## 🔧 Pre-Exercise Setup Verification
+
+**Before starting sandbox analysis, verify your environment is ready:**
+
+### Step 1: Check Docker Environment
+```bash
+# Verify containers are running:
+cd docker && docker-compose ps
+```
+
+**Container Status Check:**
+- [ ] `cybersec_sandbox` - State: Up
+- [ ] `vulnerable_web_app` - State: Up
+
+### Step 2: Test Sandbox Tools
+```bash
+# Test system monitoring tools:
+strace --version
+netstat --version
+htop --version
+```
+
+**Sandbox Tools Check:**
+- [ ] System call tracing (strace) available ✅
+- [ ] Network monitoring (netstat) available ✅
+- [ ] Resource monitoring (htop) available ✅
+
+### Step 3: Verify Sample Applications
+```bash
+# Check suspicious applications:
+ls samples/suspicious-scripts/
+ls samples/backdoor-apps/
+ls samples/resource-abuse/
+```
+
+**Sample Applications Check:**
+- [ ] Suspicious scripts accessible ✅
+- [ ] Backdoor applications accessible ✅
+- [ ] Resource abuse samples accessible ✅
+
+### Step 4: Test Container Access
+```bash
+# Enter sandbox environment:
+docker exec -it cybersec_sandbox bash
+```
+
+**Container Access Check:**
+- [ ] Successfully entered sandbox environment ✅
+- [ ] Can navigate to /workspace directory ✅
+
+### Troubleshooting:
+**If any verification fails:**
+1. Restart containers: `cd docker && docker-compose down && docker-compose up -d`
+2. Wait 30 seconds for services to initialize
+3. Re-run verification commands
+4. **Notify instructor if sandbox environment doesn't work properly**
+
+**⚠️ Complete ALL verification steps before proceeding with sandbox analysis exercises.**
+
+---
 
 ## 🎯 Learning Objectives
 
@@ -303,6 +368,85 @@ ____________________________________________________________________________
 ____________________________________________________________________________
 
 **What would you like to learn more about?**
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## ⚖️ Legal and Ethical Considerations
+
+### Professional Responsibility in Malware Analysis
+**1. Employment Impact:** How do malware incidents affect IT security teams and organizational employment?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Privacy Rights:** What privacy concerns arise when analyzing applications that may access personal data?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**3. Intellectual Property:** How could malware expose or steal proprietary software and trade secrets?
+____________________________________________________________________________
+____________________________________________________________________________
+
+### Legal Framework for Security Analysis
+**4. Authorized Analysis:** Why is it critical to only analyze suspicious software in controlled, authorized environments?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**5. Evidence Handling:** What legal requirements apply to documenting and preserving malware analysis evidence?
+____________________________________________________________________________
+____________________________________________________________________________
+
+### Ethical Malware Research
+**6. Responsible Disclosure:** How should security researchers ethically handle discovery of new malware families?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**7. Professional Standards:** What ethical obligations do cybersecurity analysts have when conducting malware analysis?
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## 🔐 Cryptography and Sandbox Security
+
+### Cryptographic Analysis in Sandboxing
+**1. Encryption Assessment:** Did any analyzed applications use encryption to hide malicious activities?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Communication Security:** How did malicious applications handle cryptographic protection of network communications?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**3. Key Management:** What cryptographic vulnerabilities were exposed in the malicious applications?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**4. Sandbox Cryptography:** How does cryptography contribute to secure sandbox design and operation?
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## 💼 Business Impact Assessment
+
+### Enterprise Malware Impact Analysis
+**1. Operational Disruption:** How would the malware behaviors you observed affect business operations?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Financial Impact:** Estimate the potential business costs of the threats you analyzed:
+- **Data Loss Costs:** _______________________________________________
+- **System Recovery Costs:** _________________________________________
+- **Regulatory Penalties:** __________________________________________
+- **Business Interruption:** ________________________________________
+
+**3. Reputation Damage:** How could malware incidents affect organizational reputation and customer trust?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**4. Incident Response:** What would be the cost and complexity of responding to the threats you analyzed?
 ____________________________________________________________________________
 ____________________________________________________________________________
 

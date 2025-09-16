@@ -1,10 +1,85 @@
 # Penetration Testing - Student Worksheet
-**Name**: _________________ **Date**: _________
+
+**Name:** ________________________________ **Date:** ________________
+
+**Lab Partner:** _________________________ **Section:** ______________
 
 ## ⚠️ Ethical Agreement
 **I understand that all penetration testing techniques learned in this exercise are for educational purposes only. I agree to only use these techniques in authorized environments and will never attempt unauthorized access to systems I do not own or lack explicit permission to test.**
 
 **Student Signature**: _________________ **Date**: _________
+
+## 🔧 Pre-Exercise Setup Verification
+
+**Before starting penetration testing, verify your environment is ready:**
+
+### Step 1: Check Target Environment
+```bash
+# Verify Docker containers are running:
+cd docker && docker-compose ps
+```
+
+**Container Status Check:**
+- [ ] `cybersec_sandbox` - State: Up
+- [ ] `vulnerable_web_app` - State: Up
+
+### Step 2: Verify Target Applications
+```bash
+# Test Flask Application:
+curl -s http://localhost:5000 | head -3
+
+# Test PWA Application:
+curl -s http://localhost:9090 | head -3
+```
+
+**Target Accessibility Check:**
+- [ ] Flask App responds at http://localhost:5000 ✅
+- [ ] PWA App responds at http://localhost:9090 ✅
+
+### Step 3: Verify All Analysis Tools
+```bash
+# Test SAST tool:
+python src/analyzer/analyze_cli.py --help
+
+# Test DAST tool:
+python src/analyzer/dast_cli.py --help
+
+# Test Network Analysis tool:
+python src/analyzer/network_cli.py --help
+
+# Test basic network tools:
+nmap --version
+```
+
+**Tool Verification Checklist:**
+- [ ] SAST CLI available ✅
+- [ ] DAST CLI available ✅  
+- [ ] Network Analysis CLI available ✅
+- [ ] Network scanning tools available ✅
+
+### Step 4: Verify Sample Applications
+```bash
+# Test access to suspicious applications:
+ls samples/backdoor-apps/
+ls samples/suspicious-scripts/
+ls samples/resource-abuse/
+```
+
+**Sample Apps Check:**
+- [ ] Backdoor applications accessible ✅
+- [ ] Suspicious scripts accessible ✅
+- [ ] Resource abuse samples accessible ✅
+
+### Troubleshooting:
+**If any verification fails:**
+1. Restart environment: `cd docker && docker-compose down && docker-compose up -d`
+2. Wait 60 seconds for full startup
+3. Re-run verification steps
+4. **Contact instructor if issues persist - do not proceed without working environment**
+
+**⚠️ IMPORTANT: Complete ALL verification steps before beginning penetration testing activities.**
+
+---
 
 ## 🎯 Learning Objectives Checklist
 By the end of this exercise, I will be able to:

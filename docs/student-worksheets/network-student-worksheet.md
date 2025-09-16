@@ -1,6 +1,80 @@
 # Network Traffic Analysis - Student Worksheet
 
-**Name**: ________________________  **Date**: ________________________  **Period**: ________
+**Name:** ________________________________ **Date:** ________________
+
+**Lab Partner:** _________________________ **Section:** ______________
+
+## 🔧 Pre-Exercise Setup Verification
+
+**Before starting network analysis, verify your environment is ready:**
+
+### Step 1: Check Docker Environment
+```bash
+# Verify containers are running:
+cd docker && docker-compose ps
+```
+
+**Container Status Check:**
+- [ ] `cybersec_sandbox` - State: Up
+- [ ] `vulnerable_web_app` - State: Up
+
+### Step 2: Test Network Analysis Tools
+```bash
+# Test Network Analysis CLI:
+python src/analyzer/network_cli.py --help
+
+# Test basic network tools:
+nmap --version
+netstat --version
+```
+
+**Network Tools Check:**
+- [ ] Network Analysis CLI available ✅
+- [ ] Nmap available ✅
+- [ ] Netstat available ✅
+
+### Step 3: Verify Network Scenarios
+```bash
+# Check sample network scenarios:
+ls samples/network-scenarios/
+python samples/network-scenarios/basic_network_activity.py --help
+```
+
+**Network Scenarios Check:**
+- [ ] Network scenario scripts accessible ✅
+- [ ] Basic network activity script executable ✅
+
+### Step 4: Test Target Applications (Network Monitoring Targets)
+```bash
+# Test network monitoring targets:
+curl -s http://localhost:5000 | head -2
+curl -s http://localhost:9090 | head -2
+```
+
+**Monitoring Targets Check:**
+- [ ] Flask App accessible for monitoring ✅
+- [ ] PWA App accessible for monitoring ✅
+
+### Step 5: Basic Network Connectivity Test
+```bash
+# Test basic network monitoring:
+python src/analyzer/network_cli.py --monitor-connections --duration 10
+```
+
+**Network Monitoring Test:**
+- [ ] Network monitoring produces output ✅
+- [ ] No connection errors ✅
+
+### Troubleshooting:
+**If any verification fails:**
+1. Restart containers: `cd docker && docker-compose down && docker-compose up -d`
+2. Wait 30 seconds for network services to initialize
+3. Re-run verification commands
+4. **Notify instructor if network tools don't work - networking issues require administrator assistance**
+
+**⚠️ Complete ALL verification steps before proceeding with network analysis exercises.**
+
+---
 
 ## 🎯 Learning Objectives
 
@@ -344,6 +418,85 @@ ____________________________________________________________________________
 ____________________________________________________________________________
 
 **What would you like to learn more about in network security?**
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## ⚖️ Legal and Ethical Considerations
+
+### Professional Responsibility in Network Analysis
+**1. Employment Impact:** How could network security incidents affect IT and security staff careers?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Privacy Rights:** What privacy concerns arise when monitoring network traffic and user communications?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**3. Intellectual Property:** How could network vulnerabilities expose proprietary data or trade secrets?
+____________________________________________________________________________
+____________________________________________________________________________
+
+### Regulatory and Legal Compliance
+**4. Network Monitoring Laws:** What legal restrictions apply to network traffic monitoring in your jurisdiction?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**5. Data Protection Compliance:** How do network security gaps violate GDPR, CCPA, or industry regulations?
+____________________________________________________________________________
+____________________________________________________________________________
+
+### Ethical Network Security
+**6. Authorized Monitoring:** Why is it critical to only monitor networks you own or have explicit permission to analyze?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**7. Incident Reporting:** What are your ethical obligations when discovering network security incidents?
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## 🔐 Cryptography and Network Security
+
+### Network Cryptographic Assessment
+**1. Encryption in Transit:** What issues did you find with data encryption over the network?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Certificate Management:** Did you identify any problems with SSL/TLS certificates or PKI infrastructure?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**3. VPN and Tunnel Security:** How would you assess the cryptographic strength of network tunnels?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**4. Network Cryptography Recommendations:** What cryptographic improvements would strengthen network security?
+____________________________________________________________________________
+____________________________________________________________________________
+
+---
+
+## 💼 Business Impact Assessment
+
+### Enterprise Network Security Impact
+**1. Business Continuity:** How would network security incidents affect critical business operations?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**2. Financial Impact:** Estimate the potential costs of network security breaches:
+- **Downtime Costs:** ___________________________________________________
+- **Data Breach Costs:** ________________________________________________
+- **Regulatory Fines:** _________________________________________________
+- **Recovery Costs:** ___________________________________________________
+
+**3. Reputation Management:** How could network security failures damage organizational reputation?
+____________________________________________________________________________
+____________________________________________________________________________
+
+**4. Customer Impact:** How would network security incidents affect customer trust and business relationships?
 ____________________________________________________________________________
 ____________________________________________________________________________
 

@@ -256,27 +256,39 @@ python samples/network-scenarios/suspicious_traffic_generator.py
 
 ```
 Docker_Sandbox_Demo/
-├── docs/exercises/              # Educational exercises and materials
-│   ├── static-application-security-testing-exercise.md
-│   ├── sast-instructor-guide.md
-│   ├── sast-quick-reference.md
-│   ├── sast-student-worksheet.md
-│   ├── dynamic-application-security-testing-exercise.md
-│   ├── dast-instructor-guide.md
-│   ├── dast-quick-reference.md
-│   ├── dast-student-worksheet.md
-│   ├── network-traffic-analysis-exercise.md
-│   ├── network-instructor-guide.md
-│   ├── network-quick-reference.md
-│   ├── network-student-worksheet.md
-│   ├── sandbox-security-analysis-exercise.md
-│   ├── sandbox-instructor-guide.md
-│   ├── sandbox-quick-reference.md
-│   ├── sandbox-student-worksheet.md
-│   ├── penetration-testing-exercise.md
-│   ├── penetration-testing-instructor-guide.md
-│   ├── penetration-testing-quick-reference.md
-│   └── penetration-testing-student-worksheet.md
+├── docs/                       # All educational and documentation materials
+│   ├── exercises/              # Main exercise files
+│   │   ├── static-application-security-testing-exercise.md
+│   │   ├── dynamic-application-security-testing-exercise.md
+│   │   ├── network-traffic-analysis-exercise.md
+│   │   ├── sandbox-security-analysis-exercise.md
+│   │   └── penetration-testing-exercise.md
+│   ├── instructor-guides/      # Instructor support materials
+│   │   ├── sast-instructor-guide.md
+│   │   ├── dast-instructor-guide.md
+│   │   ├── network-instructor-guide.md
+│   │   ├── sandbox-instructor-guide.md
+│   │   └── penetration-testing-instructor-guide.md
+│   ├── student-worksheets/     # Student worksheet templates
+│   │   ├── sast-student-worksheet.md
+│   │   ├── dast-student-worksheet.md
+│   │   ├── network-student-worksheet.md
+│   │   ├── sandbox-student-worksheet.md
+│   │   └── penetration-testing-student-worksheet.md
+│   ├── student-worksheet-answers/ # Answer keys for worksheets
+│   │   ├── sast-answer-sheet.md
+│   │   ├── dast-answer-sheet.md
+│   │   ├── network-answer-sheet.md
+│   │   ├── sandbox-answer-sheet.md
+│   │   └── penetration-testing-answer-sheet.md
+│   ├── quick-reference-guides/ # Tool quick references
+│   │   ├── sast-quick-reference.md
+│   │   ├── dast-quick-reference.md
+│   │   ├── network-quick-reference.md
+│   │   ├── sandbox-quick-reference.md
+│   │   └── penetration-testing-quick-reference.md
+│   ├── lesson-structure.md     # Course organization and progression
+│   └── maintenance-guide.md    # Project maintenance documentation
 ├── src/analyzer/               # Security analysis implementation
 │   ├── static_analyzer.py     # Core SAST analysis engine
 │   ├── dynamic_analyzer.py    # Core DAST analysis engine
@@ -345,9 +357,9 @@ After completing the exercises, students will be able to:
    ```
 
 2. **Start with the Quick References**:
-   - Read `docs/exercises/sast-quick-reference.md`
-   - Read `docs/exercises/dast-quick-reference.md`
-   - Read `docs/exercises/network-quick-reference.md`
+   - Read `docs/quick-reference-guides/sast-quick-reference.md`
+   - Read `docs/quick-reference-guides/dast-quick-reference.md`
+   - Read `docs/quick-reference-guides/network-quick-reference.md`
    - Bookmark for easy access during exercises
 
 3. **Choose Your Learning Path**:
@@ -388,13 +400,7 @@ After completing the exercises, students will be able to:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Areas for enhancement:
-- Additional vulnerable application examples
-- New security analysis tools integration
-- Enhanced educational content and analogies
-- Additional language support for SAST
-- Advanced network traffic analysis features
-- Integration with cloud security platforms
+Contributions are welcome! Please see `docs/maintenance-guide.md` for detailed contribution guidelines, coding standards, and project structure information.
 
 ## 📄 License
 

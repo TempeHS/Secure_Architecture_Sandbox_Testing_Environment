@@ -6,7 +6,55 @@
 
 ---
 
-## 📋 Exercise 1: DAST Fundamentals
+## � Pre-Exercise Setup Verification
+
+**Before starting the DAST analysis, verify your environment is ready:**
+
+### Step 1: Check Docker Containers
+```bash
+# Command to run:
+cd docker && docker-compose ps
+```
+
+**Expected Output**: You should see containers running including `cybersec_sandbox` and `vulnerable_web_app`
+
+**Container Status Check:**
+- [ ] `cybersec_sandbox` - State: Up
+- [ ] `vulnerable_web_app` - State: Up
+
+### Step 2: Verify Applications Are Accessible
+```bash
+# Test Flask Application (Port 5000):
+curl -s http://localhost:5000 | head -3
+
+# Test PWA Application (Port 9090):  
+curl -s http://localhost:9090 | head -3
+```
+
+**Application Accessibility Check:**
+- [ ] Flask App responds at http://localhost:5000 ✅
+- [ ] PWA App responds at http://localhost:9090 ✅
+
+### Step 3: Test DAST Tool
+```bash
+# Verify DAST analyzer is working:
+python src/analyzer/dast_cli.py --help
+```
+
+**Tool Verification:**
+- [ ] DAST CLI displays help information ✅
+
+### Troubleshooting:
+**If applications don't respond:**
+1. Restart containers: `cd docker && docker-compose down && docker-compose up -d`
+2. Wait 30 seconds for applications to fully start
+3. Re-test with curl commands above
+
+**If you encounter any issues, notify your instructor before proceeding.**
+
+---
+
+## �📋 Exercise 1: DAST Fundamentals
 
 ### 1.1 Concept Understanding
 **Complete the comparison table:**
@@ -273,6 +321,84 @@ _________________________________________________________________
 _________________________________________________________________
 
 **3. Analysis: What metrics would you track to measure DAST program effectiveness?**
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## ⚖️ Legal and Ethical Considerations
+
+### Professional Responsibility in Dynamic Testing
+**1. Employment Impact:** How do runtime vulnerabilities you found affect developers and IT staff responsibilities?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Privacy Rights:** What personal data could be exposed through the runtime vulnerabilities identified?
+_________________________________________________________________
+_________________________________________________________________
+
+**3. Intellectual Property:** Could the security misconfigurations expose proprietary application logic?
+_________________________________________________________________
+_________________________________________________________________
+
+### Regulatory Compliance
+**4. Web Application Compliance:** How do missing security headers violate web security standards?
+_________________________________________________________________
+_________________________________________________________________
+
+**5. Data Protection:** Which findings could lead to regulatory violations (GDPR, CCPA, PCI DSS)?
+_________________________________________________________________
+_________________________________________________________________
+
+### Ethical Testing Practices
+**6. Authorized Testing:** Why is it critical to only perform DAST on applications you own or have permission to test?
+_________________________________________________________________
+_________________________________________________________________
+
+**7. Responsible Disclosure:** How should runtime vulnerabilities be reported to application owners?
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## 🔐 Cryptography and Runtime Security
+
+### Cryptographic Implementation Assessment
+**1. Transport Security:** Did you find issues with HTTPS implementation or weak encryption in transit?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Session Management:** What cryptographic weaknesses were found in session handling?
+_________________________________________________________________
+_________________________________________________________________
+
+**3. Authentication Security:** How do the authentication vulnerabilities relate to cryptographic best practices?
+_________________________________________________________________
+_________________________________________________________________
+
+**4. Runtime Cryptography:** What recommendations would you make for improving cryptographic controls?
+_________________________________________________________________
+_________________________________________________________________
+
+---
+
+## 💼 Business Impact Assessment
+
+### Enterprise Runtime Security Impact
+**1. Operational Impact:** How would runtime exploitation of these vulnerabilities affect business operations?
+_________________________________________________________________
+_________________________________________________________________
+
+**2. Customer Trust:** How could runtime security issues affect customer confidence and retention?
+_________________________________________________________________
+_________________________________________________________________
+
+**3. Compliance Costs:** What would be the cost of regulatory fines from runtime security failures?
+- **PCI DSS Violations:** __________________________________________
+- **Data Protection Fines:** ______________________________________
+- **Industry-Specific Penalties:** _________________________________
+
+**4. Incident Response:** What would be the cost of responding to a security incident from these vulnerabilities?
 _________________________________________________________________
 _________________________________________________________________
 

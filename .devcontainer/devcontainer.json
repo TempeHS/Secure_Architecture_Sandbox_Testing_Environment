@@ -36,7 +36,10 @@
         "ms-toolsai.jupyter",
         "formulahendry.code-runner",
         "streetsidesoftware.code-spell-checker",
-        "ms-vscode.vscode-typescript-next"
+        "ms-vscode.vscode-typescript-next",
+        "oderwat.indent-rainbow",
+        "mathematic.vscode-pdf",
+        "tal7aouy.icons"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python3",
@@ -55,7 +58,11 @@
           "source.organizeImports": "explicit"
         },
         "workbench.colorTheme": "Default Dark+",
-        "terminal.integrated.fontSize": 14
+        "workbench.iconTheme": "vscode-icons",
+        "workbench.editorAssociations": {
+          "*.md": "vscode.markdown.preview.editor"
+        },
+        "terminal.integrated.fontSize": 18
       }
     }
   },
