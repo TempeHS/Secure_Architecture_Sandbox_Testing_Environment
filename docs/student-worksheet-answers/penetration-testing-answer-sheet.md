@@ -331,12 +331,7 @@ Students should demonstrate understanding of:
 ### 6.3 Compliance and Regulatory Impact
 
 **Regulatory Compliance Failures**:
-- **PCI DSS**: Web application vulnerabilities violate payment security requirements
-- **GDPR**: Lack of data protection controls violates privacy regulations  
-- **SOX**: IT control failures affect financial reporting compliance
-- **Industry Standards**: OWASP Top 10 vulnerabilities present significant compliance gaps
-
-**Legal and Business Implications**:
+**Regulatory Compliance Failures**:
 - **Regulatory Fines**: Potential penalties of $50,000-500,000 per violation
 - **Legal Liability**: Exposure to lawsuits from affected customers
 - **Business Licenses**: Risk of license suspension in regulated industries
@@ -396,8 +391,8 @@ Students should demonstrate understanding of:
 
 **4. Industry-Specific Penetration Testing Requirements**:
 **Expected Answer**: 
-- **Financial Services**: PCI DSS requires regular penetration testing for payment systems
-- **Healthcare**: HIPAA requires security assessments of systems handling PHI
+- **Financial Services**: ISM requires regular penetration testing for payment systems
+- **Healthcare**: ISO9126 requires security assessments of systems handling health information
 - **Critical Infrastructure**: NERC CIP requires security testing for power grid systems
 - **Government**: FISMA requires regular security assessments for federal systems
 

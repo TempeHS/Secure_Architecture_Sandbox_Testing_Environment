@@ -369,6 +369,11 @@ Output Options:
         if findings:
             self._display_findings(findings, args)
 
+        # Display educational insights if in educational mode
+        insights = results.get('educational_insights', {})
+        if insights and args.educational:
+            self._display_educational_insights(insights)
+
     def _display_service_results(self, results: Dict[str, Any], args) -> None:
         """Display service scanning results"""
         if args.quiet:

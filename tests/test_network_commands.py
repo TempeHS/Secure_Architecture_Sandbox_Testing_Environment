@@ -112,8 +112,8 @@ class NetworkCommandValidationTest(unittest.TestCase):
                 f"Educational connection monitoring failed: " f"{result.stderr}",
             )
             self.assertIn(
-                "educational",
-                result.stdout.lower(),
+                "🎓 EDUCATIONAL INSIGHTS",
+                result.stdout,
                 "Educational mode missing explanations",
             )
 
@@ -357,13 +357,14 @@ class NetworkCommandValidationTest(unittest.TestCase):
                 0,
                 f"JSON connection monitoring failed: " f"{result.stderr}",
             )
-            self.assertTrue(output_file.exists(), "JSON output file was not created")
+            self.assertTrue(output_file.exists(),
+                            "JSON output file was not created")
 
             # Validate JSON structure
             with open(output_file, "r") as f:
                 data = json.load(f)
                 self.assertIn(
-                    "connections", data, "JSON output missing connections key"
+                    "active_connections", data, "JSON output missing active_connections key"
                 )
 
             logger.info("✅ JSON output for connections works")
@@ -406,12 +407,14 @@ class NetworkCommandValidationTest(unittest.TestCase):
                 0,
                 f"Text service scanning failed: " f"{result.stderr}",
             )
-            self.assertTrue(output_file.exists(), "Text output file was not created")
+            self.assertTrue(output_file.exists(),
+                            "Text output file was not created")
 
             # Validate text content
             with open(output_file, "r") as f:
                 content = f.read()
-                self.assertGreater(len(content), 50, "Text output seems too short")
+                self.assertGreater(
+                    len(content), 50, "Text output seems too short")
 
             logger.info("✅ Text output for services works")
 
@@ -503,8 +506,8 @@ class NetworkCommandValidationTest(unittest.TestCase):
                 f"Combined options network analysis failed: " f"{result.stderr}",
             )
             self.assertIn(
-                "educational",
-                result.stdout.lower(),
+                "🎓 EDUCATIONAL INSIGHTS",
+                result.stdout,
                 "Combined options missing educational content",
             )
 
@@ -550,7 +553,8 @@ class NetworkCommandValidationTest(unittest.TestCase):
             # Validate JSON structure
             with open(output_file, "r") as f:
                 data = json.load(f)
-                self.assertIsInstance(data, dict, "JSON output should be a dictionary")
+                self.assertIsInstance(
+                    data, dict, "JSON output should be a dictionary")
 
             logger.info("✅ Service scanning with JSON output works")
 

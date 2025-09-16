@@ -227,6 +227,21 @@ python src/analyzer/network_cli.py --monitor-connections --educational --verbose
 
 **Expected Additional Output:**
 ```
+🎓 EDUCATIONAL INSIGHTS
+Understanding Network Connection Monitoring:
+
+Network monitoring is essential for cybersecurity because it helps identify:
+- Unauthorized connections to your systems
+- Data exfiltration attempts
+- Command and control communications
+- Lateral movement within networks
+
+Key indicators to watch for:
+- Connections to unusual ports (1337, 4444, 6666)
+- Excessive connections from single IPs
+- Connections to known malicious IPs
+- Unexpected outbound connections
+
 🔍 DETAILED CONNECTION ANALYSIS:
 
 NORMAL PATTERNS DETECTED:

@@ -8,7 +8,7 @@
 
 ### Expected Verification Results:
 - **Container Status**: Both `cybersec_sandbox` and `vulnerable_web_app` should show "Up" status
-- **Application Access**: Both Flask (5000) and PWA (9090) should respond with HTML content
+- **Application Access**: Both Flask (9090) and PWA (5000) should respond with HTML content
 - **DAST Tool**: Help information should display available options and commands
 
 **Teaching Note**: If verification fails, guide students through troubleshooting steps before proceeding.
@@ -60,7 +60,7 @@ Students should demonstrate understanding of:
 
 ### 2.1 Flask Application Quick Scan
 
-**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational`
+**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational`
 
 **Typical Scan Results Summary**:
 - **Total Findings**: 8-12 security issues
@@ -90,7 +90,7 @@ Students should demonstrate understanding of:
 
 ### 2.3 Deep Scan Analysis
 
-**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational`
+**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:9090 --deep-scan --educational`
 
 **Additional Deep Scan Findings**:
 - **Additional endpoints**: /admin, /debug, /config, hidden directories
@@ -109,7 +109,7 @@ Students should demonstrate understanding of:
 
 ### 3.1 Progressive Web App Scan
 
-**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:9090 --educational --output pwa_report.json`
+**Expected Command**: `python src/analyzer/dast_cli.py http://localhost:5000 --educational --output pwa_report.json`
 
 **Typical PWA Scan Results**:
 - **Total Findings**: 6-10 security issues
@@ -215,7 +215,7 @@ Students should demonstrate understanding of:
 
 **DYNAMIC SECURITY ASSESSMENT SUMMARY**
 
-**Applications Tested**: Flask Web Application (localhost:5000), Progressive Web Application (localhost:9090)
+**Applications Tested**: Flask Web Application (localhost:9090), Progressive Web Application (localhost:5000)
 
 **Total Security Issues Found**: 14-22 vulnerabilities across both applications
 
@@ -304,9 +304,9 @@ Students should demonstrate understanding of:
 - **DevSecOps Engineers** - Automated security pipeline integration
 
 **7. DAST compliance requirements**:
-- **PCI DSS** - Requirement 6.5.1 (application vulnerability testing)
-- **SOX** - IT controls validation for financial applications
-- **HIPAA** - Security controls testing for healthcare applications
+- **ISM** - Security controls and vulnerability assessment requirements
+- **ISO14598** - Security evaluation standards for systems validation
+- **ISO9126** - Software quality assessment including security characteristics
 - **ISO 27001** - Regular security assessment requirements
 
 ---
@@ -327,15 +327,12 @@ Students should demonstrate understanding of:
 ### Regulatory Compliance
 
 **4. Web Application Compliance**:
-**Expected Answer**: Missing security headers violate OWASP guidelines, PCI DSS requirements for web application security, and industry security standards for data protection.
+**Expected Answer**: Missing security headers violate OWASP guidelines, ISM requirements for web application security, and industry security standards for data protection.
 
 **5. Data Protection Violations**:
 **Expected Answer**: 
-- **GDPR**: XSS and SQL injection violate data protection requirements
-- **CCPA**: Security vulnerabilities may lead to unauthorized data access
-- **PCI DSS**: Web application vulnerabilities violate payment security requirements
-
-### Ethical Testing Practices
+**5. Data Protection Violations**:
+- **ISM**: Web application vulnerabilities violate security control requirements
 
 **6. Authorized Testing Importance**:
 **Expected Answer**: Unauthorized DAST testing may violate computer crime laws, could cause service disruption or data exposure, requires explicit permission and defined scope, professional liability and legal consequences possible.
@@ -372,12 +369,11 @@ Students should demonstrate understanding of:
 **Expected Answer**: Security incidents damage brand reputation, lead to customer churn and lost revenue, require costly public relations efforts, affect new customer acquisition.
 
 **3. Compliance Costs**:
-- **PCI DSS Violations**: $5,000-100,000 per month until remediated
-- **Data Protection Fines**: €20M or 4% annual revenue (GDPR), up to $7,500 per violation (CCPA)
+- **ISM Violations**: Compliance requirements for government and industry security standards
+- **Data Protection Fines**: Penalties under Privacy Act,1988 (Privacy Act) may apply for violations
 - **Industry-Specific Penalties**: Varies by sector (healthcare, financial, government)
 
 **4. Incident Response Costs**:
-**Expected Answer**: Emergency security team engagement ($200-500/hour), forensic investigation costs ($50,000-200,000), legal and compliance review fees, communication and customer notification expenses.
 
 ---
 

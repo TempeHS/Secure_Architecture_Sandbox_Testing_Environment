@@ -202,7 +202,7 @@ d) **Language coverage** - Limited to supported programming languages
 
 **Overall Risk Assessment**: **HIGH** - Multiple critical vulnerabilities present significant security risk
 
-**Compliance Impact**: Findings may violate PCI DSS, GDPR, and industry security standards
+**Compliance Impact**: Findings may violate ISM, Privacy Act,1988 (Privacy Act), and industry security standards
 
 ### 5.2 Technical Remediation Guide
 
@@ -244,7 +244,7 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 **Expected Answer**: Vulnerabilities found can affect developer job security if exploited, create liability for development teams, require additional training and skills development, impact performance reviews and career advancement, necessitate code review process improvements.
 
 **2. Privacy Rights**:
-**Expected Answer**: SQL injection can expose personal data (PII, financial, health), XSS can compromise user sessions and private information, hardcoded secrets can lead to unauthorized data access, compliance violations (GDPR, CCPA) for data protection.
+**Expected Answer**: SQL injection can expose personal data (PII, financial, health), XSS can compromise user sessions and private information, hardcoded secrets can lead to unauthorized data access, compliance violations (Privacy Act,1988 (Privacy Act)) for data protection.
 
 **3. Intellectual Property**:
 **Expected Answer**: Source code vulnerabilities can expose proprietary algorithms, trade secrets in application logic, competitive advantage information, customer lists and business processes, licensing and patent violations.
@@ -256,9 +256,9 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 
 **5. Industry Standards**:
 **Expected Answer**: 
-- **PCI DSS**: Requirements 6.3.1 (secure coding), 6.5 (vulnerability management)
-- **HIPAA**: Security safeguards for PHI, access controls, audit requirements
-- **SOX**: IT controls, data integrity, financial reporting accuracy
+- **ISM**: Security controls and vulnerability management requirements
+- **ISO9126**: Software quality standards including security characteristics
+- **ISO14598**: Software product evaluation requirements for security assessment
 
 ### Ethical Security Testing
 
@@ -296,7 +296,7 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 **2. Financial Impact Estimates**:
 - **Direct Costs**: Emergency security fixes ($50,000-100,000), compliance fines ($10,000-millions), legal and forensic costs ($25,000-200,000)
 - **Indirect Costs**: Lost productivity ($100,000-500,000), customer churn (5-25% revenue loss), insurance premium increases
-- **Regulatory Fines**: GDPR (€20M or 4% revenue), PCI DSS ($5,000-100,000/month), HIPAA ($100-50,000 per violation)
+- **Regulatory Fines**: Privacy Act,1988 (Privacy Act) penalties may apply, ISM compliance requirements, ISO9126 and ISO14598 standard violations
 
 **3. Reputation Damage**:
 **Expected Answer**: Loss of customer trust and confidence, negative media coverage and social media impact, competitive disadvantage in security-conscious markets, difficulty recruiting top talent, long-term brand damage requiring years to recover.

@@ -41,7 +41,7 @@ app.secret_key = 'weak_secret_key_123'
 JWT_SECRET = 'jwt_weak_secret'
 
 # Database setup
-DATABASE = 'vulnerable_flask.db'
+DATABASE = os.path.join(os.path.dirname(__file__), 'vulnerable_flask.db')
 
 
 def init_db():
@@ -553,4 +553,4 @@ if __name__ == '__main__':
     print("📚 For educational purposes only - DO NOT USE IN PRODUCTION!")
 
     # VULNERABILITY: Debug mode enabled
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=9090)

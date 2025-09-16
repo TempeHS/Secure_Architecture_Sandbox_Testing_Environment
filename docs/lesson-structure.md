@@ -126,8 +126,8 @@ Students learn to test running web applications for security vulnerabilities, co
 - ✅ Compare and contrast SAST vs DAST findings for comprehensive security assessment
 
 ### 🧪 Applications Tested
-- **Running Flask App**: http://localhost:5000
-- **Running PWA App**: http://localhost:9090
+- **Running Flask App**: http://localhost:9090
+- **Running PWA App**: http://localhost:5000
 
 ### 🔧 Primary Tools
 - **Nikto**: Web vulnerability scanner

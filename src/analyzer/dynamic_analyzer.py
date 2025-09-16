@@ -26,6 +26,7 @@ import requests
 import time
 import re
 import socket
+import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Any, Tuple
 from dataclasses import dataclass, asdict

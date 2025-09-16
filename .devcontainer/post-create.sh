@@ -9,7 +9,17 @@ echo "🔧 Setting up Cybersecurity Sandbox environment..."
 echo "📦 Updating system packages..."
 sudo apt-get update -y
 
-# Install essential security tools available in apt
+# Install essential security tools availableecho "✅ Environment setup complete!"
+echo "📚 Check /workspaces/Docker_Sandbox_Demo/WELCOME.md for getting started instructions"
+echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
+echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
+echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
+echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"
+
+# Make sure WELCOME.md is prominently visible by echoing its location
+echo ""
+echo "📖 Opening WELCOME.md for getting started guide..."
+echo "   File location: /workspaces/Docker_Sandbox_Demo/WELCOME.md"t
 echo "🔧 Installing security tools..."
 sudo apt-get install -y --no-install-recommends \
     nmap \
@@ -49,7 +59,11 @@ cd /opt/security-tools
 
 # Install Nikto
 echo "📥 Installing Nikto..."
-git clone https://github.com/sullo/nikto.git
+if [ ! -d "nikto" ]; then
+    git clone https://github.com/sullo/nikto.git
+else
+    echo "⚙️  Nikto directory already exists, skipping clone"
+fi
 cd nikto/program
 chmod +x nikto.pl
 sudo ln -sf /opt/security-tools/nikto/program/nikto.pl /usr/local/bin/nikto
@@ -64,7 +78,11 @@ rm gobuster_Linux_x86_64.tar.gz
 
 # Install WhatWeb
 echo "📥 Installing WhatWeb..."
-git clone https://github.com/urbanadventurer/WhatWeb.git
+if [ ! -d "WhatWeb" ]; then
+    git clone https://github.com/urbanadventurer/WhatWeb.git
+else
+    echo "⚙️  WhatWeb directory already exists, skipping clone"
+fi
 cd WhatWeb
 chmod +x whatweb
 sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
@@ -75,7 +93,7 @@ sudo chown -R vscode:vscode /workspaces/Docker_Sandbox_Demo
 
 # Create project directory structure
 mkdir -p /workspaces/Docker_Sandbox_Demo/src/{sandbox,analyzer,reporter,tools}
-mkdir -p /workspaces/Docker_Sandbox_Demo/samples/{web-app,scripts}
+mkdir -p /workspaces/Docker_Sandbox_Demo/samples/scripts
 mkdir -p /workspaces/Docker_Sandbox_Demo/docs/{lesson-plans,exercises}
 mkdir -p /workspaces/Docker_Sandbox_Demo/reports
 mkdir -p /workspaces/Docker_Sandbox_Demo/logs
@@ -199,6 +217,14 @@ if [ ! -f ~/.gitconfig ]; then
     git config --global core.editor "code --wait"
 fi
 
+# Install docker-compose and start services
+echo "📦 Installing docker-compose..."
+sudo apt-get update -y && sudo apt-get install -y docker-compose
+
+echo "🚀 Starting Docker Compose services..."
+cd /workspaces/Docker_Sandbox_Demo
+docker-compose -f docker/docker-compose.yml up -d
+
 # Create a welcome message
 cat > /workspaces/Docker_Sandbox_Demo/WELCOME.md << 'EOF'
 # 🔒 Welcome to Cybersecurity Sandbox Demo
@@ -234,10 +260,10 @@ This environment is ready for cybersecurity education and testing!
 ## Ports for Testing
 
 - **8080**: Sandbox web server
-- **9090**: Vulnerable web application (when Docker services are running)
+- **9090**: Vulnerable Flask application (samples/vulnerable-flask-app/app.py)
+- **5000**: PWA Flask application (samples/unsecure-pwa)
 - **8000**: Development server
 - **3000**: Node.js applications
-- **5000**: Flask applications
 
 ## Project Structure
 
@@ -308,3 +334,9 @@ fi
 
 echo ""
 echo "🎉 Cybersecurity Sandbox Demo is ready!"
+echo ""
+echo "📖 IMPORTANT: Please open WELCOME.md for complete setup instructions!"
+echo "   • You can open it by clicking: WELCOME.md in the file explorer"
+echo "   • Or run: code WELCOME.md"
+echo "   • Or use Ctrl+P and type: WELCOME.md"
+echo ""

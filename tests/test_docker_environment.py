@@ -30,7 +30,8 @@ class DockerSandboxValidationTest(unittest.TestCase):
         cls.project_root = Path(__file__).parent.parent
         os.chdir(cls.project_root)
         cls.docker_client = docker.from_env()
-        cls.expected_ports = [5000, 9090]  # Flask app, PWA app
+        # Flask on 9090, PWA on 5000
+        cls.expected_ports = [9090, 5000]
         cls.timeout = 30  # seconds
 
     def test_01_docker_containers_running(self):
@@ -77,7 +78,7 @@ class DockerSandboxValidationTest(unittest.TestCase):
             )
 
             running_services = result.stdout.strip().split("\n")
-            expected_services = ["sandbox", "vulnerable-web"]
+            expected_services = ["sandbox", "pwa-flask"]
             for service in expected_services:
                 self.assertIn(
                     service, running_services, f"{service} service not running"
@@ -95,10 +96,11 @@ class DockerSandboxValidationTest(unittest.TestCase):
         logger.info("Testing Flask application availability...")
 
         # First check if port 5000 is open
-        self._wait_for_port("localhost", 5000)
+        # Vulnerable Flask app now runs on port 9090
+        self._wait_for_port("localhost", 9090)
 
         try:
-            response = requests.get("http://localhost:5000", timeout=10)
+            response = requests.get("http://localhost:9090", timeout=10)
             self.assertEqual(
                 response.status_code,
                 200,
@@ -122,10 +124,11 @@ class DockerSandboxValidationTest(unittest.TestCase):
         logger.info("Testing PWA application availability...")
 
         # First check if port 9090 is open
-        self._wait_for_port("localhost", 9090)
+        # PWA Flask app now runs on port 5000
+        self._wait_for_port("localhost", 5000)
 
         try:
-            response = requests.get("http://localhost:9090", timeout=10)
+            response = requests.get("http://localhost:5000", timeout=10)
             self.assertEqual(
                 response.status_code,
                 200,
@@ -134,11 +137,22 @@ class DockerSandboxValidationTest(unittest.TestCase):
 
             # Check for expected PWA content
             content_lower = response.text.lower()
-            has_pwa_content = any(
-                keyword in content_lower
-                for keyword in ["manifest", "progressive", "pwa"]
+            # Check PWA-specific keywords
+            has_pwa = any(
+                kw in content_lower for kw in [
+                    "manifest", "progressive", "pwa"
+                ]
             )
-            self.assertTrue(has_pwa_content, "PWA app doesn't contain expected content")
+            self.assertTrue(
+                has_pwa,
+                "PWA content not found"
+            )
+            # Verify manifest link is present
+            self.assertIn(
+                'link rel="manifest"',
+                content_lower,
+                "PWA missing manifest link"
+            )
 
             logger.info("✅ PWA unsecure application is accessible")
 
@@ -160,7 +174,8 @@ class DockerSandboxValidationTest(unittest.TestCase):
         for sample_path in required_samples:
             full_path = self.project_root / sample_path
             self.assertTrue(
-                full_path.exists(), f"Sample application not found: {sample_path}"
+                full_path.exists(
+                ), f"Sample application not found: {sample_path}"
             )
 
             # Check if it's a valid Python file
@@ -187,7 +202,8 @@ class DockerSandboxValidationTest(unittest.TestCase):
 
         for tool_path in required_tools:
             full_path = self.project_root / tool_path
-            self.assertTrue(full_path.exists(), f"Analyzer tool not found: {tool_path}")
+            self.assertTrue(full_path.exists(),
+                            f"Analyzer tool not found: {tool_path}")
 
             # Test if the tool can show help
             try:
@@ -223,7 +239,8 @@ class DockerSandboxValidationTest(unittest.TestCase):
         for scenario_path in network_scenarios:
             full_path = self.project_root / scenario_path
             self.assertTrue(
-                full_path.exists(), f"Network scenario not found: {scenario_path}"
+                full_path.exists(
+                ), f"Network scenario not found: {scenario_path}"
             )
 
             # Test if scenario can be imported (syntax check)

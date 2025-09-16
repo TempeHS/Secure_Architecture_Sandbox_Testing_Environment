@@ -328,11 +328,11 @@ _________________________________________________________________
 _________________________________________________________________
 
 ### Regulatory Compliance
-**4. Data Protection Laws:** How might the vulnerabilities you found violate regulations like GDPR or CCPA?
+**4. Data Protection Laws:** How might the vulnerabilities you found violate regulations like Privacy Act,1988 (Privacy Act)?
 _________________________________________________________________
 _________________________________________________________________
 
-**5. Industry Standards:** What compliance requirements (PCI DSS, HIPAA, SOX) could be affected by these security issues?
+**5. Industry Standards:** What compliance requirements (ISM, ISO9126, ISO14598) could be affected by these security issues?
 _________________________________________________________________
 _________________________________________________________________
 

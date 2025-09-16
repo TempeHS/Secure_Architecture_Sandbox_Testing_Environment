@@ -115,7 +115,22 @@ python src/analyzer/network_cli.py --monitor-connections --educational --verbose
 echo "These are the current connections on our system"
 ```
 
-**💬 Explain to Students**: "This shows us who our computer is talking to right now. Just like a phone bill shows who you called, this shows what websites and servers our computer is communicating with."
+**💬 Expected Educational Output**:
+Students will see detailed explanations starting with:
+```
+🎓 EDUCATIONAL INSIGHTS
+Understanding Network Connection Monitoring:
+
+Network monitoring is essential for cybersecurity because it helps identify:
+- Unauthorized connections to your systems
+- Data exfiltration attempts
+- Command and control communications
+- Lateral movement within networks
+
+[Additional detailed analysis follows...]
+```
+
+**💬 Explain to Students**: "This shows us who our computer is talking to right now. Just like a phone bill shows who you called, this shows what websites and servers our computer is communicating with. The educational insights explain why this matters for security."
 
 **👥 Student Activity**: Students run the same commands to see their baseline network state
 

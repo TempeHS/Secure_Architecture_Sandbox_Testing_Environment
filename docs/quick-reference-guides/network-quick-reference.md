@@ -50,6 +50,22 @@ python src/analyzer/network_cli.py --capture-traffic --educational
 # Saves to: reports/network_traffic_capture_YYYYMMDD_HHMMSS.txt
 ```
 
+### Educational Mode Output
+When using `--educational`, expect detailed explanations including:
+```
+🎓 EDUCATIONAL INSIGHTS
+Understanding Network Connection Monitoring:
+
+Network monitoring is essential for cybersecurity because...
+[Detailed explanations of concepts and threat indicators]
+```
+
+This enhanced output helps students understand:
+- Why network monitoring matters for security
+- How to interpret connection patterns
+- What indicators suggest potential threats
+- Best practices for network security
+
 ## 🔍 Analysis Patterns
 
 ### Connection Analysis

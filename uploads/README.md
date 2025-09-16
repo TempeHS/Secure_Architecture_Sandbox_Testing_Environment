@@ -1,43 +1,55 @@
-# Docker Sandbox Demo - Student Flask App Requirements
+# Student Flask Application Template
 
-## 🎯 Overview
+## � Required Files and Structure
 
-Quick reference for students creating Flask applications for cybersecurity testing.
-
-## � Application Requirements
-
-### Required Files and Structure
 ```
 your-app-name/
-├── app.py             # Main Flask application 
+├── app.py             # Main Flask application file
 ├── requirements.txt   # Python dependencies
 └── README.md         # Optional documentation
 ```
 
-### File Specifications
+## 📝 File Specifications
 
-#### `app.py` Requirements
+### `app.py` Requirements
 - Must import Flask: `from flask import Flask`
 - Must create app instance: `app = Flask(__name__)`
 - Must include at least one route: `@app.route("/")`
 - Must run on port 8000: `app.run(debug=True, host='0.0.0.0', port=8000)`
 
-#### `requirements.txt` Requirements
+**Minimal Example:**
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8000)
+```
+
+### `requirements.txt` Requirements
 - Must include: `Flask==2.3.3`
 - Add other packages as needed with specific versions
+
+**Example:**
+```
+Flask==2.3.3
+requests==2.31.0
+```
 
 ### Port Assignment
 - **Use port 8000** for your Flask application
 - Alternative ports: 3000, 8080
 - **Do NOT use port 5000** (reserved)
 
-## 🔄 Docker Management
+## � Deploy and Refresh Your App
 
 ### Deploy Your App
 ```bash
-# Copy template (optional)
-cp -r uploads/ uploads/your-app-name
-
 # Install dependencies
 docker exec cybersec_sandbox bash -c "cd /workspace/uploads && pip3 install -r requirements.txt"
 
@@ -45,35 +57,25 @@ docker exec cybersec_sandbox bash -c "cd /workspace/uploads && pip3 install -r r
 docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
 ```
 
-### Refresh/Restart Commands
+### Refresh Docker/Restart App
 ```bash
-# Restart all Docker services
-docker-compose -f docker/docker-compose.yml restart
-
-# Stop and restart fresh
-docker-compose -f docker/docker-compose.yml down
-docker-compose -f docker/docker-compose.yml up -d
-
-# Kill your app and restart
+# Kill and restart your app
 docker exec cybersec_sandbox pkill -f "python.*app.py"
 docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
+
+# Restart all Docker services
+docker-compose -f docker/docker-compose.yml restart
 ```
 
-## 🌐 Access Your Application
+## 🌐 Access Your App
 
 ### URLs
-- **Codespaces**: `https://your-codespace-name-8000.app.github.dev`
+- **Flask App**: `https://your-codespace-name-8000.app.github.dev`
 - **Local test**: `curl http://localhost:8000`
-- **Web file browser**: `http://localhost:8080/uploads/` (nginx serves uploads folder)
+- **File browser**: `https://your-codespace-name-8080.app.github.dev/uploads/`
 
 ### Quick Test
 ```bash
-curl http://localhost:8000
-```
-
-### Quick Test
-```bash
-# Verify app is running
 curl http://localhost:8000
 ```
 
@@ -99,16 +101,19 @@ python3 src/analyzer/network_cli.py --monitor-connections --educational
 python3 src/analyzer/pentest_cli.py http://localhost:8000 --educational
 ```
 
-## 🐛 Quick Troubleshooting
+## � Quick Troubleshooting
 
 ```bash
 # Check if app is running
 curl http://localhost:8000
 
-# Kill and restart your app
-docker exec cybersec_sandbox pkill -f "python.*app.py"
-docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
+# View running processes
+docker exec cybersec_sandbox ps aux | grep python
 
 # Check port usage
 docker exec cybersec_sandbox netstat -tulpn | grep :8000
+
+# Kill and restart app
+docker exec cybersec_sandbox pkill -f "python.*app.py"
+docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
 ```

@@ -65,14 +65,14 @@ docker-compose up -d
 cd ..
 
 # Step 4: Test that websites are working (should show HTML content)
-curl http://localhost:5000  # Flask practice website
-curl http://localhost:9090  # PWA practice website
+ curl http://localhost:9090  # Flask practice website
+ curl http://localhost:5000  # PWA practice website
 
 # Step 5: Test the security scanning tool (should show help information)
 python src/analyzer/dast_cli.py --help
 
 # Step 6: Try a quick security scan (should find 5-15 security issues)
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
+ python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
 ```
 
 ### 🎯 What Should Happen:
@@ -90,10 +90,10 @@ Use the troubleshooting section at the bottom of this guide
 ```bash
 # Step 1: Basic scan demo (2 minutes)
 cd /workspaces/Docker_Sandbox_Demo
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
+ python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
 
 # Step 2: Deeper scan demo (5 minutes)
-python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
+ python src/analyzer/dast_cli.py http://localhost:9090 --deep-scan --educational
 
 # Step 3: Multiple websites demo (3 minutes)
 python src/analyzer/dast_cli.py --demo-apps --educational

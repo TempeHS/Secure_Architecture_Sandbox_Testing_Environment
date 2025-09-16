@@ -486,7 +486,7 @@ Design how DAST would fit into a development pipeline:
 ### Real-World Applications:
 - Web application penetration testing
 - DevSecOps pipeline integration
-- Compliance validation (PCI DSS, SOX)
+- Compliance validation (ISM, ISO14598)
 - Continuous security monitoring
 - Security assessment consulting
 

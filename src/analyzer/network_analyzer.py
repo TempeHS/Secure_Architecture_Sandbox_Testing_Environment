@@ -146,13 +146,19 @@ class NetworkAnalyzer:
         connections = self._get_active_connections()
         suspicious_connections = self._analyze_connections(connections)
 
-        return {
+        results = {
             'timestamp': datetime.now().isoformat(),
             'total_connections': len(connections),
             'active_connections': connections,
             'suspicious_connections': suspicious_connections,
             'findings': self.findings
         }
+
+        # Add educational insights if in educational mode
+        if self.educational_mode:
+            results['educational_insights'] = self.generate_educational_insights()
+
+        return results
 
     def analyze_dns_traffic(self, duration: int = 30) -> Dict[str, Any]:
         """

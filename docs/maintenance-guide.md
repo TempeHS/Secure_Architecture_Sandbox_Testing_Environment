@@ -4,7 +4,7 @@
 
 This maintenance guide provides comprehensive instructions for maintaining, updating, and extending the Docker Sandbox Demo project. It covers folder organization, content style guides, Docker requirements, and repository management standards.
 
-## 📁### Repository Management
+## 📁 Repository Management
 
 ### Git LFS (Large File Storage)
 - **Purpose**: Manages large binary files (DOCX, PDF, images) outside main Git repository
@@ -410,6 +410,9 @@ The project includes conversion utilities in `src/tools/` for internal maintenan
 - [ ] Test all exercise paths in Codespaces
 - [ ] Update vulnerability database entries
 - [ ] Verify Git LFS tracking and clean up old files
+- [ ] **Run complete test suite (76 tests across 5 modules) to ensure functionality**
+- [ ] **Check for missing Python imports in analyzer modules (tempfile, etc.)**
+- [ ] **Validate educational mode implementations across all CLI tools**
 
 ### Content Reviews (Per Semester)
 - [ ] Review exercise content for curriculum alignment
@@ -417,6 +420,9 @@ The project includes conversion utilities in `src/tools/` for internal maintenan
 - [ ] Review and update quick reference guides
 - [ ] Validate all instructor guides and answer keys
 - [ ] Test with actual student groups for feedback
+- [ ] **Verify all test modules pass with current codebase changes**
+- [ ] **Update test expectations when module functionality changes**
+- [ ] **Ensure JSON output formats match test expectations**
 
 ### Security Audits (Quarterly)
 - [ ] Review container security configurations
@@ -424,6 +430,62 @@ The project includes conversion utilities in `src/tools/` for internal maintenan
 - [ ] Test isolation boundaries in Codespaces
 - [ ] Review network security settings
 - [ ] Update threat scenarios for current landscape
+- [ ] **Validate Docker API compatibility with current Docker version**
+- [ ] **Test shell command execution patterns in containers**
+- [ ] **Verify educational mode security explanations are current**
+
+## � Common Maintenance Issues & Solutions
+
+### Import Dependencies
+
+**Issue**: Missing Python imports causing runtime failures
+**Example**: `tempfile` import missing in `dynamic_analyzer.py` causing Gobuster to fail
+**Detection**: Run complete test suite regularly to catch import errors
+**Solution**: 
+```python
+# Always verify imports at the top of modules
+import tempfile  # Required for Gobuster functionality
+import os
+import json
+# ... other imports
+```
+
+### Educational Mode Implementation
+
+**Issue**: Inconsistent educational mode across different CLI tools
+**Detection**: Test with `--educational` flag on all tools
+**Solution**: Ensure all CLI tools properly implement and display educational insights
+```python
+# Standard educational insight pattern
+if args.educational:
+    print("🎓 EDUCATIONAL INSIGHTS")
+    print("Detailed explanation of the security concept...")
+```
+
+### JSON Output Consistency
+
+**Issue**: Test expectations not matching actual JSON output structure
+**Example**: Tests expecting "connections" key when actual output uses "active_connections"
+**Detection**: Compare test expectations with actual CLI output
+**Solution**: Update tests to match implementation or vice versa
+
+### Docker API Compatibility
+
+**Issue**: Docker API changes affecting container command execution
+**Current Solution**: Use `["sh", "-c", command]` pattern for shell commands
+```python
+# Correct pattern for Docker API 7.1.0+
+container.exec_run(["sh", "-c", "complex shell command with | pipes"])
+
+# Instead of:
+container.exec_run("complex shell command with | pipes")  # May fail
+```
+
+### Testing Framework Maintenance
+
+**Current Status**: 76 tests across 5 modules (SAST: 12, DAST: 15, Network: 20, Sandbox: 15, Penetration: 14)
+**Best Practice**: Run full test suite before any major changes
+**Command**: `python -m pytest tests/test_*.py -v`
 
 ## 🚨 Emergency Procedures
 
@@ -451,8 +513,11 @@ The project includes conversion utilities in `src/tools/` for internal maintenan
 ### Contributing Guidelines
 - **Educational focus**: All contributions must enhance learning outcomes
 - **Code quality**: Follow established style guides and standards
-- **Testing**: Test all changes in Codespaces environment
+- **Testing**: Test all changes in Codespaces environment and run full test suite
 - **Documentation**: Update relevant documentation with changes
+- **Import validation**: Ensure all Python imports are properly included
+- **Educational mode**: Implement consistent educational explanations across tools
+- **JSON compatibility**: Maintain consistent output formats and update tests accordingly
 
 ---
 

@@ -323,9 +323,9 @@ Students should demonstrate understanding of:
 
 **7. Network security compliance requirements**:
 **Expected Answer**: 
-- **PCI DSS**: Network monitoring for payment card environments
-- **HIPAA**: Network access controls and monitoring for healthcare
-- **SOX**: IT controls including network security monitoring
+- **ISM**: Network monitoring for secure environments
+- **ISO9126**: Network quality controls and monitoring for healthcare systems
+- **ISO14598**: Network security evaluation standards
 - **NIST Framework**: Network security monitoring as part of detection functions
 
 ---
@@ -346,11 +346,11 @@ Students should demonstrate understanding of:
 ### Regulatory Compliance
 
 **4. Financial Sector Network Requirements**:
-**Expected Answer**: PCI DSS network monitoring for payment systems, banking regulations requiring network security controls, real-time fraud detection through network analysis, compliance auditing of network security.
+**Expected Answer**: ISM network monitoring for payment systems, banking regulations requiring network security controls, real-time fraud detection through network analysis, compliance auditing of network security.
 
 **5. Healthcare Network Compliance**:
 **Expected Answer**: 
-- **HIPAA**: Network access controls and audit logs for PHI access
+- **ISO9126**: Network access controls and audit logs for health information access
 - **FDA**: Medical device network security for connected devices
 - **State Laws**: Additional healthcare data protection requirements
 
@@ -398,8 +398,8 @@ Students should demonstrate understanding of:
 
 **4. Industry-Specific Network Requirements**:
 **Expected Answer**: 
-- **Financial**: Real-time fraud detection and PCI compliance
-- **Healthcare**: HIPAA network access controls and device security
+- **Financial**: Real-time fraud detection and ISM compliance
+- **Healthcare**: ISO9126 network access controls and device security
 - **Critical Infrastructure**: NERC CIP network security standards
 - **Government**: FISMA network monitoring requirements
 

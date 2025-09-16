@@ -18,7 +18,7 @@ services:
       - "8080:8080" # Main web server
       - "8000:8000" # Development server
       - "3000:3000" # Node.js apps
-      - "5000:5000" # Flask apps
+      - "9090:9090" # Flask apps (running on port 9090)
     environment:
       - PYTHONPATH=/workspace/src
       - SANDBOX_MODE=educational
@@ -42,21 +42,20 @@ services:
     # Services will start automatically via the startup script
     # To access bash interactively: docker exec -it cybersec_sandbox /bin/bash
 
-  # Simple vulnerable web application for testing
-  vulnerable-web:
-    image: nginx:alpine
-    container_name: vulnerable_web_app
-    hostname: vulnerable-web
+  # PWA Flask application service
+  pwa-flask:
+    build:
+      context: ../samples/unsecure-pwa
+      dockerfile: Dockerfile
+    container_name: pwa_flask_app
+    hostname: pwa-flask
     networks:
       - sandbox_network
-    volumes:
-      - /workspaces/Docker_Sandbox_Demo/samples/web-app:/usr/share/nginx/html:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "9090:80"
+      - "5000:5000" # Map host 5000 to PWA Flask app port
     environment:
-      - NGINX_HOST=vulnerable-web
-      - NGINX_PORT=80
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
     restart: unless-stopped
     depends_on:
       - sandbox

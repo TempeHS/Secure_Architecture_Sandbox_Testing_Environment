@@ -37,7 +37,7 @@ def run_test_suite():
     test_modules = [
         {
             "name": "Docker Environment Validation",
-            "module": "test_docker_environment_clean",
+            "module": "test_docker_environment",
             "description": "Validates Docker containers and services",
         },
         {
@@ -122,7 +122,8 @@ def run_test_suite():
             if result.wasSuccessful():
                 overall_results["passed_modules"] += 1
                 overall_results["passed_tests"] += result.testsRun
-                print(f"✅ {test_info['name']}: PASSED " f"({result.testsRun} tests)")
+                print(
+                    f"✅ {test_info['name']}: PASSED " f"({result.testsRun} tests)")
             else:
                 overall_results["failed_modules"] += 1
                 print(

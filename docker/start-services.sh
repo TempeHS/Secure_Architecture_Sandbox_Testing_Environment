@@ -88,8 +88,8 @@ start_additional_services
 echo "🎯 Cybersecurity Sandbox is ready!"
 echo "📊 Services status:"
 check_flask_status
-echo "🌐 Access vulnerable Flask app at: http://localhost:5000"
-echo "🌐 Access PWA application at: http://localhost:9090"
+echo "🌐 Access vulnerable Flask app at: http://localhost:9090"
+echo "🌐 Access PWA application at: http://localhost:5000"
 echo "📝 Logs are available in: /workspace/logs/"
 
 # Keep the container running and monitor services

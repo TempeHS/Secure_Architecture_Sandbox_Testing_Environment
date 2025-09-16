@@ -94,7 +94,6 @@ COPY docker/start-services.sh /usr/local/bin/start-services.sh
 RUN mkdir -p /workspace/src/sandbox \
     /workspace/src/analyzer \
     /workspace/src/reporter \
-    /workspace/samples/web-app \
     /workspace/samples/scripts \
     /workspace/docs/lesson-plans \
     /workspace/docs/exercises \

@@ -6,29 +6,29 @@ This repository contains a comprehensive Docker-based sandbox environment for te
 
 ## 🚀 Quick Start
 
-### Option 1: GitHub Codespaces (Recommended)
+### GitHub Codespaces (Recommended)
 1. Click the "Code" button and select "Create codespace on main"
 2. Wait for the environment to load (2-3 minutes)
 3. Follow the setup steps in our [Complete Setup Guide](docs/setup-guide.md)
 
-### Option 2: Local Development
+### 🎯 Upload Your Own Flask App for Sandbox Testing
+**Ready to upload your own Flask app for security testing?**
+
 ```bash
-git clone https://github.com/TempeHS/Docker_Sandbox_Demo.git
-cd Docker_Sandbox_Demo
+# Quick start - deploy your app
+cd uploads/
+docker exec cybersec_sandbox bash -c "cd /workspace/uploads && pip3 install -r requirements.txt"
+docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
 
-# Install Python dependencies (includes testing tools)
-pip3 install -r requirements.txt
+# Test your app
+curl http://localhost:8000
 
-# Start Docker services
-docker-compose -f docker/docker-compose.yml up -d
-
-# Install and start sample applications
-docker exec cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app && pip3 install -r requirements.txt"
-docker exec -d cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app && python3 app.py"
-
-# Validate setup
-python3 tests/test_docker_environment.py
+# Run security tests
+python3 src/analyzer/analyze_cli.py uploads/ --educational
+python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
 ```
+
+**📚 Complete Instructions**: [uploads/README.md](uploads/README.md) | **🛠️ Setup Guide**: [docs/setup-guide.md](docs/setup-guide.md)
 
 📖 **For detailed setup instructions and troubleshooting, see [docs/setup-guide.md](docs/setup-guide.md)**
 
@@ -166,13 +166,21 @@ A comprehensive 4-5 hour **advanced** exercise teaching students:
 
 ## 🎯 Sample Applications
 
-### 1. Vulnerable Flask Application
+### 1. **Student Flask Application** (`uploads/`)
+- **Purpose**: Your own Flask app for security testing
+- **Technology**: Python Flask web framework (customizable)
+- **Location**: `uploads/` folder with ready-to-use template
+- **Access**: Port 8000 (`http://localhost:8000`)
+- **Features**: File browser access, automatic Docker integration
+- **Instructions**: [uploads/README.md](uploads/README.md)
+
+### 2. Vulnerable Flask Application
 - **Technology**: Python Flask web framework
 - **Vulnerabilities**: SQL injection, XSS, weak authentication, debug mode
 - **Educational Focus**: Python security, web application vulnerabilities
 - **Analysis Results**: ~47 findings (17 high, 26 medium, 4 low severity)
 
-### 2. Unsecure Progressive Web App (PWA)
+### 3. Unsecure Progressive Web App (PWA)
 - **Technology**: Python Flask with PWA features
 - **Vulnerabilities**: Open redirects, SQL injection, insecure configurations
 - **Educational Focus**: Mobile/PWA security, configuration issues
@@ -218,13 +226,13 @@ python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output json
 **Dynamic Analysis (DAST):**
 ```bash
 # Basic web application scan
-python src/analyzer/dast_cli.py http://localhost:5000
+ python src/analyzer/dast_cli.py http://localhost:9090
 
 # Quick vulnerability check
-python src/analyzer/dast_cli.py http://localhost:5000 --quick
+ python src/analyzer/dast_cli.py http://localhost:9090 --quick
 
 # Deep scan with educational explanations
-python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
+ python src/analyzer/dast_cli.py http://localhost:9090 --deep-scan --educational
 
 # Scan all demo applications
 python src/analyzer/dast_cli.py --demo-apps --educational
@@ -311,10 +319,14 @@ Docker_Sandbox_Demo/
 │   ├── dast_cli.py           # DAST command-line interface
 │   ├── network_cli.py        # Network analysis command-line interface
 │   └── vulnerability_database.py # Educational vulnerability content
-├── samples/                    # Vulnerable applications for analysis
+├── samples/                    # Sample applications for analysis and testing
 │   ├── vulnerable-flask-app/  # Python Flask with security issues
 │   ├── unsecure-pwa/         # Progressive Web App with flaws
 │   └── network-scenarios/    # Network traffic generators and scenarios
+├── uploads/                   # Upload your Flask app for testing
+│   ├── app.py                # Flask application template
+│   ├── requirements.txt      # Python dependencies
+│   └── README.md            # Upload and testing guide
 ├── docker/                    # Container configuration
 │   ├── Dockerfile            # Sandbox container definition
 │   ├── docker-compose.yml    # Service orchestration

@@ -58,11 +58,16 @@
           "source.organizeImports": "explicit"
         },
         "workbench.colorTheme": "Default Dark+",
-        "workbench.iconTheme": "vscode-icons",
         "workbench.editorAssociations": {
           "*.md": "vscode.markdown.preview.editor"
         },
-        "terminal.integrated.fontSize": 18
+        "terminal.integrated.fontSize": 14,
+        // Suppress popup notifications in Codespaces
+        "extensions.ignoreRecommendations": true,
+        "security.workspace.trust.startupPrompt": "never",
+        // Disable the dev container rebuild notifications
+        "remote.containers.showRebuildNotification": false,
+        "dev.containers.showRebuildNotification": false
       }
     }
   },
@@ -93,6 +98,7 @@
   "onCreateCommand": "echo '🏗️  Creating Cybersecurity Sandbox environment...'",
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "echo '🔒 Cybersecurity Sandbox is ready for educational testing!'",
+  "postAttachCommand": "bash .devcontainer/open-welcome.sh",
   "remoteUser": "vscode",
   "containerEnv": {
     "PYTHONPATH": "/workspaces/Docker_Sandbox_Demo/src",

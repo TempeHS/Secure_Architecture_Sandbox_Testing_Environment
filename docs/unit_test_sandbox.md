@@ -8,29 +8,76 @@ This document describes the comprehensive unit testing framework for the Docker 
 
 ### Test Structure
 
-The testing framework consists of 6 specialized test modules plus 1 comprehensive system runner:
+The testing framework consists of 5 specialized test modules plus 1 comprehensive system runner:
 
 ```
 tests/
-├── run_all_tests.py                      # Master test runner
-├── test_docker_environment_clean.py      # Docker/Infrastructure tests
-├── test_sast_commands.py                 # Static Analysis tests
-├── test_dast_commands.py                 # Dynamic Analysis tests
-├── test_network_commands.py              # Network Analysis tests
-├── test_sandbox_commands.py              # Sandbox Security tests
-└── test_penetration_testing_commands.py  # Integrated Pentest tests
+├── run_all_tests.py      #### 6. Module Import Errors
+
+**Symptoms**:
+```
+❌ DAST Command Validation: ERROR  
+Error running Gobuster: name 'tempfile' is not defined
+```
+
+**Solution**:
+```bash
+# Check dynamic_analyzer.py for missing imports
+grep -n "import tempfile" src/analyzer/dynamic_analyzer.py
+
+# Add missing import if not found
+# Add 'import tempfile' to the import section of dynamic_analyzer.py
+```
+
+#### 7. Educational Mode Not Displaying
+
+**Symptoms**:
+```
+❌ Network test failed: Educational insights not found in output
+```
+
+**Solution**:
+```bash
+# Verify educational mode implementation in network modules
+python src/analyzer/network_cli.py --monitor-connections --educational
+
+# Check for "🎓 EDUCATIONAL INSIGHTS" header in output
+# Update network_analyzer.py and network_cli.py if missing
+```
+
+#### 8. JSON Output Key Mismatches
+
+**Symptoms**:
+```
+❌ KeyError: 'connections' not found in JSON output
+```
+
+**Solution**:
+```bash
+# Check actual JSON structure
+python src/analyzer/network_cli.py --monitor-connections --format json
+
+# Update test expectations to match actual implementation
+# Use "active_connections" instead of "connections" key
+```aster test runner
+├── test_sast_commands.py                 # Static Analysis tests (12 tests)
+├── test_dast_commands.py                 # Dynamic Analysis tests (15 tests)
+├── test_network_commands.py              # Network Analysis tests (20 tests)
+├── test_sandbox_commands.py              # Sandbox Security tests (15 tests)
+├── test_penetration_testing_commands.py  # Integrated Pentest tests (14 tests)
+└── test_docker_environment.py            # Docker/Infrastructure tests (optional)
 ```
 
 ### Test Execution Order
 
-Tests are executed in logical dependency order:
+Tests are executed in logical dependency order with **76 total tests**:
 
-1. **Docker Environment** - Validates infrastructure is ready
-2. **SAST Commands** - Tests static analysis capabilities
-3. **DAST Commands** - Tests dynamic analysis capabilities  
-4. **Network Commands** - Tests network monitoring capabilities
-5. **Sandbox Commands** - Tests container-based security analysis
-6. **Penetration Testing** - Tests integrated workflows
+1. **SAST Commands** (12 tests) - Tests static analysis capabilities
+2. **DAST Commands** (15 tests) - Tests dynamic analysis capabilities  
+3. **Network Commands** (20 tests) - Tests network monitoring capabilities
+4. **Sandbox Commands** (15 tests) - Tests container-based security analysis
+5. **Penetration Testing** (14 tests) - Tests integrated workflows
+6. **Docker Environment** (optional) - Validates infrastructure is ready
 
 ## Quick Start
 
@@ -65,35 +112,34 @@ python tests/run_all_tests.py
 # ================================================================================
 # DOCKER SANDBOX DEMO - COMPREHENSIVE SYSTEM TEST SUITE
 # ================================================================================
-# [1/6] Running Docker Environment Validation...
-# [2/6] Running SAST Command Validation...
-# [3/6] Running DAST Command Validation...
-# [4/6] Running Network Analysis Validation...
-# [5/6] Running Sandbox Command Validation...
-# [6/6] Running Penetration Testing Validation...
+# [1/5] Running SAST Command Validation...
+# [2/5] Running DAST Command Validation...
+# [3/5] Running Network Analysis Validation...
+# [4/5] Running Sandbox Command Validation...
+# [5/5] Running Penetration Testing Validation...
 # 🎉 SYSTEM STATUS: ALL TESTS PASSED!
 ```
 
 ### Running Individual Test Modules
 
 ```bash
-# Test Docker environment only
-python -m pytest tests/test_docker_environment_clean.py -v
-
-# Test SAST commands only
+# Test SAST commands only (12 tests)
 python -m pytest tests/test_sast_commands.py -v
 
-# Test DAST commands only
+# Test DAST commands only (15 tests)
 python -m pytest tests/test_dast_commands.py -v
 
-# Test Network analysis only
+# Test Network analysis only (20 tests)
 python -m pytest tests/test_network_commands.py -v
 
-# Test Sandbox commands only
+# Test Sandbox commands only (15 tests)
 python -m pytest tests/test_sandbox_commands.py -v
 
-# Test Penetration testing workflows only
+# Test Penetration testing workflows only (14 tests)
 python -m pytest tests/test_penetration_testing_commands.py -v
+
+# Optional: Test Docker environment
+python -m pytest tests/test_docker_environment.py -v
 ```
 
 ### Running Individual Tests
@@ -108,7 +154,7 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 
 ## Test Module Details
 
-### 1. Docker Environment Tests (`test_docker_environment_clean.py`)
+### 1. Docker Environment Tests (`test_docker_environment.py`) - Optional
 
 **Purpose**: Validates Docker infrastructure and application availability
 
@@ -123,13 +169,15 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 ```bash
 # What it tests:
 docker ps | grep cybersec_sandbox
-curl http://localhost:5000/
 curl http://localhost:9090/
+curl http://localhost:5000/
 ```
 
 **Dependencies**: Docker, docker-compose, requests library
 
-### 2. SAST Command Tests (`test_sast_commands.py`)
+**Note**: This module is optional and may not be included in all test runs since the other test modules verify application availability as part of their setup.
+
+### 2. SAST Command Tests (`test_sast_commands.py`) - 12 tests
 
 **Purpose**: Validates Static Application Security Testing CLI functionality
 
@@ -151,7 +199,7 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 
 **Dependencies**: analyze_cli.py, sample applications, JSON validation
 
-### 3. DAST Command Tests (`test_dast_commands.py`)
+### 3. DAST Command Tests (`test_dast_commands.py`) - 15 tests
 
 **Purpose**: Validates Dynamic Application Security Testing CLI functionality
 
@@ -166,24 +214,27 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 **Example**:
 ```bash
 # What it tests:
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
+python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
 python src/analyzer/dast_cli.py --demo-apps --tools nikto gobuster
-python src/analyzer/dast_cli.py http://localhost:5000 --output scan.json --format json
+python src/analyzer/dast_cli.py http://localhost:9090 --output scan.json --format json
 ```
 
 **Dependencies**: dast_cli.py, running web applications, HTTP client
 
-### 4. Network Analysis Tests (`test_network_commands.py`)
+**Known Issues Fixed**: 
+- Fixed missing `tempfile` import in dynamic_analyzer.py that was causing Gobuster directory enumeration to fail
+
+### 4. Network Analysis Tests (`test_network_commands.py`) - 20 tests
 
 **Purpose**: Validates Network Traffic Analysis CLI functionality
 
 **Key Tests**:
-- Connection monitoring
+- Connection monitoring with educational insights
 - Service discovery
 - Traffic capture and analysis
 - DNS analysis capabilities
 - Demo network scenarios
-- Report generation
+- Report generation with JSON output validation
 
 **Example**:
 ```bash
@@ -195,7 +246,12 @@ python src/analyzer/network_cli.py --capture-traffic --duration 30
 
 **Dependencies**: network_cli.py, network utilities, system permissions
 
-### 5. Sandbox Command Tests (`test_sandbox_commands.py`)
+**Recent Enhancements**:
+- Added educational insights to connection monitoring
+- Fixed JSON output key expectations (using "active_connections" instead of "connections")
+- Enhanced educational mode detection in tests
+
+### 5. Sandbox Command Tests (`test_sandbox_commands.py`) - 15 tests
 
 **Purpose**: Validates Sandbox Security Analysis within Docker container
 
@@ -217,7 +273,12 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 
 **Dependencies**: Docker container, security analysis tools, sample scripts
 
-### 6. Penetration Testing Tests (`test_penetration_testing_commands.py`)
+**Technical Notes**:
+- Uses Docker API 7.1.0 with ["sh", "-c", command] pattern for shell command execution
+- Implements proper timeout handling for container operations
+- Validates educational mode functionality within containerized environment
+
+### 6. Penetration Testing Tests (`test_penetration_testing_commands.py`) - 14 tests
 
 **Purpose**: Validates integrated penetration testing workflows
 
@@ -233,20 +294,22 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 # What it tests:
 # Phase 1: Reconnaissance
 python src/analyzer/network_cli.py --scan-services localhost --educational
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
+python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
 
 # Phase 2: Vulnerability Assessment
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
-python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
+python src/analyzer/dast_cli.py http://localhost:9090 --deep-scan --educational
 
 # Phase 3: Controlled Exploitation
-curl -X POST "http://localhost:5000/login" -d "username=admin' OR '1'='1&password=test"
+curl -X POST "http://localhost:9090/login" -d "username=admin' OR '1'='1&password=test"
 
 # Phase 4: Post-Exploitation Analysis
 python src/analyzer/network_cli.py --monitor-connections --duration 60 --educational
 ```
 
 **Dependencies**: All analyzer modules, web applications, HTTP client
+
+**Test Validation**: All 14 tests pass consistently, validating complete penetration testing workflow integration
 
 ## System Test Runner (`run_all_tests.py`)
 
@@ -257,6 +320,7 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 - **Error Analysis**: Shows first failure/error for quick diagnosis
 - **Results Archival**: Saves timestamped results to `reports/` directory
 - **Exit Codes**: Proper exit codes for CI/CD integration
+- **Current Status**: Validates 76 individual tests across 5 core modules
 
 ### Output Format
 
@@ -265,32 +329,44 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 DOCKER SANDBOX DEMO - COMPREHENSIVE SYSTEM TEST SUITE
 ================================================================================
 Project Root: /workspaces/Docker_Sandbox_Demo
-Test Time: 2024-12-19 14:30:15
+Test Time: 2025-09-16 14:30:15
 ================================================================================
 
-[1/6] Running Docker Environment Validation...
-Description: Validates Docker containers and services
-------------------------------------------------------------
-✅ Docker Environment Validation: PASSED (8 tests)
-
-[2/6] Running SAST Command Validation...
+[1/5] Running SAST Command Validation...
 Description: Tests Static Application Security Testing CLI
 ------------------------------------------------------------
 ✅ SAST Command Validation: PASSED (12 tests)
 
-...
+[2/5] Running DAST Command Validation...
+Description: Tests Dynamic Application Security Testing CLI
+------------------------------------------------------------
+✅ DAST Command Validation: PASSED (15 tests)
+
+[3/5] Running Network Analysis Validation...
+Description: Tests Network Traffic Analysis CLI
+------------------------------------------------------------
+✅ Network Analysis Validation: PASSED (20 tests)
+
+[4/5] Running Sandbox Command Validation...
+Description: Tests Sandbox Security Analysis within Docker
+------------------------------------------------------------
+✅ Sandbox Command Validation: PASSED (15 tests)
+
+[5/5] Running Penetration Testing Validation...
+Description: Tests integrated penetration testing workflows
+------------------------------------------------------------
+✅ Penetration Testing Validation: PASSED (14 tests)
 
 ================================================================================
 COMPREHENSIVE TEST RESULTS SUMMARY
 ================================================================================
-Test Modules: 6/6 passed
-Individual Tests: 89/89 passed
+Test Modules: 5/5 passed
+Individual Tests: 76/76 passed
 Failures: 0
 Errors: 0
 
 Module Results:
 ----------------------------------------
-✅ PASS Docker Environment Validation: 8 tests
 ✅ PASS SAST Command Validation: 12 tests
 ✅ PASS DAST Command Validation: 15 tests
 ✅ PASS Network Analysis Validation: 20 tests
@@ -387,15 +463,15 @@ docker ps  # Verify containers are running
 
 **Symptoms**:
 ```
-⚠️ http://localhost:5000 may not be available
+⚠️ http://localhost:9090 may not be available
 Connection refused
 ```
 
 **Solution**:
 ```bash
 # Check what's using the port
-netstat -tuln | grep 5000
-lsof -i :5000
+netstat -tuln | grep 9090
+lsof -i :9090
 
 # Restart docker-compose
 docker-compose restart
@@ -525,13 +601,12 @@ pre-commit install
 
 | Test Module | Duration | Test Count | Key Operations |
 |-------------|----------|------------|----------------|
-| Docker Environment | 30-60s | 8 tests | Container checks, HTTP requests |
 | SAST Commands | 60-120s | 12 tests | File analysis, report generation |
 | DAST Commands | 120-300s | 15 tests | Web scanning, deep analysis |
 | Network Analysis | 90-180s | 20 tests | Network monitoring, traffic capture |
 | Sandbox Commands | 60-120s | 15 tests | Container operations, tool execution |
 | Penetration Testing | 180-360s | 14 tests | Integrated workflows, manual testing |
-| **Total** | **8-20 minutes** | **84 tests** | **Full system validation** |
+| **Total** | **8-18 minutes** | **76 tests** | **Full system validation** |
 
 ### Resource Usage
 
@@ -622,6 +697,6 @@ This comprehensive testing framework ensures that all components of the Docker S
 
 For questions or issues with the testing framework, refer to the troubleshooting section or check the individual test module documentation within each test file.
 
-**Total Test Coverage**: 84 individual tests across 6 modules
-**Estimated Runtime**: 8-20 minutes for complete suite
+**Total Test Coverage**: 76 individual tests across 5 modules
+**Estimated Runtime**: 8-18 minutes for complete suite
 **Validation Coverage**: 100% of documented quick reference commands

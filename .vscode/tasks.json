@@ -1,0 +1,58 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Open WELCOME.md",
+            "type": "shell",
+            "command": "code",
+            "args": [
+                "WELCOME.md"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Opens the WELCOME.md file with getting started instructions"
+        },
+        {
+            "label": "Start Docker Services",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "-f",
+                "docker/docker-compose.yml",
+                "up",
+                "-d"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Starts all Docker services for the cybersecurity sandbox"
+        },
+        {
+            "label": "Stop Docker Services",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "-f",
+                "docker/docker-compose.yml",
+                "down"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "detail": "Stops all Docker services"
+        }
+    ]
+}
