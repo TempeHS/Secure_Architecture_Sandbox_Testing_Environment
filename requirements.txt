@@ -30,3 +30,6 @@ pyyaml>=6.0
 # Network security tools
 python-nmap>=0.7.1
 scapy>=2.5.0
+
+# Docker integration for testing
+docker>=6.0.0

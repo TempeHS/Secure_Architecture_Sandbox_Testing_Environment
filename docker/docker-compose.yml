@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   # Main sandbox container for cybersecurity analysis
   sandbox:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: cybersec_sandbox
     hostname: sandbox
     networks:
@@ -17,10 +15,10 @@ services:
       - sandbox_reports:/workspace/reports
       - sandbox_logs:/workspace/logs
     ports:
-      - "8080:8080"   # Main web server
-      - "8000:8000"   # Development server
-      - "3000:3000"   # Node.js apps
-      - "5000:5000"   # Flask apps
+      - "8080:8080" # Main web server
+      - "8000:8000" # Development server
+      - "3000:3000" # Node.js apps
+      - "5000:5000" # Flask apps
     environment:
       - PYTHONPATH=/workspace/src
       - SANDBOX_MODE=educational
@@ -32,14 +30,17 @@ services:
     cap_drop:
       - ALL
     cap_add:
-      - NET_RAW      # For nmap and network tools
-      - NET_ADMIN    # For network analysis
+      - NET_RAW # For nmap and network tools
+      - NET_ADMIN # For network analysis
     # Resource limits for Codespaces
     mem_limit: 1g
     cpus: 0.8
     restart: unless-stopped
+    # Keep container running and allow interactive access
     stdin_open: true
     tty: true
+    # Services will start automatically via the startup script
+    # To access bash interactively: docker exec -it cybersec_sandbox /bin/bash
 
   # Simple vulnerable web application for testing
   vulnerable-web:

@@ -77,7 +77,7 @@ ls
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Verify all security tools work (should show help for each)
-python src/analyzer/static_analyzer.py --help
+python src/analyzer/analyze_cli.py --help
 python src/analyzer/dast_cli.py --help  
 python src/analyzer/network_cli.py --help
 

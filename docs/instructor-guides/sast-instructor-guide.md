@@ -38,14 +38,14 @@ ls
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Verify the scanning tool works (should show help information)
-python src/analyzer/static_analyzer.py --help
+python src/analyzer/analyze_cli.py --help
 
 # Step 3: Check sample applications exist (should show file lists)
 ls samples/vulnerable-flask-app/
 ls samples/unsecure-pwa/
 
 # Step 4: Test a quick scan (should show security findings)
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --quick --educational
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 ```
 
 **✅ What Should Happen**:
@@ -94,10 +94,10 @@ python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --quick --ed
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Run a basic security scan (takes 30-60 seconds)
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 
 # Step 3: Count the problems found
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational | grep "Total findings:"
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep "Total findings:"
 ```
 
 #### 💭 Common Student Questions & Simple Answers:
@@ -126,13 +126,13 @@ python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educationa
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Scan the Flask web application (takes 1-2 minutes)
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 
 # Step 3: Look specifically for SQL injection problems
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational | grep -i "sql"
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep -i "sql"
 
 # Step 4: Save results to a file for review
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational > flask_security_results.txt
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational > flask_security_results.txt
 ```
 
 #### 🎭 Simple Demonstration for Class:
@@ -173,11 +173,11 @@ cursor.execute(query, (username,))
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Scan the PWA application
-python src/analyzer/static_analyzer.py samples/unsecure-pwa --educational
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
 
 # Step 3: Compare with previous results
 echo "PWA Security Issues:"
-python src/analyzer/static_analyzer.py samples/unsecure-pwa --educational | grep "Total findings:"
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational | grep "Total findings:"
 echo "Flask Security Issues:"  
 cat flask_security_results.txt | grep "Total findings:"
 ```
@@ -213,13 +213,13 @@ cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Quick comparison of both applications
 echo "=== Flask Web Application ==="
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --quick --educational | grep "Total findings:"
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep "Total findings:"
 
 echo "=== PWA Mobile-Style Application ==="  
-python src/analyzer/static_analyzer.py samples/unsecure-pwa --quick --educational | grep "Total findings:"
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational | grep "Total findings:"
 
 # Step 3: Generate a JSON report (for automation)
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --output json > flask_report.json
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output flask_report.json --format json
 echo "JSON report saved for development team integration"
 ```
 
@@ -246,13 +246,13 @@ If some students finish early, challenge them to:
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Focus on high-priority issues only
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational | grep -A 5 -B 5 "High"
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep -A 5 -B 5 "High"
 
 # Step 3: Count different severity levels
 echo "Critical Issues:"
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational | grep "High" | wc -l
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep "High" | wc -l
 echo "Medium Issues:"  
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educational | grep "Medium" | wc -l
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep "Medium" | wc -l
 ```
 
 #### 📝 Student Activity: Security Recommendation Report
@@ -277,7 +277,7 @@ python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --educationa
 cd /workspaces/Docker_Sandbox_Demo
 
 # Check the tool exists  
-ls src/analyzer/static_analyzer.py
+ls src/analyzer/analyze_cli.py
 
 # If file doesn't exist, contact technical support
 ```

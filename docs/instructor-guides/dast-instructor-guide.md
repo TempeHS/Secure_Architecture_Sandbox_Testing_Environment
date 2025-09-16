@@ -248,7 +248,7 @@ cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Compare SAST (code analysis) vs DAST (website testing)
 echo "=== SAST Results (Code Analysis) ==="
-python src/analyzer/static_analyzer.py samples/vulnerable-flask-app --quick --educational | grep "Total findings:"
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational | grep "Total findings:"
 
 echo "=== DAST Results (Website Testing) ==="
 python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational | grep "Total findings:"

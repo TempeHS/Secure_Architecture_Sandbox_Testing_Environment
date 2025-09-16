@@ -150,7 +150,7 @@ _________________________________________________________________
 ### 4.1 JSON Analysis Exercise
 ```bash
 # Generate JSON reports
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output json > flask_report.json
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output flask_report.json --format json
 
 # Count findings by severity
 grep -o '"severity": "high"' flask_report.json | wc -l

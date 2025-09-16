@@ -174,8 +174,8 @@ python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational --verbose
 #### Commands to Execute:
 ```bash
 # Comprehensive SAST analysis
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational --output reports/pentest_sast_flask.json
-python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational --output reports/pentest_sast_pwa.json
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational --output reports/pentest_sast_flask.json --format json
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational --output reports/pentest_sast_pwa.json --format json
 ```
 
 #### Vulnerability Classification Table:
@@ -192,8 +192,8 @@ python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational --output r
 #### Commands to Execute:
 ```bash
 # Comprehensive DAST scans
-python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational --output reports/pentest_dast_flask.json
-python src/analyzer/dast_cli.py http://localhost:8080 --deep-scan --educational --output reports/pentest_dast_pwa.json
+python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational --output reports/pentest_dast_flask.json --format json
+python src/analyzer/dast_cli.py http://localhost:8080 --deep-scan --educational --output reports/pentest_dast_pwa.json --format json
 ```
 
 #### Runtime Vulnerability Assessment:
@@ -219,7 +219,7 @@ python src/analyzer/dast_cli.py http://localhost:8080 --deep-scan --educational 
 #### Commands to Execute:
 ```bash
 # Monitor network behavior during testing
-python src/analyzer/network_cli.py --capture-traffic --duration 300 --educational --output reports/pentest_network.json
+python src/analyzer/network_cli.py --capture-traffic --duration 300 --educational --output reports/pentest_network.json --format json
 ```
 
 #### Network Analysis Results:

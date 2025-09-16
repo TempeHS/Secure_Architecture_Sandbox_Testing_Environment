@@ -9,14 +9,28 @@ This repository contains a comprehensive Docker-based sandbox environment for te
 ### Option 1: GitHub Codespaces (Recommended)
 1. Click the "Code" button and select "Create codespace on main"
 2. Wait for the environment to load (2-3 minutes)
-3. The sandbox will be ready to use immediately
+3. Follow the setup steps in our [Complete Setup Guide](docs/setup-guide.md)
 
 ### Option 2: Local Development
 ```bash
 git clone https://github.com/TempeHS/Docker_Sandbox_Demo.git
 cd Docker_Sandbox_Demo
+
+# Install Python dependencies (includes testing tools)
+pip3 install -r requirements.txt
+
+# Start Docker services
 docker-compose -f docker/docker-compose.yml up -d
+
+# Install and start sample applications
+docker exec cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app && pip3 install -r requirements.txt"
+docker exec -d cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app && python3 app.py"
+
+# Validate setup
+python3 tests/test_docker_environment.py
 ```
+
+📖 **For detailed setup instructions and troubleshooting, see [docs/setup-guide.md](docs/setup-guide.md)**
 
 ## 📊 Report Organization
 

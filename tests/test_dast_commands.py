@@ -1,0 +1,473 @@
+#!/usr/bin/env python3
+"""
+DAST (Dynamic Application Security Testing) Command Validation Tests
+
+This test suite validates all DAST commands from the quick reference guide
+to ensure they work correctly and produce expected output.
+"""
+
+import unittest
+import subprocess
+import json
+import requests
+import time
+import os
+import logging
+from pathlib import Path
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+class DASTCommandValidationTest(unittest.TestCase):
+    """Test suite to validate DAST analyzer commands."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up test environment once for all tests."""
+        cls.project_root = Path(__file__).parent.parent
+        os.chdir(cls.project_root)
+        cls.dast_cli = "src/analyzer/dast_cli.py"
+        cls.timeout = 120  # seconds - DAST takes longer
+        cls.reports_dir = cls.project_root / "reports"
+        cls.reports_dir.mkdir(exist_ok=True)
+        cls.flask_url = "http://localhost:5000"
+        cls.pwa_url = "http://localhost:9090"
+
+        # Wait for applications to be available
+        cls._wait_for_applications()
+
+    @classmethod
+    def _wait_for_applications(cls):
+        """Wait for test applications to be available."""
+        logger.info("Waiting for test applications to be available...")
+
+        for url in [cls.flask_url, cls.pwa_url]:
+            start_time = time.time()
+            while time.time() - start_time < 60:  # 1 minute timeout
+                try:
+                    response = requests.get(url, timeout=5)
+                    if response.status_code == 200:
+                        logger.info(f"✅ {url} is available")
+                        break
+                except requests.exceptions.RequestException:
+                    time.sleep(2)
+                    continue
+            else:
+                logger.warning(f"⚠️ {url} may not be available")
+
+    def test_01_dast_help_command(self):
+        """Test DAST analyzer help command."""
+        logger.info("Testing DAST help command...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, "--help"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST help command failed: {result.stderr}"
+            )
+            self.assertIn(
+                "Dynamic Application Security Testing",
+                result.stdout,
+                "Help output missing expected content",
+            )
+            self.assertIn(
+                "--educational", result.stdout, "Help missing --educational option"
+            )
+            self.assertIn(
+                "--deep-scan", result.stdout, "Help missing --deep-scan option"
+            )
+
+            logger.info("✅ DAST help command works correctly")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST help command timed out")
+
+    def test_02_dast_basic_scan_flask(self):
+        """Test basic DAST scan on Flask application."""
+        logger.info("Testing basic DAST scan on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST basic scan failed: {result.stderr}"
+            )
+            self.assertIn(
+                "Analysis complete",
+                result.stdout.lower(),
+                "Scan output missing completion message",
+            )
+
+            logger.info("✅ Basic DAST scan on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST basic scan timed out")
+
+    def test_03_dast_quick_scan_flask(self):
+        """Test quick DAST scan on Flask application."""
+        logger.info("Testing quick DAST scan on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--quick"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout // 2,  # Quick scan should be faster
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST quick scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ Quick DAST scan on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST quick scan timed out")
+
+    def test_04_dast_educational_mode_flask(self):
+        """Test DAST analysis with educational explanations on Flask app."""
+        logger.info("Testing DAST educational mode on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--educational"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST educational scan failed: {result.stderr}"
+            )
+            self.assertIn(
+                "Educational", result.stdout, "Educational mode missing explanations"
+            )
+
+            logger.info("✅ DAST educational mode on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST educational scan timed out")
+
+    def test_05_dast_deep_scan_flask(self):
+        """Test DAST deep scan on Flask application."""
+        logger.info("Testing DAST deep scan on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--deep-scan"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout * 2,  # Deep scan takes longer
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST deep scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST deep scan on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST deep scan timed out")
+
+    def test_06_dast_json_output_flask(self):
+        """Test DAST analysis with JSON output on Flask app."""
+        logger.info("Testing DAST JSON output on Flask app...")
+
+        output_file = self.reports_dir / "test_dast_flask.json"
+
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    self.dast_cli,
+                    self.flask_url,
+                    "--output",
+                    str(output_file),
+                    "--format",
+                    "json",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST JSON scan failed: {result.stderr}"
+            )
+            self.assertTrue(output_file.exists(), "JSON output file was not created")
+
+            # Validate JSON structure
+            with open(output_file, "r") as f:
+                data = json.load(f)
+                self.assertIn("findings", data, "JSON output missing findings key")
+                self.assertIn("target_url", data, "JSON output missing target_url key")
+
+            logger.info("✅ DAST JSON output on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST JSON scan timed out")
+        except json.JSONDecodeError:
+            self.fail("DAST JSON output is not valid JSON")
+        finally:
+            # Clean up
+            if output_file.exists():
+                output_file.unlink()
+
+    def test_07_dast_text_output_flask(self):
+        """Test DAST analysis with text output on Flask app."""
+        logger.info("Testing DAST text output on Flask app...")
+
+        output_file = self.reports_dir / "test_dast_flask.txt"
+
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    self.dast_cli,
+                    self.flask_url,
+                    "--output",
+                    str(output_file),
+                    "--format",
+                    "txt",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST text scan failed: {result.stderr}"
+            )
+            self.assertTrue(output_file.exists(), "Text output file was not created")
+
+            # Validate text content
+            with open(output_file, "r") as f:
+                content = f.read()
+                self.assertGreater(len(content), 50, "Text output seems too short")
+
+            logger.info("✅ DAST text output on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST text scan timed out")
+        finally:
+            # Clean up
+            if output_file.exists():
+                output_file.unlink()
+
+    def test_08_dast_verbose_mode_flask(self):
+        """Test DAST analysis with verbose output on Flask app."""
+        logger.info("Testing DAST verbose mode on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--verbose"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST verbose scan failed: {result.stderr}"
+            )
+            # Verbose mode should produce more detailed output
+            self.assertGreater(
+                len(result.stdout), 500, "Verbose output seems too short"
+            )
+
+            logger.info("✅ DAST verbose mode on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST verbose scan timed out")
+
+    def test_09_dast_quiet_mode_flask(self):
+        """Test DAST analysis in quiet mode on Flask app."""
+        logger.info("Testing DAST quiet mode on Flask app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--quiet"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST quiet scan failed: {result.stderr}"
+            )
+            # Quiet mode should produce less output
+            self.assertLess(
+                len(result.stdout), 200, "Quiet mode output seems too verbose"
+            )
+
+            logger.info("✅ DAST quiet mode on Flask app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST quiet scan timed out")
+
+    def test_10_dast_nikto_tool_only(self):
+        """Test DAST analysis with nikto tool only."""
+        logger.info("Testing DAST with nikto tool only...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--tools", "nikto"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST nikto scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST nikto-only scan works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST nikto scan timed out")
+
+    def test_11_dast_gobuster_tool_only(self):
+        """Test DAST analysis with gobuster tool only."""
+        logger.info("Testing DAST with gobuster tool only...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--tools", "gobuster"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST gobuster scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST gobuster-only scan works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST gobuster scan timed out")
+
+    def test_12_dast_multiple_tools(self):
+        """Test DAST analysis with multiple tools."""
+        logger.info("Testing DAST with multiple tools...")
+
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    self.dast_cli,
+                    self.flask_url,
+                    "--tools",
+                    "nikto",
+                    "gobuster",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout * 2,  # Multiple tools take longer
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST multi-tool scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST multi-tool scan works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST multi-tool scan timed out")
+
+    def test_13_dast_all_tools(self):
+        """Test DAST analysis with all available tools."""
+        logger.info("Testing DAST with all tools...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.flask_url, "--tools", "all"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout * 2,  # All tools take longer
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST all-tools scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST all-tools scan works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST all-tools scan timed out")
+
+    def test_14_dast_demo_apps_scan(self):
+        """Test DAST scan on all demo applications."""
+        logger.info("Testing DAST demo apps scan...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, "--demo-apps", "--educational"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout * 3,  # Multiple apps take much longer
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST demo apps scan failed: {result.stderr}"
+            )
+            self.assertIn(
+                "localhost:5000", result.stdout, "Demo apps scan missing Flask app"
+            )
+
+            logger.info("✅ DAST demo apps scan works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST demo apps scan timed out")
+
+    def test_15_dast_scan_pwa_app(self):
+        """Test DAST scan on PWA application."""
+        logger.info("Testing DAST scan on PWA app...")
+
+        try:
+            result = subprocess.run(
+                ["python", self.dast_cli, self.pwa_url, "--educational"],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"DAST PWA scan failed: {result.stderr}"
+            )
+
+            logger.info("✅ DAST scan on PWA app works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("DAST PWA scan timed out")
+
+
+if __name__ == "__main__":
+    # Run with verbose output
+    unittest.main(verbosity=2)

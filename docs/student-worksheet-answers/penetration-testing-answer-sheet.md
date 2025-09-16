@@ -80,7 +80,7 @@ Students should demonstrate understanding of:
 
 ### 2.1 Reconnaissance Phase
 
-**Expected Command**: `python src/analyzer/static_analyzer.py samples/ --educational`
+**Expected Command**: `python src/analyzer/analyze_cli.py samples/ --educational`
 
 **Information Gathered from SAST**:
 - **Technology Stack** - Programming languages, frameworks, and libraries used
@@ -97,7 +97,7 @@ Students should demonstrate understanding of:
 
 ### 2.2 Service Discovery
 
-**Expected Command**: `python src/analyzer/network_cli.py --service-scan --targets localhost`
+**Expected Command**: `python src/analyzer/network_cli.py --scan-services localhost`
 
 **Typical Services Discovered**:
 - **Port 5000** - Flask application (HTTP)
@@ -152,7 +152,7 @@ Students should demonstrate understanding of:
 
 ### 3.2 Network Infrastructure Assessment
 
-**Expected Command**: `python src/analyzer/network_cli.py --analyze-traffic --comprehensive`
+**Expected Command**: `python src/analyzer/network_cli.py --capture-traffic --duration 120`
 
 **Network Security Findings**:
 - **Unencrypted Communication** - HTTP traffic containing sensitive information

@@ -14,7 +14,7 @@ python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --verbose
 
 # JSON output for automation
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output json
+python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --output report.json --format json
 ```
 
 ### Application-Specific Commands

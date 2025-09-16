@@ -62,39 +62,47 @@ RUN cd /opt && \
     ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
 
 # Install Python security and analysis packages
-RUN pip3 install --no-cache-dir --upgrade pip && \
-    pip3 install --no-cache-dir \
-    # Security analysis tools
-    bandit \
-    safety \
-    semgrep \
-    # Web and network libraries
+RUN pip3 install --no-cache-dir --upgrade pip
+
+# Copy requirements files
+COPY requirements.txt /tmp/requirements.txt
+COPY samples/vulnerable-flask-app/requirements.txt /tmp/flask-requirements.txt
+
+# Install Python packages for cybersecurity analysis and Flask app
+RUN pip install --no-cache-dir \
     requests \
     beautifulsoup4 \
+    lxml \
+    scapy \
     python-nmap \
-    # Web frameworks for sample apps
-    flask \
-    # Report generation
-    reportlab \
-    jinja2 \
-    # Data handling
+    selenium \
     pyyaml \
-    # Development tools
     pytest \
     black \
-    flake8
+    flake8 && \
+    # Install main requirements
+    pip install --no-cache-dir -r /tmp/requirements.txt && \
+    # Install Flask app requirements
+    pip install --no-cache-dir -r /tmp/flask-requirements.txt && \
+    # Clean up
+    rm /tmp/requirements.txt /tmp/flask-requirements.txt
+
+# Copy startup script
+COPY docker/start-services.sh /usr/local/bin/start-services.sh
 
 # Create application directories with proper permissions
 RUN mkdir -p /workspace/src/sandbox \
-             /workspace/src/analyzer \
-             /workspace/src/reporter \
-             /workspace/samples/web-app \
-             /workspace/samples/scripts \
-             /workspace/docs/lesson-plans \
-             /workspace/docs/exercises \
-             /workspace/reports \
-             /workspace/logs && \
-    chown -R vscode:vscode /workspace
+    /workspace/src/analyzer \
+    /workspace/src/reporter \
+    /workspace/samples/web-app \
+    /workspace/samples/scripts \
+    /workspace/docs/lesson-plans \
+    /workspace/docs/exercises \
+    /workspace/reports \
+    /workspace/logs && \
+    chown -R vscode:vscode /workspace && \
+    # Make startup script executable
+    chmod +x /usr/local/bin/start-services.sh
 
 # Set working directory
 WORKDIR /workspace
@@ -114,7 +122,7 @@ EXPOSE 8080 8000 3000 5000
 
 # Health check to ensure container is ready
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python3 -c "import requests; print('Container is healthy')" || exit 1
+    CMD curl -f http://localhost:5000 || exit 1
 
-# Default command
-CMD ["/bin/bash"]
+# Default command - start services automatically
+CMD ["/usr/local/bin/start-services.sh"]

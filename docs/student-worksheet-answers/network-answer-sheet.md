@@ -47,11 +47,11 @@ Students should demonstrate understanding of:
 **Expected Command**: `python src/analyzer/network_cli.py --help`
 
 **Network Analysis Modes Available**:
-- **--monitor** - Real-time traffic monitoring and analysis
-- **--baseline** - Establish normal network activity patterns
-- **--analyze-traffic** - Analyze captured traffic for threats
+- **--monitor-connections** - Real-time connection monitoring and analysis
+- **--capture-traffic** - Capture and analyze network traffic patterns
 - **--dns-analysis** - Comprehensive DNS query and response analysis
-- **--service-scan** - Network service discovery and enumeration
+- **--scan-services TARGET** - Network service discovery and enumeration
+- **--demo-network** - Run network analysis demonstration
 
 **Teaching Point**: Network security requires both passive monitoring and active analysis techniques.
 
@@ -62,7 +62,7 @@ Students should demonstrate understanding of:
 ### 2.1 Normal Traffic Baseline
 
 **Expected Command**: `python samples/network-scenarios/basic_network_activity.py &`
-**Expected Command**: `python src/analyzer/network_cli.py --monitor --duration 60`
+**Expected Command**: `python src/analyzer/network_cli.py --monitor-connections --duration 60`
 
 **Typical Baseline Characteristics**:
 - **Protocols Observed**: HTTP (80), HTTPS (443), DNS (53), SSH (22)
@@ -100,7 +100,7 @@ Students should demonstrate understanding of:
 ### 3.1 Suspicious Pattern Analysis
 
 **Expected Command**: `python samples/network-scenarios/suspicious_traffic_generator.py &`
-**Expected Command**: `python src/analyzer/network_cli.py --analyze-traffic --suspicious`
+**Expected Command**: `python src/analyzer/network_cli.py --capture-traffic --duration 60`
 
 **Suspicious Activities Detected**:
 - **Port Scanning** - Sequential connection attempts to multiple ports
@@ -138,7 +138,7 @@ Students should demonstrate understanding of:
 ### 4.1 Backdoor Communication Analysis
 
 **Expected Command**: `python samples/network-scenarios/backdoor_simulation.py &`
-**Expected Command**: `python src/analyzer/network_cli.py --analyze-traffic --backdoor`
+**Expected Command**: `python src/analyzer/network_cli.py --capture-traffic --duration 90`
 
 **Backdoor Communication Indicators**:
 - **Command & Control (C2) Beacons** - Regular periodic connections to external servers
@@ -155,7 +155,7 @@ Students should demonstrate understanding of:
 ### 4.2 DNS Threat Analysis
 
 **Expected Command**: `python samples/network-scenarios/dns_threat_scenarios.py &`
-**Expected Command**: `python src/analyzer/network_cli.py --dns-analysis --threats`
+**Expected Command**: `python src/analyzer/network_cli.py --dns-analysis --duration 60`
 
 **DNS Security Threats Detected**:
 - **DNS Tunneling** - Excessive DNS queries with large payloads
@@ -189,7 +189,7 @@ Students should demonstrate understanding of:
 
 ### 5.1 Comprehensive Analysis Results
 
-**Expected Command**: `python src/analyzer/network_cli.py --comprehensive --all-scenarios`
+**Expected Command**: `python src/analyzer/network_cli.py --demo-network --educational`
 
 **Integration Benefits of Combined Analysis**:
 - **Complete Attack Chain Visibility** - From initial reconnaissance to data theft

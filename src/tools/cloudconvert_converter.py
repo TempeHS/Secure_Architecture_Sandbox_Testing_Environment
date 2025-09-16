@@ -86,11 +86,11 @@ class CloudConvertWorksheetConverter:
             if not self.api_key:
                 print("❌ No API key provided")
                 return False
-            
+
             if not self.api_key.startswith('eyJ'):
                 print("❌ API key does not appear to be in valid JWT format")
                 return False
-                
+
             self.log("API key validated successfully")
             return True
         except Exception as e:
@@ -294,7 +294,7 @@ class CloudConvertWorksheetConverter:
             # Basic API key validation
             if not self.api_key:
                 return {'error': 'No API key provided'}
-            
+
             # Check if API key looks like a valid JWT token
             if self.api_key.startswith('eyJ'):
                 return {
@@ -397,9 +397,12 @@ Setup:
             print(f"❌ Error: {account_info['error']}")
         else:
             print(f"� Status: {account_info.get('status', 'Unknown')}")
-            print(f"🔑 API Key Format: {account_info.get('api_key_format', 'Unknown')}")
-            print(f"� API Key Length: {account_info.get('api_key_length', 0)} characters")
-            print(f"✅ Ready for Conversion: {account_info.get('ready_for_conversion', False)}")
+            print(
+                f"🔑 API Key Format: {account_info.get('api_key_format', 'Unknown')}")
+            print(
+                f"� API Key Length: {account_info.get('api_key_length', 0)} characters")
+            print(
+                f"✅ Ready for Conversion: {account_info.get('ready_for_conversion', False)}")
             if 'note' in account_info:
                 print(f"� Note: {account_info['note']}")
         return

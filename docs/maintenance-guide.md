@@ -364,7 +364,43 @@ security(samples): fix overly permissive vulnerable app configuration
 - **Container isolation**: Maintain proper container security boundaries
 - **Regular updates**: Keep security tools and dependencies current
 
-## 🔄 Maintenance Tasks
+## � Internal Development Tools
+
+### Worksheet Conversion Utilities
+
+The project includes conversion utilities in `src/tools/` for internal maintenance tasks:
+
+#### CloudConvert Converter (`cloudconvert_converter.py`)
+- **Purpose**: Convert Markdown worksheets to high-quality DOCX format for distribution
+- **Usage**: Internal tool for maintainers only - not for student/instructor use
+- **Requirements**: CloudConvert API key (configured via environment variable)
+- **Quality**: Produces professional-grade DOCX files with proper formatting
+- **Commands**:
+  ```bash
+  # Convert all worksheets (internal use only)
+  python src/tools/cloudconvert_converter.py --all
+  
+  # Convert single worksheet
+  python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md
+  
+  # Check account status
+  python src/tools/cloudconvert_converter.py --account-info
+  ```
+
+#### Local Converter (`worksheet_converter.py`)
+- **Purpose**: Offline conversion for development and testing
+- **Usage**: Quick conversions during development
+- **Requirements**: No external dependencies beyond python-docx
+- **Quality**: Basic formatting suitable for development
+- **Commands**:
+  ```bash
+  # Convert all worksheets locally
+  python src/tools/worksheet_converter.py --all
+  ```
+
+**Note**: These tools are for maintainer use only. Students and instructors should use the pre-converted DOCX files provided in the repository.
+
+## �🔄 Maintenance Tasks
 
 ### Regular Updates (Monthly)
 - [ ] Update base Docker images

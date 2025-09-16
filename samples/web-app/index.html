@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Web Application</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="warning">
+            <strong>⚠️ Configuration Notice:</strong> This is a placeholder page for the PWA application.
+        </div>
+        
+        <h1>Sample Web Application</h1>
+        <p>This page serves as a placeholder for the Progressive Web App vulnerability testing target.</p>
+        
+        <h2>Available Applications</h2>
+        <ul>
+            <li><strong>Main Vulnerable Flask App:</strong> <a href="http://localhost:5000">http://localhost:5000</a></li>
+            <li><strong>PWA Flask App:</strong> Requires configuration update (see setup-guide.md)</li>
+        </ul>
+        
+        <h2>Configuration Status</h2>
+        <p>The PWA application is currently served as static content. To enable the full Flask PWA application:</p>
+        <ol>
+            <li>Update docker-compose.yml to run the PWA Flask app on port 9090</li>
+            <li>Or manually start: <code>docker exec -d cybersec_sandbox bash -c "cd /workspace/samples/unsecure-pwa && python3 -c 'import main; main.app.run(debug=True, host=\"0.0.0.0\", port=9090)'"</code></li>
+        </ol>
+        
+        <p><em>For detailed setup instructions, see docs/setup-guide.md</em></p>
+    </div>
+</body>
+</html>
