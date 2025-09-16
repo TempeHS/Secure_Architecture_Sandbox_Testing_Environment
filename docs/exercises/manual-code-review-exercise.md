@@ -1,0 +1,496 @@
+# Manual Code Review Exercise
+
+## 🎯 Learning Objectives
+
+By the end of this exercise, students will be able to:
+
+- ✅ Understand what manual code review is and how it differs from automated
+  testing
+- ✅ Apply systematic code review methodology to identify security
+  vulnerabilities
+- ✅ Recognize common security anti-patterns through manual source code
+  inspection
+- ✅ Evaluate authentication, authorization, and input validation
+  implementations
+- ✅ Document security findings with clear explanations and remediation
+  recommendations
+- ✅ Understand the role of human judgment in security assessment
+
+## 📍 Getting Started - Important Navigation
+
+**🏠 Always start from the main project folder:**
+
+```bash
+# If you get lost, return to the main folder with this command:
+cd /workspaces/Docker_Sandbox_Demo
+
+# Check you're in the right place (should see folders like 'src', 'samples', 'docker'):
+ls
+```
+
+**Expected Output:**
+
+```
+copilot-instructions.md  docker/  docs/  reports/  samples/  src/  ...
+```
+
+## 📚 What is Manual Code Review?
+
+### Definition
+
+Manual code review is the systematic examination of source code by human
+reviewers to identify security vulnerabilities, logic flaws, and coding best
+practice violations. Unlike automated tools, manual review relies on **human
+intelligence and context understanding** to identify complex security issues.
+
+### 🔍 Real-World Analogy
+
+Think of manual code review like a **detective examining evidence**. While
+security scanners are like metal detectors that find obvious problems, human
+reviewers are like experienced detectives who can:
+
+- Understand the **context** and **intent** behind code
+- Spot **subtle patterns** that indicate security problems
+- Identify **business logic flaws** that tools miss
+- Recognize **architectural security issues**
+
+### Key Characteristics:
+
+- **Human Intelligence**: Leverages critical thinking and experience
+- **Context Awareness**: Understands business logic and application flow
+- **Pattern Recognition**: Identifies subtle security anti-patterns
+- **Deep Analysis**: Can trace complex data flows and security boundaries
+
+### Manual Review vs Automated Testing:
+
+| Aspect                    | Manual Code Review                         | Automated SAST/DAST          |
+| ------------------------- | ------------------------------------------ | ---------------------------- |
+| **Detection Capability**  | Complex logic flaws, business logic issues | Known vulnerability patterns |
+| **False Positives**       | Low (human judgment)                       | High (pattern matching)      |
+| **Coverage**              | Selective, focused                         | Comprehensive, systematic    |
+| **Speed**                 | Slower, thorough                           | Fast, repeatable             |
+| **Expertise Required**    | High security knowledge                    | Basic tool operation         |
+| **Context Understanding** | Excellent                                  | Limited                      |
+
+### Why Manual Review Matters:
+
+- **Business Logic Vulnerabilities**: Only humans can understand intended vs
+  actual behavior
+- **Complex Attack Chains**: Human reviewers can trace multi-step attack
+  scenarios
+- **Architecture Assessment**: Evaluation of overall security design and
+  patterns
+- **False Positive Reduction**: Human judgment eliminates tool noise
+- **Compliance Requirements**: Many security standards require human review
+
+---
+
+## 🎯 Exercise Overview
+
+In this exercise, you will conduct a comprehensive manual security code review
+of the **Unsecure PWA (Progressive Web Application)**. This application contains
+multiple security vulnerabilities that demonstrate common coding mistakes and
+security anti-patterns.
+
+### 🏗️ Application Architecture
+
+The Unsecure PWA consists of:
+
+- **Backend**: Python Flask web application (`main.py`, `user_management.py`)
+- **Frontend**: HTML templates with form handling (`templates/` directory)
+- **Database**: SQLite database for user and feedback storage
+- **Authentication**: Custom user login and registration system
+
+### 🔍 Review Focus Areas
+
+Your manual review will focus on:
+
+1. **Authentication and Session Management**
+2. **Input Validation and Sanitization**
+3. **SQL Injection Prevention**
+4. **Cross-Site Scripting (XSS) Protection**
+5. **Business Logic Security**
+6. **Error Handling and Information Disclosure**
+7. **Authorization and Access Control**
+
+---
+
+## 📋 Part 1: Application Discovery and Setup
+
+### Step 1.1: Navigate to the Application
+
+```bash
+# Navigate to the Unsecure PWA directory
+cd /workspaces/Docker_Sandbox_Demo/samples/unsecure-pwa
+
+# List all files to understand the application structure
+ls -la
+```
+
+**Expected files:**
+
+- `main.py` - Main Flask application
+- `user_management.py` - Database operations and user handling
+- `templates/` - HTML frontend files
+- `requirements.txt` - Python dependencies
+- `database_files/` - SQLite database storage
+
+### Step 1.2: Examine Application Structure
+
+```bash
+# View the main application entry point
+cat main.py
+
+# Examine the user management module
+cat user_management.py
+
+# Look at the HTML templates
+ls templates/
+cat templates/index.html
+cat templates/signup.html
+```
+
+### Step 1.3: Start the Application (Optional - for context)
+
+```bash
+# Install dependencies if needed
+pip install -r requirements.txt
+
+# Start the application
+python main.py
+```
+
+**Note**: The application will run on `http://localhost:5000`. You can view it
+in your browser to understand the user interface, but the focus of this exercise
+is **code review, not runtime testing**.
+
+---
+
+## 📋 Part 2: Authentication and Session Management Review
+
+### Step 2.1: Authentication Logic Analysis
+
+**🔍 Review Focus**: Examine how users log in and how passwords are handled.
+
+**Files to Review**: `user_management.py` (functions: `retrieveUsers`)
+
+**Key Questions to Ask:**
+
+1. How are passwords stored in the database?
+2. Is password hashing implemented correctly?
+3. Are there any timing attacks possible?
+4. How is user session management handled?
+
+**Manual Review Checklist:**
+
+- [ ] Password storage mechanism
+- [ ] SQL query construction for authentication
+- [ ] Timing attack vulnerabilities
+- [ ] Session management implementation
+- [ ] Brute force protection
+
+### Step 2.2: Registration Process Review
+
+**🔍 Review Focus**: Examine user registration and data validation.
+
+**Files to Review**: `user_management.py` (function: `insertUser`), `main.py`
+(signup route)
+
+**Key Questions to Ask:**
+
+1. Is input validation performed on registration data?
+2. Are there any SQL injection vulnerabilities?
+3. How is duplicate user handling implemented?
+4. What sensitive information is logged or stored?
+
+**Manual Review Checklist:**
+
+- [ ] Input validation on username, password, and date of birth
+- [ ] SQL injection prevention in INSERT statements
+- [ ] Duplicate user handling
+- [ ] Password complexity requirements
+- [ ] Data sanitization before storage
+
+---
+
+## 📋 Part 3: Input Validation and SQL Injection Analysis
+
+### Step 3.1: Database Query Review
+
+**🔍 Review Focus**: Examine all database interactions for SQL injection
+vulnerabilities.
+
+**Files to Review**: `user_management.py` (all database functions)
+
+**Critical Code Patterns to Look For:**
+
+```python
+# VULNERABLE PATTERN - String formatting in SQL
+cur.execute(f"SELECT * FROM users WHERE username = '{username}'")
+
+# SECURE PATTERN - Parameterized queries
+cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+```
+
+**Manual Review Process:**
+
+1. **Identify all SQL queries** in the application
+2. **Check query construction method** (string formatting vs parameterized)
+3. **Trace user input** from web forms to database queries
+4. **Evaluate injection attack scenarios**
+
+### Step 3.2: Form Input Analysis
+
+**🔍 Review Focus**: Examine how user input from web forms is processed.
+
+**Files to Review**: `main.py` (all route handlers), HTML templates
+
+**Key Areas to Examine:**
+
+- Form data extraction (`request.form["fieldname"]`)
+- Input validation before processing
+- Data sanitization mechanisms
+- Error handling for invalid input
+
+---
+
+## 📋 Part 4: Cross-Site Scripting (XSS) Prevention Review
+
+### Step 4.1: Template Security Analysis
+
+**🔍 Review Focus**: Examine HTML templates for XSS vulnerabilities.
+
+**Files to Review**: All files in `templates/` directory
+
+**Critical Template Patterns to Look For:**
+
+```html
+<!-- VULNERABLE PATTERN - Unescaped output -->
+<div>{{ user_input|safe }}</div>
+
+<!-- SECURE PATTERN - Escaped output -->
+<div>{{ user_input }}</div>
+```
+
+**Manual Review Process:**
+
+1. **Identify all user input display points** in templates
+2. **Check for `|safe` filter usage** (disables XSS protection)
+3. **Examine JavaScript code** for dynamic content insertion
+4. **Evaluate stored vs reflected XSS scenarios**
+
+### Step 4.2: Output Encoding Review
+
+**🔍 Review Focus**: Examine how user-generated content is displayed.
+
+**Files to Review**: `user_management.py` (function: `listFeedback`)
+
+**Key Questions to Ask:**
+
+1. How is user feedback displayed in the application?
+2. Is HTML encoding applied to user input?
+3. Are there any dynamic HTML generation vulnerabilities?
+
+---
+
+## 📋 Part 5: Business Logic and Authorization Review
+
+### Step 5.1: Access Control Analysis
+
+**🔍 Review Focus**: Examine authorization and access control mechanisms.
+
+**Files to Review**: `main.py` (all route handlers)
+
+**Key Areas to Examine:**
+
+- Route protection mechanisms
+- User authorization checks
+- Session validation
+- Administrative function access
+
+**Manual Review Questions:**
+
+1. Are all sensitive routes properly protected?
+2. Can users access functionality they shouldn't?
+3. Is there proper session validation?
+4. Are there any privilege escalation vulnerabilities?
+
+### Step 5.2: Business Logic Flaw Analysis
+
+**🔍 Review Focus**: Identify logic flaws that could be exploited.
+
+**Files to Review**: `main.py`, `user_management.py`
+
+**Common Business Logic Issues to Look For:**
+
+- Race conditions in authentication
+- Inconsistent validation logic
+- Improper state management
+- Logic bypass opportunities
+
+---
+
+## 📋 Part 6: Error Handling and Information Disclosure
+
+### Step 6.1: Error Message Analysis
+
+**🔍 Review Focus**: Examine error handling and information disclosure.
+
+**Files to Review**: All Python files
+
+**Key Questions to Ask:**
+
+1. What information is revealed in error messages?
+2. Are database errors properly handled?
+3. Could error messages help attackers?
+4. Is sensitive information logged inappropriately?
+
+**Information Disclosure Checklist:**
+
+- [ ] Database error messages
+- [ ] File path disclosures
+- [ ] Stack trace information
+- [ ] Debug information in production
+- [ ] Sensitive data in logs
+
+---
+
+## 📋 Part 7: Security Configuration Review
+
+### Step 7.1: Application Configuration Analysis
+
+**🔍 Review Focus**: Examine security-related configuration settings.
+
+**Files to Review**: `main.py` (Flask configuration)
+
+**Security Configuration Items:**
+
+- Debug mode settings
+- Secret key management
+- HTTPS configuration
+- Security headers
+- Cookie security settings
+
+### Step 7.2: Dependency Security Review
+
+**🔍 Review Focus**: Examine third-party dependencies and versions.
+
+**Files to Review**: `requirements.txt`
+
+**Dependency Review Process:**
+
+1. **Identify all dependencies** and their versions
+2. **Check for known vulnerabilities** in dependency versions
+3. **Evaluate dependency necessity** and principle of least privilege
+4. **Assess update and maintenance status**
+
+---
+
+## 📋 Part 8: Comprehensive Security Assessment
+
+### Step 8.1: Vulnerability Prioritization
+
+**🔍 Review Focus**: Rank identified vulnerabilities by risk and impact.
+
+**Risk Assessment Criteria:**
+
+- **Critical**: Direct compromise of confidentiality, integrity, or availability
+- **High**: Significant security impact with straightforward exploitation
+- **Medium**: Moderate security impact requiring specific conditions
+- **Low**: Minor security concerns with limited impact
+
+### Step 8.2: Remediation Recommendations
+
+**🔍 Review Focus**: Provide specific, actionable remediation guidance.
+
+**Recommendation Categories:**
+
+1. **Immediate Fixes**: Critical vulnerabilities requiring urgent attention
+2. **Security Improvements**: Important security enhancements
+3. **Best Practices**: Long-term security improvements
+4. **Architecture Changes**: Structural security improvements
+
+---
+
+## 📋 Part 9: Documentation and Reporting
+
+### Step 9.1: Security Finding Documentation
+
+For each vulnerability identified, document:
+
+- **Vulnerability Type**: SQL Injection, XSS, Authentication Bypass, etc.
+- **Location**: Specific file and line number
+- **Risk Level**: Critical, High, Medium, Low
+- **Description**: Clear explanation of the security issue
+- **Proof of Concept**: Example of how the vulnerability could be exploited
+- **Remediation**: Specific steps to fix the vulnerability
+
+### Step 9.2: Executive Summary Creation
+
+Create a high-level summary including:
+
+- **Total vulnerabilities found** by severity level
+- **Most critical security issues** requiring immediate attention
+- **Overall security posture** assessment
+- **Recommended next steps** for security improvement
+
+---
+
+## 🎓 Learning Reflection
+
+### Key Takeaways
+
+After completing this manual code review exercise, reflect on:
+
+1. **Human vs Tool Analysis**: What types of vulnerabilities did you identify
+   that automated tools might miss?
+
+2. **Context Importance**: How did understanding the application's business
+   logic help in identifying security issues?
+
+3. **Systematic Approach**: How did following a structured review process
+   improve your analysis?
+
+4. **Real-World Application**: How would this manual review process fit into a
+   development lifecycle?
+
+### Professional Development Questions
+
+1. **Code Review Integration**: How could this manual review process be
+   integrated with automated SAST/DAST testing?
+
+2. **Skills Development**: What additional knowledge or experience would improve
+   your manual review effectiveness?
+
+3. **Industry Application**: How do professional security teams balance manual
+   review with automated testing?
+
+---
+
+## 📚 Additional Resources
+
+### Security Review Methodologies
+
+- **OWASP Code Review Guide**: Comprehensive manual review methodology
+- **SANS Secure Code Review**: Industry-standard review practices
+- **Microsoft Security Development Lifecycle**: Integrated security review
+  processes
+
+### Vulnerability References
+
+- **OWASP Top 10**: Most critical web application security risks
+- **CWE (Common Weakness Enumeration)**: Comprehensive vulnerability
+  classification
+- **NIST Cybersecurity Framework**: Risk management and security controls
+
+### Professional Development
+
+- **Secure Code Review Certification**: Professional certification programs
+- **Security Training Programs**: Advanced security analysis training
+- **Industry Communities**: Professional security review communities and forums
+
+---
+
+**🔍 Remember: Manual code review is both an art and a science. The more you
+practice systematic analysis, the better you'll become at identifying complex
+security vulnerabilities that automated tools miss!**

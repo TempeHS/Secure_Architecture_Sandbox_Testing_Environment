@@ -1,11 +1,14 @@
 # Penetration Testing Exercise
+
 **Duration**: 4-5 hours  
 **Difficulty**: Advanced  
-**Prerequisites**: Completion of SAST, DAST, Network Analysis, and Sandbox exercises
+**Prerequisites**: Completion of SAST, DAST, Network Analysis, and Sandbox
+exercises
 
 ## 📍 Getting Started - Important Navigation
 
 **� CRITICAL: Always start from the main project folder:**
+
 ```bash
 # If you get lost, return to the main folder:
 cd /workspaces/Docker_Sandbox_Demo
@@ -13,7 +16,9 @@ cd /workspaces/Docker_Sandbox_Demo
 # Check you're in the right place:
 ls
 ```
+
 **Expected Output:**
+
 ```
 copilot-instructions.md  docker/  docs/  reports/  samples/  src/  ...
 ```
@@ -23,9 +28,11 @@ copilot-instructions.md  docker/  docs/  reports/  samples/  src/  ...
 ## �🎯 Learning Objectives
 
 By the end of this exercise, students will be able to:
+
 - ✅ Understand the penetration testing methodology and ethical considerations
 - ✅ Conduct comprehensive reconnaissance using multiple techniques
-- ✅ Integrate SAST, DAST, Network Analysis, and Sandbox findings for vulnerability assessment
+- ✅ Integrate SAST, DAST, Network Analysis, and Sandbox findings for
+  vulnerability assessment
 - ✅ Perform controlled exploitation in a safe environment
 - ✅ Document findings and recommendations professionally
 - ✅ Understand the importance of responsible disclosure and ethical hacking
@@ -34,18 +41,24 @@ By the end of this exercise, students will be able to:
 
 ### ⚠️ CRITICAL - Read Before Proceeding
 
-**This exercise is for EDUCATIONAL PURPOSES ONLY and must be conducted in the provided controlled environment.**
+**This exercise is for EDUCATIONAL PURPOSES ONLY and must be conducted in the
+provided controlled environment.**
 
-**Think of this like learning to be a "good guy" security guard who tests locks and alarms to make sure they work properly.**
+**Think of this like learning to be a "good guy" security guard who tests locks
+and alarms to make sure they work properly.**
 
 ### Ethical Hacking Principles (Memorize These!)
-1. **Permission**: Only test systems you own or have explicit written permission to test
-2. **Scope**: Stay within the defined scope of testing (this sandbox environment only)
+
+1. **Permission**: Only test systems you own or have explicit written permission
+   to test
+2. **Scope**: Stay within the defined scope of testing (this sandbox environment
+   only)
 3. **Documentation**: Document all activities for learning and accountability
 4. **Responsibility**: Report findings responsibly and help improve security
 5. **No Harm**: Never cause damage or disruption to systems or data
 
 ### Legal Responsibilities (This Is Serious!)
+
 - **NEVER** use these techniques against systems you don't own
 - **ALWAYS** obtain written permission before testing any system
 - **REPORT** vulnerabilities through proper channels
@@ -53,12 +66,13 @@ By the end of this exercise, students will be able to:
 - **FOLLOW** your organization's security policies and procedures
 
 ### 📝 Student Ethics Agreement
+
 **Before continuing, write and sign this agreement:**
 
 ```
 I, [Your Name], understand that:
 ✅ These techniques are for learning cybersecurity defense only
-✅ I will NEVER use these skills on systems I don't own  
+✅ I will NEVER use these skills on systems I don't own
 ✅ I will NEVER access computers, networks, or accounts without permission
 ✅ I will report any real vulnerabilities through proper channels
 ✅ I understand that unauthorized computer access is a serious crime
@@ -69,12 +83,19 @@ Student Signature: _________________ Date: _________
 
 ## 📋 Exercise Overview
 
-This comprehensive penetration testing exercise integrates all previous security analysis methods:
-- **Phase 1: Reconnaissance** - Information gathering using network analysis (like casing a building)
-- **Phase 2: Vulnerability Assessment** - Combining SAST, DAST, and sandbox findings (like finding weak locks)
-- **Phase 3: Exploitation** - Controlled exploitation of identified vulnerabilities (like testing if weak locks actually open)
-- **Phase 4: Post-Exploitation** - Understanding impact and maintaining access (like seeing what you could access)
-- **Phase 5: Reporting** - Professional documentation and recommendations (like writing a security report)
+This comprehensive penetration testing exercise integrates all previous security
+analysis methods:
+
+- **Phase 1: Reconnaissance** - Information gathering using network analysis
+  (like casing a building)
+- **Phase 2: Vulnerability Assessment** - Combining SAST, DAST, and sandbox
+  findings (like finding weak locks)
+- **Phase 3: Exploitation** - Controlled exploitation of identified
+  vulnerabilities (like testing if weak locks actually open)
+- **Phase 4: Post-Exploitation** - Understanding impact and maintaining access
+  (like seeing what you could access)
+- **Phase 5: Reporting** - Professional documentation and recommendations (like
+  writing a security report)
 
 ## 🔍 Phase 1: Reconnaissance (45 minutes)
 
@@ -83,16 +104,20 @@ This comprehensive penetration testing exercise integrates all previous security
 ### Step 1: Set Up Your Testing Environment
 
 **Navigate to main folder:**
+
 ```bash
 cd /workspaces/Docker_Sandbox_Demo
 pwd
 ```
+
 **Expected Output:**
+
 ```
 /workspaces/Docker_Sandbox_Demo
 ```
 
 **Start target applications:**
+
 ```bash
 # Start the applications we'll be testing
 cd samples/vulnerable-flask-app && python app.py &
@@ -106,11 +131,14 @@ sleep 10
 ```
 
 **Verify applications are running:**
+
 ```bash
 curl -I http://localhost:5000
 curl -I http://localhost:9090
 ```
+
 **Expected Output:**
+
 ```
 HTTP/1.1 200 OK
 Server: Werkzeug/X.X.X Python/3.X.X
@@ -120,10 +148,13 @@ Server: Werkzeug/X.X.X Python/3.X.X
 ### Step 2: Network Discovery
 
 **Discover active services:**
+
 ```bash
 python src/analyzer/network_cli.py --scan-services localhost --educational
 ```
+
 **Expected Output:**
+
 ```
 🌐 NETWORK SERVICE DISCOVERY
 🎯 Target: localhost
@@ -131,7 +162,7 @@ python src/analyzer/network_cli.py --scan-services localhost --educational
 
 DISCOVERED SERVICES:
 ✅ Port 5000: HTTP (Flask Application)
-✅ Port 9090: HTTP (PWA Application)  
+✅ Port 9090: HTTP (PWA Application)
 ✅ Port 22: SSH (if available)
 
 SERVICE DETAILS:
@@ -142,11 +173,12 @@ Flask App (Port 5000):
 
 PWA App (Port 9090):
 - Technology: Python Web App
-- Status: Running  
+- Status: Running
 - Risk Level: Medium (Unsecured configuration)
 ```
 
 **Check for running web applications:**
+
 ```bash
 python src/analyzer/network_cli.py --monitor-connections --educational
 ```
@@ -154,17 +186,20 @@ python src/analyzer/network_cli.py --monitor-connections --educational
 ### Step 3: Web Application Enumeration
 
 **Enumerate web directories and files:**
+
 ```bash
 python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
 ```
+
 **Expected Output:**
+
 ```
 🌐 DYNAMIC APPLICATION SECURITY TESTING (DAST) REPORT
 🎯 Target: http://localhost:5000
 
 🔍 Directory Discovery:
 Found: /admin
-Found: /login  
+Found: /login
 Found: /api
 Found: /debug (potentially sensitive)
 
@@ -180,6 +215,7 @@ SECURITY FINDINGS:
 ```
 
 **Test the PWA application:**
+
 ```bash
 python src/analyzer/dast_cli.py http://localhost:9090 --educational
 ```
@@ -187,10 +223,13 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational
 ### Step 4: Technology Stack Identification
 
 **Analyze application code:**
+
 ```bash
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 ```
+
 **Expected Output:**
+
 ```
 🔍 STATIC APPLICATION SECURITY TESTING (SAST) REPORT
 📂 Target: samples/vulnerable-flask-app
@@ -203,7 +242,7 @@ TECHNOLOGY STACK:
 
 SECURITY FINDINGS SUMMARY:
 🚨 High: X findings
-⚠️ Medium: X findings  
+⚠️ Medium: X findings
 🔵 Low: X findings
 ```
 
@@ -214,51 +253,62 @@ SECURITY FINDINGS SUMMARY:
 **Target Environment Profile:**
 
 1. **Network Services Discovered:**
-   - Port 5000: ___________________________
-   - Port 9090: ___________________________  
-   - Port 22: _____________________________
-   - Other ports: _________________________
+
+   - Port 5000: ************\_\_\_************
+   - Port 9090: ************\_\_\_************
+   - Port 22: **************\_**************
+   - Other ports: ************\_************
 
 2. **Web Application Structure:**
-   
+
    **Flask App (Port 5000):**
-   - Endpoints found: ______________________
-   - Technology stack: ____________________
-   - Security headers: ____________________
-   
+
+   - Endpoints found: **********\_\_**********
+   - Technology stack: ********\_\_\_\_********
+   - Security headers: ********\_\_\_\_********
+
    **PWA App (Port 9090):**
-   - Endpoints found: ______________________
-   - Technology stack: ____________________
-   - Security headers: ____________________
+
+   - Endpoints found: **********\_\_**********
+   - Technology stack: ********\_\_\_\_********
+   - Security headers: ********\_\_\_\_********
 
 3. **Technology Details:**
-   - Programming language: ________________
-   - Web framework: _______________________ 
-   - Database type: _______________________
-   - Server software: _____________________
+
+   - Programming language: ******\_\_\_\_******
+   - Web framework: **********\_\_\_**********
+   - Database type: **********\_\_\_**********
+   - Server software: **********\_**********
 
 4. **Initial Security Observations:**
+
    - Debug mode enabled: ⚪ Yes ⚪ No ⚪ Unknown
    - Missing security headers: ⚪ Yes ⚪ No
    - Sensitive endpoints exposed: ⚪ Yes ⚪ No
    - Development server in use: ⚪ Yes ⚪ No
 
 5. **Potential Attack Vectors Identified:**
-   - Web application vulnerabilities: ________
-   - Configuration issues: ________________
-   - Network service issues: ______________
-   - Code-level vulnerabilities: ___________
+   - Web application vulnerabilities: **\_\_\_\_**
+   - Configuration issues: ******\_\_\_\_******
+   - Network service issues: ******\_\_******
+   - Code-level vulnerabilities: ****\_\_\_****
 
 **❌ Troubleshooting:**
+
 - **Applications won't start?** Try: `cd docker && docker-compose up -d`
 - **Connection refused?** Wait longer: `sleep 30` then try again
-- **No services found?** Check applications are running: `curl http://localhost:5000`
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational --output reports/pentest_sast_flask.json
-python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational --output reports/pentest_sast_pwa.json
+- **No services found?** Check applications are running:
+  `curl http://localhost:5000` python src/analyzer/analyze_cli.py
+  samples/vulnerable-flask-app --educational --output
+  reports/pentest_sast_flask.json python src/analyzer/analyze_cli.py
+  samples/unsecure-pwa --educational --output reports/pentest_sast_pwa.json
 
 # Analyze suspicious scripts
-python src/analyzer/analyze_cli.py samples/suspicious-scripts --educational --output reports/pentest_sast_scripts.json
-```
+
+python src/analyzer/analyze_cli.py samples/suspicious-scripts --educational
+--output reports/pentest_sast_scripts.json
+
+````
 
 **Analysis Task**: Review SAST findings and identify critical vulnerabilities suitable for exploitation.
 
@@ -270,11 +320,13 @@ python src/analyzer/dast_cli.py http://localhost:8080 --deep-scan --educational 
 
 # Test for specific vulnerabilities
 python src/analyzer/dast_cli.py http://localhost:5000 --test-xss --test-sqli --educational
-```
+````
 
-**Analysis Task**: Identify exploitable runtime vulnerabilities and misconfigurations.
+**Analysis Task**: Identify exploitable runtime vulnerabilities and
+misconfigurations.
 
 ### 2.3 Network Traffic Analysis
+
 ```bash
 # Monitor network behavior during testing
 python src/analyzer/network_cli.py --capture-traffic --duration 300 --educational --output reports/pentest_network.json
@@ -284,9 +336,11 @@ python samples/network-scenarios/suspicious_traffic_generator.py 120 &
 python src/analyzer/network_cli.py --monitor-connections --duration 150 --educational
 ```
 
-**Analysis Task**: Understand network communication patterns and potential covert channels.
+**Analysis Task**: Understand network communication patterns and potential
+covert channels.
 
 ### 2.4 Sandbox Analysis
+
 ```bash
 # Analyze suspicious applications in controlled environment
 python samples/backdoor-apps/backdoor_app.py &
@@ -299,10 +353,13 @@ sleep 10
 python src/analyzer/network_cli.py --monitor-connections --duration 60 --educational
 ```
 
-**Analysis Task**: Identify malicious behavior patterns and backdoor communications.
+**Analysis Task**: Identify malicious behavior patterns and backdoor
+communications.
 
 ### 📝 Vulnerability Assessment Deliverable
+
 Create a vulnerability assessment report including:
+
 - Categorized vulnerability list (Critical, High, Medium, Low)
 - Exploitability assessment for each finding
 - Risk prioritization matrix
@@ -311,13 +368,17 @@ Create a vulnerability assessment report including:
 ## ⚔️ Phase 3: Controlled Exploitation (90 minutes)
 
 ### Objective
-Safely demonstrate exploitation of identified vulnerabilities in the controlled environment.
 
-**⚠️ REMINDER: Only exploit vulnerabilities in the provided sandbox environment.**
+Safely demonstrate exploitation of identified vulnerabilities in the controlled
+environment.
+
+**⚠️ REMINDER: Only exploit vulnerabilities in the provided sandbox
+environment.**
 
 ### 3.1 Web Application Exploitation
 
 #### SQL Injection Testing
+
 ```bash
 # Test for SQL injection vulnerabilities identified in DAST
 curl -X POST "http://localhost:5000/login" \
@@ -330,9 +391,11 @@ curl -X POST "http://localhost:5000/search" \
   -H "Content-Type: application/x-www-form-urlencoded"
 ```
 
-**Documentation Task**: Record successful exploitation attempts and data accessed.
+**Documentation Task**: Record successful exploitation attempts and data
+accessed.
 
 #### Cross-Site Scripting (XSS) Testing
+
 ```bash
 # Test for reflected XSS
 curl "http://localhost:5000/search?q=<script>alert('XSS')</script>"
@@ -343,11 +406,13 @@ curl -X POST "http://localhost:5000/comment" \
   -H "Content-Type: application/x-www-form-urlencoded"
 ```
 
-**Documentation Task**: Demonstrate XSS impact and potential for session hijacking.
+**Documentation Task**: Demonstrate XSS impact and potential for session
+hijacking.
 
 ### 3.2 Configuration Exploitation
 
 #### Debug Mode Exploitation
+
 ```bash
 # Test debug mode information disclosure
 curl "http://localhost:5000/debug" -v
@@ -356,9 +421,11 @@ curl "http://localhost:5000/debug" -v
 curl "http://localhost:5000/config" -v
 ```
 
-**Documentation Task**: Document information disclosed through misconfigurations.
+**Documentation Task**: Document information disclosed through
+misconfigurations.
 
 #### Weak Authentication Testing
+
 ```bash
 # Test default credentials
 curl -X POST "http://localhost:8080/login" \
@@ -371,11 +438,13 @@ curl -X POST "http://localhost:8080/login" \
   -H "Content-Type: application/x-www-form-urlencoded"
 ```
 
-**Documentation Task**: Record authentication bypass techniques and success rates.
+**Documentation Task**: Record authentication bypass techniques and success
+rates.
 
 ### 3.3 Network-Based Exploitation
 
 #### Service Exploitation
+
 ```bash
 # Test for service vulnerabilities discovered in network analysis
 python src/analyzer/network_cli.py --scan-services localhost --ports 1337,4444,31337 --educational
@@ -388,7 +457,9 @@ python src/analyzer/network_cli.py --monitor-connections --duration 70 --educati
 **Documentation Task**: Identify and exploit network-based vulnerabilities.
 
 ### 📝 Exploitation Deliverable
+
 Create an exploitation report including:
+
 - Successful exploitation techniques used
 - Data or access obtained through exploitation
 - Screenshots and evidence of successful attacks
@@ -397,9 +468,12 @@ Create an exploitation report including:
 ## 🔍 Phase 4: Post-Exploitation Analysis (45 minutes)
 
 ### Objective
-Understand the full impact of successful exploitation and demonstrate advanced techniques.
+
+Understand the full impact of successful exploitation and demonstrate advanced
+techniques.
 
 ### 4.1 Access Maintenance
+
 ```bash
 # Simulate persistence mechanisms
 python samples/backdoor-apps/backdoor_app.py &
@@ -411,9 +485,11 @@ python src/analyzer/network_cli.py --monitor-connections --duration 120 --educat
 python samples/network-scenarios/dns_threat_scenarios.py 60
 ```
 
-**Documentation Task**: Document persistence techniques and covert communication methods.
+**Documentation Task**: Document persistence techniques and covert communication
+methods.
 
 ### 4.2 Data Exfiltration Simulation
+
 ```bash
 # Simulate data exfiltration patterns
 python samples/network-scenarios/backdoor_simulation.py 90 &
@@ -422,9 +498,11 @@ python samples/network-scenarios/backdoor_simulation.py 90 &
 python src/analyzer/network_cli.py --capture-traffic --duration 100 --educational --output reports/pentest_exfiltration.json
 ```
 
-**Documentation Task**: Analyze data exfiltration patterns and detection evasion techniques.
+**Documentation Task**: Analyze data exfiltration patterns and detection evasion
+techniques.
 
 ### 4.3 Lateral Movement Simulation
+
 ```bash
 # Test internal network discovery
 python src/analyzer/network_cli.py --scan-services 127.0.0.1 --educational
@@ -433,10 +511,13 @@ python src/analyzer/network_cli.py --scan-services 127.0.0.1 --educational
 python samples/network-scenarios/suspicious_traffic_generator.py 60
 ```
 
-**Documentation Task**: Document lateral movement techniques and network traversal methods.
+**Documentation Task**: Document lateral movement techniques and network
+traversal methods.
 
 ### 📝 Post-Exploitation Deliverable
+
 Create a post-exploitation analysis including:
+
 - Persistence mechanisms identified
 - Data exfiltration capabilities
 - Lateral movement possibilities
@@ -445,30 +526,37 @@ Create a post-exploitation analysis including:
 ## 📊 Phase 5: Professional Reporting (60 minutes)
 
 ### Objective
-Create a comprehensive penetration testing report suitable for executive and technical audiences.
+
+Create a comprehensive penetration testing report suitable for executive and
+technical audiences.
 
 ### 5.1 Executive Summary Template
+
 ```markdown
 # Penetration Testing Report - Executive Summary
 
 ## Overview
+
 - **Target**: Docker Sandbox Demo Environment
 - **Testing Period**: [Date Range]
 - **Methodology**: OWASP Testing Guide + Custom Framework
 - **Scope**: Web Applications, Network Services, Code Analysis
 
 ## Key Findings
+
 - **Critical Vulnerabilities**: [Number] identified
 - **Exploitable Issues**: [Number] successfully exploited
 - **Business Risk**: [High/Medium/Low]
 
 ## Recommendations
+
 1. Immediate Actions Required
 2. Short-term Improvements (1-3 months)
 3. Long-term Security Strategy (6-12 months)
 ```
 
 ### 5.2 Technical Findings Report
+
 ```bash
 # Compile all analysis reports
 ls -la reports/pentest_*
@@ -478,11 +566,13 @@ python src/analyzer/analyze_cli.py samples/ --educational --output reports/pente
 python src/analyzer/dast_cli.py --demo-apps --educational --output reports/pentest_final_dast.json
 ```
 
-**Reporting Task**: Integrate findings from all testing phases into comprehensive technical documentation.
+**Reporting Task**: Integrate findings from all testing phases into
+comprehensive technical documentation.
 
 ### 5.3 Risk Assessment Matrix
 
 Create a risk matrix documenting:
+
 - **Vulnerability Description**: Technical details of each finding
 - **Exploitability**: Ease of exploitation (High/Medium/Low)
 - **Impact**: Potential business impact (Critical/High/Medium/Low)
@@ -490,6 +580,7 @@ Create a risk matrix documenting:
 - **Remediation**: Specific steps to address each vulnerability
 
 ### 📝 Final Deliverable Requirements
+
 1. **Executive Summary** (1-2 pages)
 2. **Technical Findings Report** (5-10 pages)
 3. **Risk Assessment Matrix** (spreadsheet or table)
@@ -501,18 +592,21 @@ Create a risk matrix documenting:
 Students will be evaluated on:
 
 ### Technical Competency (40%)
+
 - Successful completion of reconnaissance phase
 - Effective integration of SAST, DAST, Network, and Sandbox findings
 - Demonstrated exploitation techniques
 - Understanding of post-exploitation impact
 
 ### Methodology and Process (30%)
+
 - Systematic approach to penetration testing
 - Proper documentation throughout the process
 - Adherence to ethical guidelines and scope
 - Logical progression through testing phases
 
 ### Communication and Reporting (30%)
+
 - Clear and professional report writing
 - Appropriate technical detail for target audience
 - Effective risk communication
@@ -521,6 +615,7 @@ Students will be evaluated on:
 ## 🔄 Integration with Previous Exercises
 
 This penetration testing exercise builds directly on:
+
 - **SAST Exercise**: Static analysis findings inform target selection
 - **DAST Exercise**: Dynamic testing results guide exploitation attempts
 - **Network Analysis**: Traffic monitoring reveals communication patterns
@@ -529,7 +624,9 @@ This penetration testing exercise builds directly on:
 ## 💡 Key Learning Outcomes
 
 After completing this exercise, students will understand:
-- How individual security testing methods integrate into comprehensive assessments
+
+- How individual security testing methods integrate into comprehensive
+  assessments
 - The penetration testing methodology and its real-world application
 - The importance of ethical considerations in security testing
 - Professional reporting and communication skills for security findings
@@ -537,12 +634,19 @@ After completing this exercise, students will understand:
 
 ## 🛡️ Ethical Reflection Questions
 
-1. What are the ethical implications of penetration testing in real-world scenarios?
-2. How do you ensure penetration testing activities stay within legal and ethical boundaries?
-3. What responsibilities do security professionals have when discovering vulnerabilities?
-4. How should vulnerability disclosure be handled in different organizational contexts?
-5. What measures can organizations take to ensure ethical security testing practices?
+1. What are the ethical implications of penetration testing in real-world
+   scenarios?
+2. How do you ensure penetration testing activities stay within legal and
+   ethical boundaries?
+3. What responsibilities do security professionals have when discovering
+   vulnerabilities?
+4. How should vulnerability disclosure be handled in different organizational
+   contexts?
+5. What measures can organizations take to ensure ethical security testing
+   practices?
 
 ---
 
-**⚠️ Remember**: This exercise must only be conducted in the provided sandbox environment. Never apply these techniques to systems you do not own or lack explicit permission to test.
+**⚠️ Remember**: This exercise must only be conducted in the provided sandbox
+environment. Never apply these techniques to systems you do not own or lack
+explicit permission to test.

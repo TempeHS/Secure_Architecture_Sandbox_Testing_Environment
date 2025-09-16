@@ -2,13 +2,16 @@
 
 ## Overview
 
-This document describes the comprehensive unit testing framework for the Docker Sandbox Demo project. The test suite validates all cybersecurity analysis tools, commands, and workflows documented in the quick reference guides.
+This document describes the comprehensive unit testing framework for the Docker
+Sandbox Demo project. The test suite validates all cybersecurity analysis tools,
+commands, and workflows documented in the quick reference guides.
 
 ## Architecture
 
 ### Test Structure
 
-The testing framework consists of 5 specialized test modules plus 1 comprehensive system runner:
+The testing framework consists of 5 specialized test modules plus 1
+comprehensive system runner:
 
 ```
 tests/
@@ -16,9 +19,11 @@ tests/
 
 **Symptoms**:
 ```
+
 ❌ DAST Command Validation: ERROR  
 Error running Gobuster: name 'tempfile' is not defined
-```
+
+````
 
 **Solution**:
 ```bash
@@ -27,16 +32,18 @@ grep -n "import tempfile" src/analyzer/dynamic_analyzer.py
 
 # Add missing import if not found
 # Add 'import tempfile' to the import section of dynamic_analyzer.py
-```
+````
 
 #### 7. Educational Mode Not Displaying
 
 **Symptoms**:
+
 ```
 ❌ Network test failed: Educational insights not found in output
 ```
 
 **Solution**:
+
 ```bash
 # Verify educational mode implementation in network modules
 python src/analyzer/network_cli.py --monitor-connections --educational
@@ -48,12 +55,14 @@ python src/analyzer/network_cli.py --monitor-connections --educational
 #### 8. JSON Output Key Mismatches
 
 **Symptoms**:
+
 ```
 ❌ KeyError: 'connections' not found in JSON output
 ```
 
 **Solution**:
-```bash
+
+````bash
 # Check actual JSON structure
 python src/analyzer/network_cli.py --monitor-connections --format json
 
@@ -66,14 +75,14 @@ python src/analyzer/network_cli.py --monitor-connections --format json
 ├── test_sandbox_commands.py              # Sandbox Security tests (15 tests)
 ├── test_penetration_testing_commands.py  # Integrated Pentest tests (14 tests)
 └── test_docker_environment.py            # Docker/Infrastructure tests (optional)
-```
+````
 
 ### Test Execution Order
 
 Tests are executed in logical dependency order with **76 total tests**:
 
 1. **SAST Commands** (12 tests) - Tests static analysis capabilities
-2. **DAST Commands** (15 tests) - Tests dynamic analysis capabilities  
+2. **DAST Commands** (15 tests) - Tests dynamic analysis capabilities
 3. **Network Commands** (20 tests) - Tests network monitoring capabilities
 4. **Sandbox Commands** (15 tests) - Tests container-based security analysis
 5. **Penetration Testing** (14 tests) - Tests integrated workflows
@@ -159,6 +168,7 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 **Purpose**: Validates Docker infrastructure and application availability
 
 **Key Tests**:
+
 - Container status and accessibility
 - Port connectivity (5000, 9090, etc.)
 - Application endpoint availability
@@ -166,6 +176,7 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 - Reports directory structure
 
 **Example**:
+
 ```bash
 # What it tests:
 docker ps | grep cybersec_sandbox
@@ -175,13 +186,15 @@ curl http://localhost:5000/
 
 **Dependencies**: Docker, docker-compose, requests library
 
-**Note**: This module is optional and may not be included in all test runs since the other test modules verify application availability as part of their setup.
+**Note**: This module is optional and may not be included in all test runs since
+the other test modules verify application availability as part of their setup.
 
 ### 2. SAST Command Tests (`test_sast_commands.py`) - 12 tests
 
 **Purpose**: Validates Static Application Security Testing CLI functionality
 
 **Key Tests**:
+
 - Help command and argument validation
 - Educational mode explanations
 - Output format validation (JSON, text)
@@ -190,6 +203,7 @@ curl http://localhost:5000/
 - Report generation and validation
 
 **Example**:
+
 ```bash
 # What it tests:
 python src/analyzer/analyze_cli.py --help
@@ -204,6 +218,7 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 **Purpose**: Validates Dynamic Application Security Testing CLI functionality
 
 **Key Tests**:
+
 - URL target scanning
 - Quick vs deep scan modes
 - Educational explanations
@@ -212,6 +227,7 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 - Output format validation
 
 **Example**:
+
 ```bash
 # What it tests:
 python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
@@ -221,14 +237,17 @@ python src/analyzer/dast_cli.py http://localhost:9090 --output scan.json --forma
 
 **Dependencies**: dast_cli.py, running web applications, HTTP client
 
-**Known Issues Fixed**: 
-- Fixed missing `tempfile` import in dynamic_analyzer.py that was causing Gobuster directory enumeration to fail
+**Known Issues Fixed**:
+
+- Fixed missing `tempfile` import in dynamic_analyzer.py that was causing
+  Gobuster directory enumeration to fail
 
 ### 4. Network Analysis Tests (`test_network_commands.py`) - 20 tests
 
 **Purpose**: Validates Network Traffic Analysis CLI functionality
 
 **Key Tests**:
+
 - Connection monitoring with educational insights
 - Service discovery
 - Traffic capture and analysis
@@ -237,6 +256,7 @@ python src/analyzer/dast_cli.py http://localhost:9090 --output scan.json --forma
 - Report generation with JSON output validation
 
 **Example**:
+
 ```bash
 # What it tests:
 python src/analyzer/network_cli.py --monitor-connections --educational
@@ -247,8 +267,10 @@ python src/analyzer/network_cli.py --capture-traffic --duration 30
 **Dependencies**: network_cli.py, network utilities, system permissions
 
 **Recent Enhancements**:
+
 - Added educational insights to connection monitoring
-- Fixed JSON output key expectations (using "active_connections" instead of "connections")
+- Fixed JSON output key expectations (using "active_connections" instead of
+  "connections")
 - Enhanced educational mode detection in tests
 
 ### 5. Sandbox Command Tests (`test_sandbox_commands.py`) - 15 tests
@@ -256,6 +278,7 @@ python src/analyzer/network_cli.py --capture-traffic --duration 30
 **Purpose**: Validates Sandbox Security Analysis within Docker container
 
 **Key Tests**:
+
 - Container accessibility and permissions
 - Security tool availability (strace, netstat, lsof)
 - System call tracing functionality
@@ -264,6 +287,7 @@ python src/analyzer/network_cli.py --capture-traffic --duration 30
 - Log analysis patterns
 
 **Example**:
+
 ```bash
 # What it tests (inside container):
 docker exec -it cybersec_sandbox strace -o trace.log python script.py
@@ -274,7 +298,9 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 **Dependencies**: Docker container, security analysis tools, sample scripts
 
 **Technical Notes**:
-- Uses Docker API 7.1.0 with ["sh", "-c", command] pattern for shell command execution
+
+- Uses Docker API 7.1.0 with ["sh", "-c", command] pattern for shell command
+  execution
 - Implements proper timeout handling for container operations
 - Validates educational mode functionality within containerized environment
 
@@ -283,13 +309,16 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 **Purpose**: Validates integrated penetration testing workflows
 
 **Key Tests**:
-- 4-phase pentest methodology (Recon, Assessment, Exploitation, Post-Exploitation)
+
+- 4-phase pentest methodology (Recon, Assessment, Exploitation,
+  Post-Exploitation)
 - Integrated tool workflows
 - Multi-module report generation
 - Manual testing techniques (SQL injection, XSS)
 - Professional workflow validation
 
 **Example**:
+
 ```bash
 # What it tests:
 # Phase 1: Reconnaissance
@@ -309,7 +338,8 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 
 **Dependencies**: All analyzer modules, web applications, HTTP client
 
-**Test Validation**: All 14 tests pass consistently, validating complete penetration testing workflow integration
+**Test Validation**: All 14 tests pass consistently, validating complete
+penetration testing workflow integration
 
 ## System Test Runner (`run_all_tests.py`)
 
@@ -446,13 +476,15 @@ netstat -tuln | grep -E ":5000|:9090"
 
 #### 1. Container Not Running
 
-**Symptoms**: 
+**Symptoms**:
+
 ```
 ❌ Docker Environment Validation: FAILED
 Container cybersec_sandbox not found
 ```
 
 **Solution**:
+
 ```bash
 docker-compose down
 docker-compose up -d
@@ -462,12 +494,14 @@ docker ps  # Verify containers are running
 #### 2. Port Conflicts
 
 **Symptoms**:
+
 ```
 ⚠️ http://localhost:9090 may not be available
 Connection refused
 ```
 
 **Solution**:
+
 ```bash
 # Check what's using the port
 netstat -tuln | grep 9090
@@ -480,11 +514,13 @@ docker-compose restart
 #### 3. Permission Denied
 
 **Symptoms**:
+
 ```
 Permission denied for network operations
 ```
 
 **Solution**:
+
 ```bash
 # Run with sudo (if needed)
 sudo python tests/run_all_tests.py
@@ -496,12 +532,14 @@ python src/analyzer/network_cli.py --demo-network --educational
 #### 4. Module Import Errors
 
 **Symptoms**:
+
 ```
 ❌ SAST Command Validation: IMPORT ERROR
 Could not import test_sast_commands
 ```
 
 **Solution**:
+
 ```bash
 # Ensure you're in the project root
 cd /workspaces/Docker_Sandbox_Demo
@@ -516,11 +554,13 @@ pip install -r requirements.txt
 #### 5. Test Timeouts
 
 **Symptoms**:
+
 ```
 DAST deep scan timed out
 ```
 
 **Solution**:
+
 ```bash
 # Increase timeout in test configuration
 # Edit test files and increase timeout values
@@ -558,19 +598,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Docker
-      run: |
-        docker-compose up -d
-        sleep 30  # Wait for services to start
-    - name: Run Tests
-      run: |
-        python tests/run_all_tests.py
-    - name: Archive test results
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-results
-        path: reports/
+      - uses: actions/checkout@v2
+      - name: Set up Docker
+        run: |
+          docker-compose up -d
+          sleep 30  # Wait for services to start
+      - name: Run Tests
+        run: |
+          python tests/run_all_tests.py
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: reports/
 ```
 
 ### Pre-commit Hooks
@@ -599,14 +639,14 @@ pre-commit install
 
 ### Expected Test Execution Times
 
-| Test Module | Duration | Test Count | Key Operations |
-|-------------|----------|------------|----------------|
-| SAST Commands | 60-120s | 12 tests | File analysis, report generation |
-| DAST Commands | 120-300s | 15 tests | Web scanning, deep analysis |
-| Network Analysis | 90-180s | 20 tests | Network monitoring, traffic capture |
-| Sandbox Commands | 60-120s | 15 tests | Container operations, tool execution |
-| Penetration Testing | 180-360s | 14 tests | Integrated workflows, manual testing |
-| **Total** | **8-18 minutes** | **76 tests** | **Full system validation** |
+| Test Module         | Duration         | Test Count   | Key Operations                       |
+| ------------------- | ---------------- | ------------ | ------------------------------------ |
+| SAST Commands       | 60-120s          | 12 tests     | File analysis, report generation     |
+| DAST Commands       | 120-300s         | 15 tests     | Web scanning, deep analysis          |
+| Network Analysis    | 90-180s          | 20 tests     | Network monitoring, traffic capture  |
+| Sandbox Commands    | 60-120s          | 15 tests     | Container operations, tool execution |
+| Penetration Testing | 180-360s         | 14 tests     | Integrated workflows, manual testing |
+| **Total**           | **8-18 minutes** | **76 tests** | **Full system validation**           |
 
 ### Resource Usage
 
@@ -643,11 +683,12 @@ python -m pytest tests/ --cov=src --cov-report=html
 5. **Update this documentation** with new test descriptions
 
 Example new test:
+
 ```python
 def test_99_new_feature_validation(self):
     """Test new feature functionality."""
     logger.info("Testing new feature...")
-    
+
     try:
         result = subprocess.run(
             ["python", "src/analyzer/new_tool.py", "--new-option"],
@@ -656,12 +697,12 @@ def test_99_new_feature_validation(self):
             text=True,
             timeout=self.timeout
         )
-        
+
         self.assertEqual(result.returncode, 0,
                          f"New feature failed: {result.stderr}")
-        
+
         logger.info("✅ New feature validation passed")
-        
+
     except subprocess.TimeoutExpired:
         self.fail("New feature test timed out")
 ```
@@ -693,10 +734,14 @@ def test_99_new_feature_validation(self):
 
 ## Conclusion
 
-This comprehensive testing framework ensures that all components of the Docker Sandbox Demo are functional and meet educational objectives. The tests validate that students can successfully learn cybersecurity analysis techniques using the provided tools and workflows.
+This comprehensive testing framework ensures that all components of the Docker
+Sandbox Demo are functional and meet educational objectives. The tests validate
+that students can successfully learn cybersecurity analysis techniques using the
+provided tools and workflows.
 
-For questions or issues with the testing framework, refer to the troubleshooting section or check the individual test module documentation within each test file.
+For questions or issues with the testing framework, refer to the troubleshooting
+section or check the individual test module documentation within each test file.
 
-**Total Test Coverage**: 76 individual tests across 5 modules
-**Estimated Runtime**: 8-18 minutes for complete suite
-**Validation Coverage**: 100% of documented quick reference commands
+**Total Test Coverage**: 76 individual tests across 5 modules **Estimated
+Runtime**: 8-18 minutes for complete suite **Validation Coverage**: 100% of
+documented quick reference commands

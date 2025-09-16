@@ -1,10 +1,13 @@
 # Network Traffic Scenarios for Educational Demonstrations
 
-This directory contains sample network scenarios and traffic generators designed for educational cybersecurity exercises. These tools help students learn to identify various network security threats and patterns.
+This directory contains sample network scenarios and traffic generators designed
+for educational cybersecurity exercises. These tools help students learn to
+identify various network security threats and patterns.
 
 ## 🚀 Quick Start
 
 ### Basic Network Activity Generator
+
 ```bash
 # Run basic network scenario
 python samples/network-scenarios/basic_network_activity.py
@@ -17,6 +20,7 @@ python samples/network-scenarios/backdoor_simulation.py
 ```
 
 ### Monitoring the Scenarios
+
 ```bash
 # Monitor while running scenarios
 python src/analyzer/network_cli.py --monitor-connections --educational
@@ -28,26 +32,34 @@ python src/analyzer/network_cli.py --capture-traffic --duration 60 --educational
 ## 📂 Scenario Categories
 
 ### 1. Basic Network Activity
+
 - **Purpose**: Establish baseline network behavior for comparison
 - **File**: `basic_network_activity.py`
-- **Activities**: Normal web requests, DNS queries, legitimate service connections
+- **Activities**: Normal web requests, DNS queries, legitimate service
+  connections
 
 ### 2. Suspicious Traffic Patterns
-- **Purpose**: Generate network patterns that indicate potential security threats
+
+- **Purpose**: Generate network patterns that indicate potential security
+  threats
 - **File**: `suspicious_traffic_generator.py`
-- **Activities**: Port scanning, unusual connection patterns, data exfiltration simulation
+- **Activities**: Port scanning, unusual connection patterns, data exfiltration
+  simulation
 
 ### 3. Backdoor Communication
+
 - **Purpose**: Simulate backdoor/malware network communication patterns
 - **File**: `backdoor_simulation.py`
 - **Activities**: C&C communication, reverse shells, data tunneling
 
 ### 4. DNS-based Threats
+
 - **Purpose**: Demonstrate DNS-based attack patterns and detection
 - **File**: `dns_threat_scenarios.py`
 - **Activities**: DNS tunneling, DGA patterns, malicious domain queries
 
 ### 5. Service Discovery Attacks
+
 - **Purpose**: Show how attackers discover and exploit network services
 - **File**: `service_discovery_attacks.py`
 - **Activities**: Port scanning, service enumeration, vulnerability probing
@@ -55,6 +67,7 @@ python src/analyzer/network_cli.py --capture-traffic --duration 60 --educational
 ## 🎯 Educational Objectives
 
 Students will learn to:
+
 1. **Recognize normal vs. suspicious network patterns**
 2. **Identify common attack signatures in network traffic**
 3. **Use network analysis tools effectively**
@@ -64,11 +77,15 @@ Students will learn to:
 ## 🛡️ Safety and Ethics
 
 ### Educational Use Only
-- These scenarios are designed for educational purposes in controlled environments
-- All activities should be conducted only on systems you own or have explicit permission to test
+
+- These scenarios are designed for educational purposes in controlled
+  environments
+- All activities should be conducted only on systems you own or have explicit
+  permission to test
 - Do not use these tools against systems you do not own
 
 ### Responsible Disclosure
+
 - If you discover real vulnerabilities during exercises, report them responsibly
 - Follow your organization's security policies and procedures
 - Never exploit vulnerabilities for personal gain
@@ -76,6 +93,7 @@ Students will learn to:
 ## 🔧 Technical Requirements
 
 ### Dependencies
+
 ```bash
 # Python packages
 pip install requests scapy python-nmap psutil
@@ -85,6 +103,7 @@ pip install requests scapy python-nmap psutil
 ```
 
 ### Environment Setup
+
 1. Ensure you're running in the Docker sandbox environment
 2. All scenarios run on localhost to prevent network interference
 3. Use educational mode for all tools: `--educational` flag
@@ -92,12 +111,14 @@ pip install requests scapy python-nmap psutil
 ## 📝 Usage Instructions
 
 ### For Instructors
+
 1. **Review each scenario** before class to understand expected outputs
 2. **Test network monitoring tools** to ensure they detect scenario activities
 3. **Prepare discussion points** about each security pattern demonstrated
 4. **Have backup plans** if certain network tools are not available
 
 ### For Students
+
 1. **Start network monitoring** before running scenarios
 2. **Document all findings** using provided worksheets
 3. **Compare patterns** between different scenario types
@@ -106,6 +127,7 @@ pip install requests scapy python-nmap psutil
 ## 🔍 Expected Learning Outcomes
 
 After completing these exercises, students should be able to:
+
 - Distinguish between legitimate and suspicious network activity
 - Use command-line network analysis tools effectively
 - Generate professional security assessment reports
@@ -115,26 +137,32 @@ After completing these exercises, students should be able to:
 ## 📊 Integration with Other Modules
 
 ### SAST Integration
+
 - Use static analysis to identify network-related vulnerabilities in source code
 - Look for hardcoded IPs, insecure protocols, and poor input validation
 
-### DAST Integration  
+### DAST Integration
+
 - Combine network monitoring with dynamic application testing
 - Observe network traffic generated by web application security tests
 
 ### Sandbox Integration
+
 - Monitor network activity of suspicious applications in the sandbox
 - Correlate behavioral analysis with network communication patterns
 
 ## 🎓 Assessment Criteria
 
 Students will be assessed on:
+
 1. **Technical accuracy** of network analysis findings
 2. **Quality of documentation** and reporting
-3. **Understanding of security implications** 
+3. **Understanding of security implications**
 4. **Ability to recommend** appropriate countermeasures
 5. **Professional presentation** of results
 
 ---
 
-**Note**: These scenarios are designed to work in a Codespaces/Docker environment with limited network access. They focus on localhost traffic and simulated patterns that students can observe and analyze safely.
+**Note**: These scenarios are designed to work in a Codespaces/Docker
+environment with limited network access. They focus on localhost traffic and
+simulated patterns that students can observe and analyze safely.

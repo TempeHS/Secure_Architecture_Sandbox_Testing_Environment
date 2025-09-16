@@ -61,6 +61,16 @@
         "workbench.editorAssociations": {
           "*.md": "vscode.markdown.preview.editor"
         },
+        "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+        },
+            "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "json.format.enable": true,
         "terminal.integrated.fontSize": 14,
         // Suppress popup notifications in Codespaces
         "extensions.ignoreRecommendations": true,

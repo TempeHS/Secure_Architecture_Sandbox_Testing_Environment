@@ -16,6 +16,7 @@ This environment is ready for cybersecurity education and testing!
 **Upload your Flask app to test for security vulnerabilities!**
 
 ### Quick Setup
+
 ```bash
 # 1. Go to uploads folder
 cd uploads/
@@ -32,15 +33,17 @@ curl http://localhost:8000
 ```
 
 ### Access Your App
+
 - **Flask App**: `https://your-codespace-name-8000.app.github.dev`
 - **File Browser**: `https://your-codespace-name-8080.app.github.dev/uploads/`
 
 ### Security Testing Your App
+
 ```bash
 # Static Analysis
 python3 src/analyzer/analyze_cli.py uploads/ --educational
 
-# Dynamic Analysis  
+# Dynamic Analysis
 python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
 
 # Network Analysis
@@ -96,12 +99,15 @@ python3 src/analyzer/pentest_cli.py http://localhost:8000 --educational
 **The `uploads/` folder is ready for your Flask app testing!**
 
 ### Flask App Template
+
 The `uploads/` folder contains a ready-to-use Flask template:
+
 - `app.py` - Basic Flask app (edit this!)
-- `requirements.txt` - Python dependencies  
+- `requirements.txt` - Python dependencies
 - `README.md` - Upload and testing instructions
 
 ### Testing Workflow
+
 1. **Upload**: Place your Flask app in `uploads/app.py`
 2. **Deploy**: Use Docker commands to install deps and run
 3. **Test**: Access your app on port 8000
@@ -109,6 +115,7 @@ The `uploads/` folder contains a ready-to-use Flask template:
 5. **Iterate**: Fix issues and retest
 
 ### Example Flask App for Testing
+
 ```python
 from flask import Flask, request
 app = Flask(__name__)
@@ -133,13 +140,16 @@ if __name__ == '__main__':
 ## Next Steps
 
 ### For Flask App Testing 🎓
+
 1. **Start Here**: Check out the ready-to-use Flask template in `uploads/`
-2. **Read Instructions**: Open [uploads/README.md](uploads/README.md) for step-by-step guidance
-3. **Upload Your App**: Place your Flask app in `uploads/app.py` 
+2. **Read Instructions**: Open [uploads/README.md](uploads/README.md) for
+   step-by-step guidance
+3. **Upload Your App**: Place your Flask app in `uploads/app.py`
 4. **Security Test**: Use the 4 built-in security testing tools
 5. **Learn More**: Explore exercises in `docs/exercises/`
 
 ### For Advanced Users 🔧
+
 1. Explore the `/workspaces/Docker_Sandbox_Demo/src` directory
 2. Check out sample vulnerable applications in `samples/`
 3. Read documentation in `docs/`

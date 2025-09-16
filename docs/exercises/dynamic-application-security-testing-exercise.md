@@ -2,11 +2,17 @@
 
 ## 📖 Overview
 
-Dynamic Application Security Testing (DAST) is a "black-box" security testing method that finds vulnerabilities in **running web applications**. Unlike Static Application Security Testing (SAST) which examines source code, DAST tests applications from the outside by sending requests and analyzing responses.
+Dynamic Application Security Testing (DAST) is a "black-box" security testing
+method that finds vulnerabilities in **running web applications**. Unlike Static
+Application Security Testing (SAST) which examines source code, DAST tests
+applications from the outside by sending requests and analyzing responses.
 
-**Think of it this way:** If SAST is like proofreading an essay before it's read aloud, then DAST is like listening to someone actually give a speech and noting problems with their delivery.
+**Think of it this way:** If SAST is like proofreading an essay before it's read
+aloud, then DAST is like listening to someone actually give a speech and noting
+problems with their delivery.
 
 **Key Learning Objectives:**
+
 - ✅ Understand the difference between SAST and DAST
 - ✅ Learn how to test running web applications for security issues
 - ✅ Practice using web vulnerability scanners (nikto, gobuster)
@@ -17,6 +23,7 @@ Dynamic Application Security Testing (DAST) is a "black-box" security testing me
 ## 📍 Getting Started - Important Navigation
 
 **� Always start from the main project folder:**
+
 ```bash
 # If you get lost, return to the main folder:
 cd /workspaces/Docker_Sandbox_Demo
@@ -24,49 +31,58 @@ cd /workspaces/Docker_Sandbox_Demo
 # Check you're in the right place:
 ls
 ```
+
 **Expected Output:**
+
 ```
 copilot-instructions.md  docker/  docs/  reports/  samples/  src/  ...
 ```
 
 ## �🎯 SAST vs DAST Comparison (Understanding the Difference)
 
-| Aspect | SAST (Static) | DAST (Dynamic) | Real-World Example |
-|--------|---------------|----------------|-------------------|
-| **Analysis Type** | Source code analysis | Running application testing | Reading vs. listening |
-| **When to Run** | During development | During runtime/testing | Before the speech vs. during the speech |
-| **Access Needed** | Source code access | Application URL/endpoint | Essay text vs. audience seat |
-| **Finds** | Code-level vulnerabilities | Runtime vulnerabilities | Grammar errors vs. delivery problems |
-| **Examples** | Hardcoded secrets, unsafe functions | XSS, SQL injection, auth bypass | Typos vs. mumbling |
-| **Speed** | Fast (no app needed) | Slower (requires running app) | Quick read vs. full performance |
-| **Coverage** | All code paths | Only tested paths | Every sentence vs. what's actually said |
+| Aspect            | SAST (Static)                       | DAST (Dynamic)                  | Real-World Example                      |
+| ----------------- | ----------------------------------- | ------------------------------- | --------------------------------------- |
+| **Analysis Type** | Source code analysis                | Running application testing     | Reading vs. listening                   |
+| **When to Run**   | During development                  | During runtime/testing          | Before the speech vs. during the speech |
+| **Access Needed** | Source code access                  | Application URL/endpoint        | Essay text vs. audience seat            |
+| **Finds**         | Code-level vulnerabilities          | Runtime vulnerabilities         | Grammar errors vs. delivery problems    |
+| **Examples**      | Hardcoded secrets, unsafe functions | XSS, SQL injection, auth bypass | Typos vs. mumbling                      |
+| **Speed**         | Fast (no app needed)                | Slower (requires running app)   | Quick read vs. full performance         |
+| **Coverage**      | All code paths                      | Only tested paths               | Every sentence vs. what's actually said |
 
 ## 🧪 Lab Environment Setup
 
 ### ✅ Prerequisites Check
 
 **Step 1: Navigate to main folder**
+
 ```bash
 cd /workspaces/Docker_Sandbox_Demo
 pwd
 ```
+
 **Expected Output:**
+
 ```
 /workspaces/Docker_Sandbox_Demo
 ```
 
 **Step 2: Start the target applications**
+
 ```bash
 # Start the vulnerable applications for testing
 cd docker && docker-compose up -d
 ```
+
 **Expected Output:**
+
 ```
 Creating cybersec_sandbox ... done
 Creating vulnerable_webapp ... done
 ```
 
 **Step 3: Wait for applications to start (important!)**
+
 ```bash
 # Wait 30 seconds for applications to fully start
 sleep 30
@@ -76,10 +92,13 @@ cd /workspaces/Docker_Sandbox_Demo
 ```
 
 **Step 4: Verify applications are running**
+
 ```bash
 curl -s http://localhost:5000 | head -5
 ```
+
 **Expected Output (HTML content):**
+
 ```
 <!DOCTYPE html>
 <html>
@@ -90,7 +109,9 @@ curl -s http://localhost:5000 | head -5
 ```bash
 curl -s http://localhost:9090 | head -5
 ```
+
 **Expected Output (HTML content):**
+
 ```
 <!DOCTYPE html>
 <html>
@@ -99,10 +120,13 @@ curl -s http://localhost:9090 | head -5
 ```
 
 **Step 5: Test the DAST analyzer**
+
 ```bash
 python src/analyzer/dast_cli.py --help
 ```
+
 **Expected Output (first few lines):**
+
 ```
 usage: dast_cli.py [-h] [--quick] [--deep-scan] [--educational] [--verbose] [--output {text,json}] url
 
@@ -110,25 +134,33 @@ Dynamic Application Security Testing (DAST) tool for educational purposes
 ```
 
 **❌ If Something Goes Wrong:**
-- **Applications not starting?** Run: `cd docker && docker-compose down && docker-compose up -d`
+
+- **Applications not starting?** Run:
+  `cd docker && docker-compose down && docker-compose up -d`
 - **Connection refused?** Wait longer for applications to start: `sleep 60`
 - **Tool not found?** Make sure you're in: `cd /workspaces/Docker_Sandbox_Demo`
 
 ## 🎯 Sample Applications (Your Testing Targets)
 
 ### 1. Vulnerable Flask Application (Port 5000)
+
 - **Technology**: Python Flask web framework
 - **Test URL**: http://localhost:5000
 - **Purpose**: Demonstrates web application vulnerabilities
-- **What you'll find**: HTTP security headers missing, debug information, input validation issues
-- **Think of it as**: A website with security problems you can discover by visiting it
+- **What you'll find**: HTTP security headers missing, debug information, input
+  validation issues
+- **Think of it as**: A website with security problems you can discover by
+  visiting it
 
-### 2. Unsecure PWA (Port 9090)  
+### 2. Unsecure PWA (Port 9090)
+
 - **Technology**: Progressive Web App with Python backend
 - **Test URL**: http://localhost:9090
 - **Purpose**: Demonstrates configuration and session management issues
-- **What you'll find**: Authentication bypass, session issues, redirect vulnerabilities
-- **Think of it as**: A mobile-friendly website with different types of security problems
+- **What you'll find**: Authentication bypass, session issues, redirect
+  vulnerabilities
+- **Think of it as**: A mobile-friendly website with different types of security
+  problems
 
 ---
 
@@ -141,31 +173,39 @@ Dynamic Application Security Testing (DAST) tool for educational purposes
 **Read and understand the key differences:**
 
 **Questions to Answer (write your answers):**
-1. **Why can't DAST find hardcoded passwords in source code?**
-   Your answer: _________________________________________________
-   **Correct answer**: DAST only sees the running application, not the source code. It's like watching a movie - you see the final product but not the script.
 
-2. **Why can't SAST find SQL injection vulnerabilities that only occur with specific user input?**
-   Your answer: _________________________________________________
-   **Correct answer**: SAST analyzes code but doesn't execute it with real data. It's like reading a recipe but not actually cooking the meal.
+1. **Why can't DAST find hardcoded passwords in source code?** Your answer:
+   ************************\_************************ **Correct answer**: DAST
+   only sees the running application, not the source code. It's like watching a
+   movie - you see the final product but not the script.
 
-3. **When would you use DAST in a development workflow?**
-   Your answer: _________________________________________________
-   **Correct answer**: After the application is built and running, typically in testing/staging environments before production release.
+2. **Why can't SAST find SQL injection vulnerabilities that only occur with
+   specific user input?** Your answer:
+   ************************\_************************ **Correct answer**: SAST
+   analyzes code but doesn't execute it with real data. It's like reading a
+   recipe but not actually cooking the meal.
+
+3. **When would you use DAST in a development workflow?** Your answer:
+   ************************\_************************ **Correct answer**: After
+   the application is built and running, typically in testing/staging
+   environments before production release.
 
 ### 1.2 Tool Exploration
 
 **Navigate to the main folder:**
+
 ```bash
 cd /workspaces/Docker_Sandbox_Demo
 ```
 
 **Explore the DAST tool options:**
+
 ```bash
 python src/analyzer/dast_cli.py --help
 ```
 
 **Expected Output:**
+
 ```
 usage: dast_cli.py [-h] [--quick] [--deep-scan] [--educational] [--verbose] [--output {text,json}] url
 
@@ -184,6 +224,7 @@ optional arguments:
 ```
 
 **Key Features to Note:**
+
 - **--quick**: Fast scan for basic issues
 - **--deep-scan**: Comprehensive scan using multiple tools
 - **--educational**: Explanations for learning (always use this!)
@@ -198,17 +239,20 @@ optional arguments:
 ### 2.1 Quick Vulnerability Scan
 
 **Make sure you're in the right place:**
+
 ```bash
 cd /workspaces/Docker_Sandbox_Demo
 pwd  # Should show /workspaces/Docker_Sandbox_Demo
 ```
 
 **Run a quick scan of the Flask application:**
+
 ```bash
 python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
 ```
 
 **Expected Output (sample):**
+
 ```
 🌐 DYNAMIC APPLICATION SECURITY TESTING (DAST) REPORT
 🎯 Target: http://localhost:5000
@@ -219,7 +263,7 @@ python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
 
 HTTP Security Headers Analysis:
 ❌ Missing X-Frame-Options header
-❌ Missing Content-Security-Policy header  
+❌ Missing Content-Security-Policy header
 ❌ Missing X-Content-Type-Options header
 ⚠️ Server header reveals technology: Werkzeug/X.X.X Python/3.X.X
 
@@ -230,27 +274,30 @@ Total: 6 findings
 ```
 
 **Analysis Questions (write your answers):**
-1. **What security headers are missing?**
-   Your findings: ___________________________________________
 
-2. **Are there any information disclosure issues?**
-   Your findings: ___________________________________________
+1. **What security headers are missing?** Your findings:
+   ********************\_\_\_********************
 
-3. **What is the overall risk score?**
-   Your assessment: _____/10 (where 10 is highest risk)
+2. **Are there any information disclosure issues?** Your findings:
+   ********************\_\_\_********************
+
+3. **What is the overall risk score?** Your assessment: **\_**/10 (where 10 is
+   highest risk)
 
 ### 2.2 Deep Scan with Tools
 
 **Run a comprehensive scan:**
+
 ```bash
 python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational --verbose
 ```
 
 **Expected Output (additional content):**
+
 ```
 🔧 Running External Security Tools:
 ✅ nikto: Web vulnerability scanner
-✅ gobuster: Directory enumeration  
+✅ gobuster: Directory enumeration
 ✅ Custom XSS testing
 ✅ Custom SQL injection testing
 
@@ -266,23 +313,26 @@ Found: /debug
 ```
 
 **Observation Tasks (complete this):**
-1. **How many HTTP requests were made during the scan?**
-   Count: ____________ (look for "HTTP requests sent" in output)
 
-2. **What additional endpoints were discovered?**
-   Endpoints found: ________________________________________
+1. **How many HTTP requests were made during the scan?** Count: ****\_\_\_\_****
+   (look for "HTTP requests sent" in output)
 
-3. **Which tools provided the most valuable findings?**
-   Most useful tool: ______________________________________
+2. **What additional endpoints were discovered?** Endpoints found:
+   ******************\_\_\_\_******************
+
+3. **Which tools provided the most valuable findings?** Most useful tool:
+   ******************\_\_******************
 
 ### 2.3 PWA Application Analysis
 
 **Scan the Progressive Web App:**
+
 ```bash
 python src/analyzer/dast_cli.py http://localhost:9090 --educational --output json > pwa_dast_report.json
 ```
 
 **View the results:**
+
 ```bash
 # Look at the JSON report
 cat pwa_dast_report.json | head -20
@@ -292,6 +342,7 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational
 ```
 
 **Expected Output Differences:**
+
 ```
 🌐 DYNAMIC APPLICATION SECURITY TESTING (DAST) REPORT
 🎯 Target: http://localhost:9090
@@ -299,65 +350,80 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational
 Different findings might include:
 - Different missing security headers
 - Different server technology revealed
-- Different available endpoints  
+- Different available endpoints
 - Different vulnerability patterns
 ```
 
 **Comparison Analysis (fill this out):**
+
 1. **How do the findings differ between the Flask app and PWA?**
-   
+
    **Flask App (port 5000) findings:**
-   - _________________________________________________
-   
+
+   - ***
+
    **PWA App (port 9090) findings:**
-   - _________________________________________________
 
-2. **Which application has more severe vulnerabilities?**
-   Your assessment: ___________________________________
+   - ***
 
-3. **What types of vulnerabilities are unique to each application?**
-   Flask-only: _____________________________________
-   PWA-only: ______________________________________
+2. **Which application has more severe vulnerabilities?** Your assessment:
+   ****************\_\_\_****************
+
+3. **What types of vulnerabilities are unique to each application?** Flask-only:
+   ******************\_****************** PWA-only:
+   ******************\_\_******************
 
 **❌ Troubleshooting:**
-- **"Connection refused" error?** Make sure applications are running: `curl http://localhost:5000`
-- **No findings?** Check if the scan completed successfully - look for "FINDINGS SUMMARY"
-- **JSON file empty?** Run without `--output json` first to see if basic scan works
+
+- **"Connection refused" error?** Make sure applications are running:
+  `curl http://localhost:5000`
+- **No findings?** Check if the scan completed successfully - look for "FINDINGS
+  SUMMARY"
+- **JSON file empty?** Run without `--output json` first to see if basic scan
+  works
 
 ---
 
 ## 📋 Exercise 3: Vulnerability Deep Dive
 
 ### 3.1 Cross-Site Scripting (XSS) Testing
+
 The DAST scanner tests for XSS automatically. Review the findings:
 
 **Understanding XSS Detection:**
+
 - Scanner sends payloads like `<script>alert('XSS')</script>`
 - Checks if the payload appears in the HTTP response
 - Different payloads test various XSS scenarios
 
 **Practical Exercise:**
+
 1. Look for XSS findings in your scan results
 2. Note which parameters were vulnerable
 3. Understand why the scanner classified it as XSS
 
 ### 3.2 SQL Injection Detection
+
 Review SQL injection findings from your scans:
 
 **How DAST Finds SQL Injection:**
+
 - Sends malicious SQL payloads like `' OR 1=1--`
 - Looks for database error messages in responses
 - Tests different injection points (GET/POST parameters)
 
 **Analysis Tasks:**
+
 1. Identify any SQL injection vulnerabilities found
 2. Examine the payloads that triggered the detection
 3. Understand the evidence that confirmed the vulnerability
 
 ### 3.3 Security Configuration Issues
+
 DAST excels at finding configuration problems:
 
 **Common Misconfigurations Found:**
+
 - Missing security headers (X-Frame-Options, CSP)
 - Server information disclosure
 - Debug mode enabled
@@ -368,6 +434,7 @@ DAST excels at finding configuration problems:
 ## 📋 Exercise 4: Comparative Analysis
 
 ### 4.1 All Applications Scan
+
 Run DAST against both applications simultaneously:
 
 ```bash
@@ -375,18 +442,17 @@ python src/analyzer/dast_cli.py --demo-apps --educational --output combined_dast
 ```
 
 ### 4.2 SAST vs DAST Results Comparison
+
 Compare your DAST results with previous SAST results:
 
-**Create Comparison Table:**
-| Vulnerability Type | Found by SAST? | Found by DAST? | Why the Difference? |
-|-------------------|----------------|----------------|-------------------|
-| SQL Injection | | | |
-| XSS | | | |
-| Missing Security Headers | | | |
-| Debug Information | | | |
-| Hardcoded Secrets | | | |
+**Create Comparison Table:** | Vulnerability Type | Found by SAST? | Found by
+| DAST? | Why the Difference? |
+| ----- | ------------------- |  |  ||
+SQL Injection | | | | | XSS | | | | | Missing Security Headers | | | | | Debug
+Information | | | | | Hardcoded Secrets | | | |
 
 **Analysis Questions:**
+
 1. Which testing method found more vulnerabilities overall?
 2. What types of issues are unique to each approach?
 3. How would you combine SAST and DAST in a security program?
@@ -396,9 +462,11 @@ Compare your DAST results with previous SAST results:
 ## 📋 Exercise 5: Professional Reporting
 
 ### 5.1 Generate Executive Summary
+
 Based on your DAST findings, create a security summary:
 
 **Template:**
+
 ```
 DYNAMIC SECURITY ASSESSMENT SUMMARY
 
@@ -423,9 +491,11 @@ METHODOLOGY:
 ```
 
 ### 5.2 Technical Remediation Guide
+
 For each finding, provide specific remediation steps:
 
 **Example Format:**
+
 ```
 VULNERABILITY: Missing X-Frame-Options Header
 
@@ -448,19 +518,25 @@ VERIFICATION:
 ## 🚀 Advanced Challenges (Optional)
 
 ### Challenge 1: Custom Payload Testing
+
 Modify the DAST scanner to test custom payloads:
+
 1. Add new XSS payloads to test
 2. Create custom SQL injection test cases
 3. Test for specific application logic flaws
 
 ### Challenge 2: Authenticated Scanning
+
 Explore how DAST would work with authenticated sessions:
+
 1. Research session-based testing
 2. Consider how to test login functionality
 3. Plan testing of user-specific features
 
 ### Challenge 3: CI/CD Integration
+
 Design how DAST would fit into a development pipeline:
+
 1. When should DAST scans run?
 2. How would you handle scan failures?
 3. What metrics would you track over time?
@@ -470,6 +546,7 @@ Design how DAST would fit into a development pipeline:
 ## 📚 Key Takeaways
 
 ### What You Learned:
+
 1. **DAST Fundamentals**: How dynamic testing differs from static analysis
 2. **Practical Skills**: Using web vulnerability scanners effectively
 3. **Vulnerability Types**: Runtime issues that only DAST can find
@@ -477,6 +554,7 @@ Design how DAST would fit into a development pipeline:
 5. **Integration**: How DAST fits into a comprehensive security program
 
 ### Best Practices:
+
 - ✅ Combine SAST and DAST for comprehensive coverage
 - ✅ Run DAST against staging environments regularly
 - ✅ Focus on high-severity findings first
@@ -484,6 +562,7 @@ Design how DAST would fit into a development pipeline:
 - ✅ Document remediation steps clearly
 
 ### Real-World Applications:
+
 - Web application penetration testing
 - DevSecOps pipeline integration
 - Compliance validation (ISM, ISO14598)
@@ -498,7 +577,8 @@ Design how DAST would fit into a development pipeline:
 
 2. **Limitations**: What are the main limitations of dynamic testing?
 
-3. **Workflow Integration**: How would you integrate DAST into a development team's workflow?
+3. **Workflow Integration**: How would you integrate DAST into a development
+   team's workflow?
 
 4. **Prioritization**: How do you prioritize DAST findings for remediation?
 
@@ -509,21 +589,25 @@ Design how DAST would fit into a development pipeline:
 ## 📖 Additional Resources
 
 ### Industry Standards:
+
 - OWASP Application Security Verification Standard (ASVS)
 - NIST Cybersecurity Framework
 - ISO 27001 Security Controls
 
 ### Tools and Technologies:
+
 - OWASP ZAP (Zed Attack Proxy)
 - Burp Suite Professional
 - Nessus Web Application Scanning
 - Qualys Web Application Scanning
 
 ### Learning Path:
+
 1. Master basic web application security concepts
 2. Learn manual penetration testing techniques
 3. Study advanced DAST tool configuration
 4. Explore integration with development workflows
 5. Develop custom security testing scripts
 
-**🎓 Congratulations! You've completed the Dynamic Application Security Testing exercise and gained hands-on experience with runtime vulnerability detection!**
+**🎓 Congratulations! You've completed the Dynamic Application Security Testing
+exercise and gained hands-on experience with runtime vulnerability detection!**

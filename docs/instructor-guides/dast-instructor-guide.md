@@ -8,12 +8,17 @@
 **Group Size**: 15-25 students
 
 ### 💡 For Non-Technical Instructors
-**Don't worry about the technical details!** This guide explains everything in simple terms. DAST = testing running software for security problems (like checking if the doors and windows of a house are properly locked).
+
+**Don't worry about the technical details!** This guide explains everything in
+simple terms. DAST = testing running software for security problems (like
+checking if the doors and windows of a house are properly locked).
 
 ## 🎯 Learning Objectives (Student-Friendly Goals)
 
 By the end of this exercise, students will understand:
-- [ ] The difference between examining code (SAST) and testing running software (DAST)
+
+- [ ] The difference between examining code (SAST) and testing running software
+      (DAST)
 - [ ] How to scan websites for security vulnerabilities
 - [ ] How to read security scan results and identify priorities
 - [ ] Common web security problems like XSS and SQL injection
@@ -22,7 +27,9 @@ By the end of this exercise, students will understand:
 
 ## 📍 Important: Navigation Instructions
 
-**All commands start from the main project folder. If you or students get lost:**
+**All commands start from the main project folder. If you or students get
+lost:**
+
 ```bash
 # Return to the main project folder (copy and paste this)
 cd /workspaces/Docker_Sandbox_Demo
@@ -34,31 +41,36 @@ ls
 ## ⏰ Simple Lesson Timeline
 
 ### 🚀 Phase 1: Introduction and Setup (30 minutes)
+
 - **0-10 min**: Simple explanation - What is DAST vs SAST?
 - **10-20 min**: Make sure everything is working (like turning on the equipment)
 - **20-30 min**: Show students the practice websites they'll test
 
 ### 🔍 Phase 2: Basic Security Scanning (45 minutes)
+
 - **30-50 min**: Exercise 1 - Understanding DAST basics
 - **50-75 min**: Exercise 2 - First website security scan
 
 ### 🕵️ Phase 3: Finding Security Problems (60 minutes)
+
 - **75-105 min**: Exercise 3 - Understanding what the problems mean
 - **105-135 min**: Exercise 4 - Comparing different websites
 
 ### 📝 Phase 4: Professional Reporting (45 minutes)
+
 - **135-165 min**: Exercise 5 - Writing security recommendations
 - **165-180 min**: Review and questions
 
 ## 🧑‍🏫 Instructor Preparation (15 minutes)
 
 ### ✅ Pre-Class Setup Checklist:
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
 
 # Step 2: Start the practice websites (takes 1-2 minutes)
-cd docker 
+cd docker
 docker-compose up -d
 
 # Step 3: Return to main folder
@@ -76,15 +88,18 @@ python src/analyzer/dast_cli.py --help
 ```
 
 ### 🎯 What Should Happen:
+
 - Docker starts containers (you'll see download progress)
 - Websites respond with HTML text (means they're working)
 - Security tool shows help information (means it's working)
 - Quick scan finds security issues (usually 8-12 problems)
 
 ### ❌ If Something's Wrong:
+
 Use the troubleshooting section at the bottom of this guide
 
 ### 🎭 Simple Demonstrations for Class:
+
 **Keep these commands ready for live demonstrations:**
 
 ```bash
@@ -100,8 +115,10 @@ python src/analyzer/dast_cli.py --demo-apps --educational
 ```
 
 **💬 While Demonstrations Run, Explain:**
+
 - "The tool is pretending to be an attacker testing the website"
-- "It's checking for common security problems like weak passwords or missing protection"
+- "It's checking for common security problems like weak passwords or missing
+  protection"
 - "This is safe because we're testing practice websites designed for learning"
 
 ## 📚 Exercise-by-Exercise Teaching Guide
@@ -111,11 +128,14 @@ python src/analyzer/dast_cli.py --demo-apps --educational
 #### 🎯 Key Teaching Points (Use Simple Analogies):
 
 **What is DAST?**
+
 - **DAST** = Testing a running website like a customer would use it
 - **SAST** = Reading the code like examining building blueprints
-- **Analogy**: DAST is like test-driving a car, SAST is like inspecting the car engine
+- **Analogy**: DAST is like test-driving a car, SAST is like inspecting the car
+  engine
 
 **💻 Basic Commands for Students:**
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
@@ -129,13 +149,16 @@ curl http://localhost:9090
 ```
 
 #### 💭 Expected Student Questions & Simple Answers:
-**Q**: "Why can't DAST find hardcoded passwords?"
-**A**: "DAST can only see what a website visitor sees - it can't look at the secret code behind the website."
 
-**Q**: "Why do we need both SAST and DAST?"
-**A**: "It's like checking a house by reading the blueprints AND walking through the finished house - you find different problems each way."
+**Q**: "Why can't DAST find hardcoded passwords?" **A**: "DAST can only see what
+a website visitor sees - it can't look at the secret code behind the website."
+
+**Q**: "Why do we need both SAST and DAST?" **A**: "It's like checking a house
+by reading the blueprints AND walking through the finished house - you find
+different problems each way."
 
 #### ✅ Expected Results for Students:
+
 - Students see the help information (tool options)
 - Both practice websites respond with HTML content
 - Students understand DAST tests running websites, not code
@@ -143,12 +166,15 @@ curl http://localhost:9090
 ### Exercise 2: Basic Web Application Scanning
 
 #### 🎯 Key Teaching Points (Student-Friendly):
+
 **What Are Security Headers?**
+
 - Like safety features on a car (seatbelts, airbags)
 - Headers tell the web browser how to stay secure
 - Missing headers = missing safety features
 
 **💻 Commands for Students:**
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
@@ -167,6 +193,7 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational > pwa_securi
 #### ✅ Expected Findings Students Should See:
 
 **Flask Website** (usually 8-12 security issues):
+
 - Missing X-Frame-Options header (protection against clickjacking)
 - Missing X-Content-Type-Options header (prevents file type confusion)
 - Missing X-XSS-Protection header (prevents script injection)
@@ -174,14 +201,18 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational > pwa_securi
 - Debug information exposure (gives attackers helpful information)
 
 **PWA Website** (usually 5-8 security issues):
+
 - Missing security headers (same types as Flask)
 - Session management problems (login/logout security issues)
 - Redirect vulnerabilities (can send users to malicious sites)
 
 #### 🎯 Teaching Guidance for Class:
+
 **💬 Walk Students Through Each Finding:**
+
 1. **Show Browser Developer Tools** (Press F12) to look at headers
-2. **Explain Real-World Impact**: "Missing X-Frame-Options means malicious websites could embed this site in a hidden frame"
+2. **Explain Real-World Impact**: "Missing X-Frame-Options means malicious
+   websites could embed this site in a hidden frame"
 3. **Use Analogies**: "It's like having a house with no locks on the doors"
 
 ### Exercise 3: Understanding Security Vulnerabilities
@@ -189,16 +220,19 @@ python src/analyzer/dast_cli.py http://localhost:9090 --educational > pwa_securi
 #### 🎯 Key Concepts to Teach (Keep It Simple):
 
 **What is XSS (Cross-Site Scripting)?**
+
 - Malicious code gets injected into websites
 - Like graffiti that does harmful actions when visitors see it
 - Can steal passwords and personal information
 
 **What is SQL Injection?**
+
 - Attackers trick the database by changing requests
 - Like changing a library request to check out restricted books
 - Can steal all data from the database
 
 **💻 Commands for Students to Find Evidence:**
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
@@ -214,9 +248,11 @@ python src/analyzer/dast_cli.py http://localhost:5000 --educational | grep -i "h
 ```
 
 #### 🎭 Simple Demonstrations for Class:
+
 **Show How DAST Detects Problems** (use whiteboard or screen):
 
 **XSS Detection:**
+
 ```
 Tool sends: <script>alert('test')</script>
 Website responds: Hello <script>alert('test')</script>!
@@ -224,6 +260,7 @@ Tool says: "XSS found! Script was not filtered!"
 ```
 
 **SQL Injection Detection:**
+
 ```
 Tool sends: ' OR 1=1--
 Website responds: Database error: syntax error near OR
@@ -231,17 +268,19 @@ Tool says: "SQL injection found! Database error revealed!"
 ```
 
 #### 💭 Class Discussion Questions:
-**Q**: "Why are database errors dangerous to show users?"
-**A**: "Errors tell attackers how the database works and confirm their attacks are working"
 
-**Q**: "How could attackers use XSS to steal passwords?"
-**A**: "The malicious script could send all typed passwords to the attacker's website"
+**Q**: "Why are database errors dangerous to show users?" **A**: "Errors tell
+attackers how the database works and confirm their attacks are working"
+
+**Q**: "How could attackers use XSS to steal passwords?" **A**: "The malicious
+script could send all typed passwords to the attacker's website"
 
 ### Exercise 4: Comparing SAST vs DAST
 
 #### 🎯 Simple Comparison for Students:
 
 **💻 Commands to Compare Methods:**
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
@@ -259,34 +298,38 @@ python src/analyzer/dast_cli.py --demo-apps --educational
 
 #### 📊 Expected SAST vs DAST Comparison Table (Help Students Fill This Out):
 
-| Security Problem | SAST (Code) | DAST (Website) | Why The Difference? |
-|------------------|-------------|----------------|-------------------|
-| **SQL Injection** | ✅ Found | ✅ Found | Both methods can find this |
-| **XSS** | ✅ Found | ✅ Found | Both methods are effective |
-| **Missing Security Headers** | ❌ Not Found | ✅ Found | Headers are website settings, not code |
-| **Debug Information** | ✅ Found | ✅ Found | Code shows debug settings, website shows debug output |
-| **Hardcoded Passwords** | ✅ Found | ❌ Not Found | DAST can't see inside the code |
+| Security Problem             | SAST (Code)  | DAST (Website) | Why The Difference?                                   |
+| ---------------------------- | ------------ | -------------- | ----------------------------------------------------- |
+| **SQL Injection**            | ✅ Found     | ✅ Found       | Both methods can find this                            |
+| **XSS**                      | ✅ Found     | ✅ Found       | Both methods are effective                            |
+| **Missing Security Headers** | ❌ Not Found | ✅ Found       | Headers are website settings, not code                |
+| **Debug Information**        | ✅ Found     | ✅ Found       | Code shows debug settings, website shows debug output |
+| **Hardcoded Passwords**      | ✅ Found     | ❌ Not Found   | DAST can't see inside the code                        |
 
 #### 💭 Class Discussion Points:
-**Q**: "Why do some problems appear in both SAST and DAST?"
-**A**: "Some problems can be detected by examining code AND by testing the running website"
 
-**Q**: "Which method is better - SAST or DAST?"
-**A**: "Neither! They're like different tools in a toolbox - you need both for complete security"
+**Q**: "Why do some problems appear in both SAST and DAST?" **A**: "Some
+problems can be detected by examining code AND by testing the running website"
 
-**Q**: "When would companies use DAST?"
-**A**: "Before releasing websites, during regular security checkups, and when testing websites they didn't build"
+**Q**: "Which method is better - SAST or DAST?" **A**: "Neither! They're like
+different tools in a toolbox - you need both for complete security"
+
+**Q**: "When would companies use DAST?" **A**: "Before releasing websites,
+during regular security checkups, and when testing websites they didn't build"
 
 ### Exercise 5: Writing Professional Security Reports
 
 #### 🎯 Teaching Professional Skills:
+
 **How to Prioritize Security Problems:**
+
 - **Critical**: Can steal data or take over the website immediately
 - **High**: Can cause significant damage with some effort
 - **Medium**: Security improvements that reduce risk
 - **Low**: Minor issues that should be fixed when convenient
 
 **💻 Commands for Students to Analyze Priorities:**
+
 ```bash
 # Step 1: Make sure you're in the main folder
 cd /workspaces/Docker_Sandbox_Demo
@@ -302,15 +345,20 @@ python src/analyzer/dast_cli.py http://localhost:5000 --educational | grep -A 2 
 ```
 
 #### 📝 Student Report Template (Give Students This Structure):
+
 **Professional Security Assessment Report**
 
-1. **Executive Summary**: "We tested the Flask practice website and found ___ security issues."
+1. **Executive Summary**: "We tested the Flask practice website and found \_\_\_
+   security issues."
 
-2. **Most Critical Finding**: "SQL injection vulnerability allows attackers to steal database information."
+2. **Most Critical Finding**: "SQL injection vulnerability allows attackers to
+   steal database information."
 
-3. **Business Impact**: "Customer data could be stolen, leading to legal problems and reputation damage."
+3. **Business Impact**: "Customer data could be stolen, leading to legal
+   problems and reputation damage."
 
-4. **Immediate Actions**: 
+4. **Immediate Actions**:
+
    - Fix SQL injection (Priority 1 - this week)
    - Add security headers (Priority 2 - next week)
    - Remove debug information (Priority 3 - this month)
@@ -318,6 +366,7 @@ python src/analyzer/dast_cli.py http://localhost:5000 --educational | grep -A 2 
 5. **Total Cost to Fix**: Estimate 2-4 weeks of developer time
 
 #### ✅ Assessment Criteria for Teachers:
+
 - Can students identify the most dangerous problems?
 - Do they understand business impact beyond technical details?
 - Can they write recommendations that non-technical managers would understand?
@@ -326,7 +375,9 @@ python src/analyzer/dast_cli.py http://localhost:5000 --educational | grep -A 2 
 ## 🚨 Simple Troubleshooting Guide
 
 ### ❌ Problem: Websites don't respond
+
 **✅ Solution:**
+
 ```bash
 # Restart the practice websites
 cd /workspaces/Docker_Sandbox_Demo/docker
@@ -340,7 +391,9 @@ curl http://localhost:9090
 ```
 
 ### ❌ Problem: DAST scanner gives errors
+
 **✅ Solution:**
+
 ```bash
 # Make sure you're in the right place
 cd /workspaces/Docker_Sandbox_Demo
@@ -353,15 +406,21 @@ python src/analyzer/dast_cli.py http://localhost:5000 --quick
 ```
 
 ### ❌ Problem: Students get different results
+
 **✅ Teaching Strategy:**
+
 - **Normal variation**: Different scan timing can produce different results
-- **Focus on concepts**: Emphasize learning about security types, not exact numbers
+- **Focus on concepts**: Emphasize learning about security types, not exact
+  numbers
 - **Use ranges**: "You should see 8-15 issues" instead of exact counts
 
 ### ❌ Problem: No security issues found
+
 **✅ Checklist:**
+
 - Are websites actually running? (Check with curl commands)
 - Is the URL correct? (Use http:// not https://)
 - Try adding --verbose flag to see what's happening
 
-**🎯 Pro Tip**: Practice all commands yourself before class and note the typical ranges of results to expect!
+**🎯 Pro Tip**: Practice all commands yourself before class and note the typical
+ranges of results to expect!

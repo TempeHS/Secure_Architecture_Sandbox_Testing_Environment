@@ -3,6 +3,7 @@
 ## 🚀 Essential Commands
 
 ### Network Analysis Tool Usage
+
 ```bash
 # Connection monitoring
 python src/analyzer/network_cli.py --monitor-connections --educational
@@ -21,6 +22,7 @@ python src/analyzer/network_cli.py --demo-network --educational
 ```
 
 ### System Network Tools
+
 ```bash
 # Display active connections
 netstat -tuln                    # Traditional network statistics
@@ -38,6 +40,7 @@ nmap -sU localhost              # UDP scan
 ```
 
 ### Report Generation
+
 ```bash
 # JSON reports for automation
 python src/analyzer/network_cli.py --monitor-connections --format json --output network_report.json
@@ -51,7 +54,9 @@ python src/analyzer/network_cli.py --capture-traffic --educational
 ```
 
 ### Educational Mode Output
+
 When using `--educational`, expect detailed explanations including:
+
 ```
 🎓 EDUCATIONAL INSIGHTS
 Understanding Network Connection Monitoring:
@@ -61,6 +66,7 @@ Network monitoring is essential for cybersecurity because...
 ```
 
 This enhanced output helps students understand:
+
 - Why network monitoring matters for security
 - How to interpret connection patterns
 - What indicators suggest potential threats
@@ -69,6 +75,7 @@ This enhanced output helps students understand:
 ## 🔍 Analysis Patterns
 
 ### Connection Analysis
+
 ```bash
 # Find suspicious ports
 netstat -tuln | grep -E ":4444|:6666|:1337|:31337|:8080"
@@ -84,6 +91,7 @@ netstat -tuln | grep LISTEN | sort
 ```
 
 ### Service Discovery
+
 ```bash
 # Common service ports
 netstat -tuln | grep -E ":21|:22|:23|:25|:53|:80|:110|:143|:443|:993|:995|:3389|:5900"
@@ -99,6 +107,7 @@ netstat -tuln | grep -E ":25|:110|:143|:993|:995"
 ```
 
 ### DNS Analysis
+
 ```bash
 # Basic DNS queries
 nslookup google.com
@@ -117,38 +126,47 @@ dig google.com AAAA             # IPv6 records
 ## 🚨 Threat Indicators
 
 ### Suspicious Network Patterns
-- **Port Scanning**: Multiple connection attempts to different ports from single IP
+
+- **Port Scanning**: Multiple connection attempts to different ports from single
+  IP
 - **Backdoor Communication**: Connections on ports 4444, 6666, 1337, 31337
 - **Data Exfiltration**: Large outbound data transfers to external IPs
 - **C&C Communication**: Regular connections to suspicious external domains
 
 ### High-Risk Services
+
 - **Port 21 (FTP)**: Unencrypted file transfer, often has vulnerabilities
-- **Port 23 (Telnet)**: Unencrypted remote access, credentials sent in plain text
+- **Port 23 (Telnet)**: Unencrypted remote access, credentials sent in plain
+  text
 - **Port 3389 (RDP)**: Remote desktop, frequent brute force target
 - **Port 5900 (VNC)**: Virtual network computing, often weak authentication
 
 ### DNS Threat Indicators
+
 - **Long Subdomains**: May indicate DNS tunneling for data exfiltration
 - **Suspicious TLDs**: Domains ending in .tk, .ml, .ga (often used by attackers)
-- **DGA Patterns**: Domain generation algorithm patterns (random-looking domains)
-- **High Query Volume**: Excessive queries may indicate tunneling or C&C communication
+- **DGA Patterns**: Domain generation algorithm patterns (random-looking
+  domains)
+- **High Query Volume**: Excessive queries may indicate tunneling or C&C
+  communication
 
 ## 🛡️ Security Assessment Guidelines
 
 ### Risk Levels
+
 - **CRITICAL**: Remote code execution, active backdoors, data exfiltration
 - **HIGH**: Unencrypted services, vulnerable services exposed externally
 - **MEDIUM**: Internal services with potential risks, missing security controls
 - **LOW**: Informational findings, configuration recommendations
 
 ### Port Risk Assessment
+
 ```bash
 # Critical Risk Ports
 4444, 6666, 1337, 31337         # Common backdoor/malware ports
 1234, 12345, 54321              # Trojan/backdoor ports
 
-# High Risk Ports  
+# High Risk Ports
 21 (FTP), 23 (Telnet)          # Unencrypted protocols
 135, 139, 445 (SMB)            # Windows file sharing
 1433 (SQL Server), 3306 (MySQL) # Database services
@@ -166,6 +184,7 @@ dig google.com AAAA             # IPv6 records
 ## 📊 Common Analysis Workflows
 
 ### 1. Basic Network Assessment (15 minutes)
+
 ```bash
 # Step 1: Check active connections
 python src/analyzer/network_cli.py --monitor-connections --educational
@@ -178,6 +197,7 @@ python src/analyzer/network_cli.py --monitor-connections --format json --output 
 ```
 
 ### 2. Incident Investigation (30 minutes)
+
 ```bash
 # Step 1: Capture current state
 netstat -tuln > /tmp/connections_now.txt
@@ -194,6 +214,7 @@ python src/analyzer/network_cli.py --demo-network --format json --output inciden
 ```
 
 ### 3. Security Audit (60 minutes)
+
 ```bash
 # Step 1: Comprehensive service scan
 python src/analyzer/network_cli.py --scan-services localhost --educational --verbose
@@ -211,6 +232,7 @@ python src/analyzer/network_cli.py --demo-network --educational --format text --
 ## 🔧 Troubleshooting
 
 ### Common Issues
+
 ```bash
 # Permission denied for network operations
 # Solution: Use alternative commands or educational mode
@@ -228,6 +250,7 @@ python src/analyzer/network_cli.py --scan-services localhost  # instead of nmap
 ```
 
 ### Performance Tips
+
 ```bash
 # Limit output for large networks
 netstat -tuln | head -20
@@ -242,13 +265,15 @@ python src/analyzer/network_cli.py --monitor-connections --format json --output 
 ## 📱 Protocol Quick Reference
 
 ### TCP vs UDP
+
 - **TCP**: Reliable, connection-oriented (web, email, file transfer)
 - **UDP**: Fast, connectionless (DNS, video streaming, gaming)
 
 ### Common Protocol Ports
+
 ```
 21    FTP          File Transfer Protocol
-22    SSH          Secure Shell  
+22    SSH          Secure Shell
 23    Telnet       Remote Terminal
 25    SMTP         Email sending
 53    DNS          Domain Name System
@@ -263,6 +288,7 @@ python src/analyzer/network_cli.py --monitor-connections --format json --output 
 ```
 
 ### Network Analysis Commands Summary
+
 ```bash
 # Monitoring
 netstat -tuln                   # Show all connections
@@ -281,6 +307,7 @@ python src/analyzer/network_cli.py --help    # Full tool options
 ## 🎓 Educational Tips
 
 ### Learning Progression
+
 1. **Start with localhost**: Understand your own system first
 2. **Use educational mode**: Enable detailed explanations
 3. **Compare methods**: Understand how network analysis differs from SAST/DAST
@@ -288,6 +315,7 @@ python src/analyzer/network_cli.py --help    # Full tool options
 5. **Document findings**: Good documentation is crucial for security work
 
 ### Best Practices
+
 - Always establish a baseline before investigation
 - Document everything with timestamps
 - Use multiple tools to verify findings

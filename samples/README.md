@@ -1,20 +1,25 @@
 # Demo Applications for Cybersecurity Analysis
 
-This folder contains three vulnerable applications designed for educational cybersecurity testing and static analysis demonstrations.
+This folder contains three vulnerable applications designed for educational
+cybersecurity testing and static analysis demonstrations.
 
 ## 🚨 **IMPORTANT SECURITY WARNING**
-**These applications contain intentional security vulnerabilities and should NEVER be deployed in production environments. They are designed solely for educational purposes within a controlled sandbox environment.**
+
+**These applications contain intentional security vulnerabilities and should
+NEVER be deployed in production environments. They are designed solely for
+educational purposes within a controlled sandbox environment.**
 
 ---
 
 ## 📁 Application Overview
 
 ### 1. **Vulnerable Node.js Application** (`vulnerable-nodejs-app/`)
-**Technology Stack:** Node.js, Express.js, SQLite, EJS
-**Primary Language:** JavaScript
-**Port:** 3000
+
+**Technology Stack:** Node.js, Express.js, SQLite, EJS **Primary Language:**
+JavaScript **Port:** 3000
 
 **Key Vulnerabilities Demonstrated:**
+
 - ✅ SQL Injection (Login & Search)
 - ✅ Cross-Site Scripting (XSS) - Reflected & Stored
 - ✅ Command Injection (Ping functionality)
@@ -27,6 +32,7 @@ This folder contains three vulnerable applications designed for educational cybe
 - ✅ Cross-Site Request Forgery (CSRF)
 
 **Quick Start:**
+
 ```bash
 cd vulnerable-nodejs-app
 npm install
@@ -37,11 +43,12 @@ npm start
 **Default Credentials:** `admin` / `admin123`
 
 ### 2. **Vulnerable Flask Application** (`vulnerable-flask-app/`)
-**Technology Stack:** Python, Flask, SQLite, Jinja2
-**Primary Language:** Python
+
+**Technology Stack:** Python, Flask, SQLite, Jinja2 **Primary Language:** Python
 **Port:** 5000
 
 **Key Vulnerabilities Demonstrated:**
+
 - ✅ SQL Injection (Login & Search)
 - ✅ Cross-Site Scripting (XSS)
 - ✅ Server-Side Template Injection (SSTI)
@@ -54,6 +61,7 @@ npm start
 - ✅ Insecure Direct Object References
 
 **Quick Start:**
+
 ```bash
 cd vulnerable-flask-app
 pip install -r requirements.txt
@@ -64,11 +72,12 @@ python app.py
 **Default Credentials:** `admin` / `admin123` or `user` / `user123`
 
 ### 3. **The Unsecure PWA** (`unsecure-pwa/`)
-**Technology Stack:** Python, Flask, SQLite
-**Primary Language:** Python
+
+**Technology Stack:** Python, Flask, SQLite **Primary Language:** Python
 **Port:** 5001 (configurable)
 
 **Key Vulnerabilities Demonstrated:**
+
 - ✅ Advanced Python-specific vulnerabilities
 - ✅ Progressive Web App security issues
 - ✅ Database injection attacks
@@ -76,6 +85,7 @@ python app.py
 - ✅ Session management flaws
 
 **Quick Start:**
+
 ```bash
 cd unsecure-pwa
 pip install -r requirements.txt
@@ -88,18 +98,22 @@ python main.py
 ## 🎯 **Educational Use Cases**
 
 ### **For Static Analysis Training:**
+
 1. **Beginner Level:** Start with the Flask app - clearer Python code structure
 2. **Intermediate Level:** Progress to Node.js app - different language patterns
 3. **Advanced Level:** Analyze the Unsecure PWA - real-world complexity
 
 ### **For Security Testing:**
+
 1. **Manual Testing:** Use web interfaces to discover vulnerabilities
 2. **Automated Scanning:** Run security tools against running applications
 3. **Code Analysis:** Perform static analysis on source code
 
 ### **For Vulnerability Assessment:**
+
 1. **Network Scanning:** Use nmap to discover open ports and services
-2. **Web Application Testing:** Use tools like Nikto, Gobuster for web vulnerabilities
+2. **Web Application Testing:** Use tools like Nikto, Gobuster for web
+   vulnerabilities
 3. **Code Review:** Use Bandit, Safety, Semgrep for Python code analysis
 
 ---
@@ -109,6 +123,7 @@ python main.py
 ### **Recommended Security Tools for Each Application:**
 
 #### Node.js Application Analysis:
+
 ```bash
 # Static analysis
 npm audit                           # Dependency vulnerabilities
@@ -121,6 +136,7 @@ gobuster dir -u http://localhost:3000 -w /path/to/wordlist
 ```
 
 #### Flask Application Analysis:
+
 ```bash
 # Static analysis
 bandit -r .                        # Python security issues
@@ -133,6 +149,7 @@ nikto -h localhost:5000            # Web vulnerability scan
 ```
 
 #### Unsecure PWA Analysis:
+
 ```bash
 # Advanced Python analysis
 bandit -r . -f json               # Detailed security analysis
@@ -148,12 +165,14 @@ nikto -h localhost:5001 -C all    # Comprehensive web testing
 ## 📊 **Expected Analysis Results**
 
 ### **Static Analysis Findings:**
+
 - **High Severity:** SQL injection, command injection, path traversal
 - **Medium Severity:** XSS, CSRF, insecure deserialization
 - **Low Severity:** Information disclosure, weak cryptography
 - **Informational:** Missing security headers, debug mode enabled
 
 ### **Dynamic Analysis Findings:**
+
 - **Authentication Bypass:** Multiple methods per application
 - **Injection Attacks:** SQL, Command, Template injection points
 - **File System Access:** Path traversal and unrestricted uploads
@@ -178,13 +197,15 @@ After analyzing these applications, students should understand:
 1. **Isolated Environment:** Only run these applications in the provided sandbox
 2. **No Production Use:** Never deploy these applications in real environments
 3. **Educational Purpose:** Use only for learning and authorized testing
-4. **Responsible Disclosure:** Apply learned concepts ethically in real scenarios
+4. **Responsible Disclosure:** Apply learned concepts ethically in real
+   scenarios
 
 ---
 
 ## 📝 **Quick Reference Commands**
 
 ### Start All Applications:
+
 ```bash
 # Terminal 1: Node.js App
 cd vulnerable-nodejs-app && npm start
@@ -197,6 +218,7 @@ cd unsecure-pwa && python main.py
 ```
 
 ### Run Security Analysis:
+
 ```bash
 # Python applications
 bandit -r vulnerable-flask-app/ vulnerable-pwa/
@@ -214,4 +236,5 @@ nikto -h localhost:5001
 
 ---
 
-**Remember:** These applications are powerful learning tools when used responsibly within the cybersecurity sandbox environment! 🛡️
+**Remember:** These applications are powerful learning tools when used
+responsibly within the cybersecurity sandbox environment! 🛡️
