@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Comprehensive test script to verify all security tools and environment setup
-for the Cybersecurity Sandbox Demo project.
+for the Secure Architecture Sandbox project.
 """
 import subprocess
 import sys
