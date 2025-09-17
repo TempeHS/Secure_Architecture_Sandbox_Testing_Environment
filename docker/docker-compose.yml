@@ -45,8 +45,8 @@ services:
   # PWA Flask application service
   pwa-flask:
     build:
-      context: ../samples/unsecure-pwa
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile.unsecure-pwa
     container_name: pwa_flask_app
     hostname: pwa-flask
     networks:
