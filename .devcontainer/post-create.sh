@@ -3,35 +3,14 @@
 # Post-creation script for Codespaces setup
 set -e  # Exit on any error
 
-echo "🔧 Setting up Cybersecurity Sandbox environment..."
-
-# Get the workspace folder dynamically
-WORKSPACE_DIR="${CODESPACE_VSCODE_FOLDER:-$(pwd)}"
-if [ ! -d "$WORKSPACE_DIR" ]; then
-    WORKSPACE_DIR="/workspaces/$(basen## Next Steps
-
-1. Explore the \`$(basename "$WORKSPACE_DIR")/src\` directory
-2. Check out sample vulnerable applications in \`samples/\`
-3. Read documentation in \`docs/\`
-4. Start building your cybersecurity analysis tools!
-5. Use Docker services for isolated testing environments
-
-Happy learning! 🎓🔍
-EOF
-
-echo "✅ Environment setup complete!"
-echo "📚 Check $WORKSPACE_DIR/WELCOME.md for getting started instructions"
-echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
-echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
-echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
-echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"echo "📁 Working in: $WORKSPACE_DIR"
+echo "🔧 Setting up Secure Architecture Sandbox environment..."
 
 # Update package lists and install security tools
 echo "📦 Updating system packages..."
 sudo apt-get update -y
 
 # Install essential security tools availableecho "✅ Environment setup complete!"
-echo "📚 Check $WORKSPACE_DIR/WELCOME.md for getting started instructions"
+echo "📚 Check /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
 echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
@@ -40,7 +19,7 @@ echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing env
 # Make sure WELCOME.md is prominently visible by echoing its location
 echo ""
 echo "📖 Opening WELCOME.md for getting started guide..."
-echo "   File location: $WORKSPACE_DIR/WELCOME.md"
+echo "   File location: /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md"t
 echo "🔧 Installing security tools..."
 sudo apt-get install -y --no-install-recommends \
     nmap \
@@ -110,23 +89,16 @@ sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
 cd /opt/security-tools
 
 # Ensure proper permissions for workspace
-sudo chown -R vscode:vscode "$WORKSPACE_DIR"
-
-# Create project directory structure
-mkdir -p "$WORKSPACE_DIR/src/{sandbox,analyzer,reporter,tools}"
-mkdir -p "$WORKSPACE_DIR/samples/scripts"
-mkdir -p "$WORKSPACE_DIR/docs/{lesson-plans,exercises}"
-mkdir -p "$WORKSPACE_DIR/reports"
-mkdir -p "$WORKSPACE_DIR/logs"
+sudo chown -R vscode:vscode /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing
 
 # Install Python security packages for development and analysis
 echo "🐍 Installing Python security packages..."
 python3 -m pip install --upgrade pip
 
 # Install from requirements.txt if it exists, otherwise install individually
-if [ -f "$WORKSPACE_DIR/requirements.txt" ]; then
+if [ -f "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/requirements.txt" ]; then
     echo "📋 Installing from requirements.txt..."
-    if python3 -m pip install -r "$WORKSPACE_DIR/requirements.txt"; then
+    if python3 -m pip install -r /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/requirements.txt; then
         echo "✅ Python packages installed successfully from requirements.txt"
     else
         echo "⚠️  Some packages from requirements.txt failed, trying individual installation..."
@@ -169,15 +141,8 @@ else
     fi
 fi
 
-# Create initial Python package structure
-touch "$WORKSPACE_DIR/src/__init__.py"
-touch "$WORKSPACE_DIR/src/sandbox/__init__.py"
-touch "$WORKSPACE_DIR/src/analyzer/__init__.py"
-touch "$WORKSPACE_DIR/src/reporter/__init__.py"
-touch "$WORKSPACE_DIR/src/tools/__init__.py"
-
 # Create a simple test script to verify security tools
-cat > "$WORKSPACE_DIR/.devcontainer/test_tools.py" << 'EOF'
+cat > /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/test_tools.py << 'EOF'
 #!/usr/bin/env python3
 """
 Quick test script to verify security tools are available
@@ -228,7 +193,7 @@ if __name__ == "__main__":
     sys.exit(main())
 EOF
 
-chmod +x "$WORKSPACE_DIR/.devcontainer/test_tools.py"
+chmod +x /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/test_tools.py
 
 # Set up git if not already configured
 if [ ! -f ~/.gitconfig ]; then
@@ -243,14 +208,14 @@ echo "📦 Installing docker-compose..."
 sudo apt-get update -y && sudo apt-get install -y docker-compose
 
 echo "🚀 Starting Docker Compose services..."
-cd "$WORKSPACE_DIR"
+cd /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing
 docker-compose -f docker/docker-compose.yml up -d
 
 # Create a welcome message
-cat > "$WORKSPACE_DIR/WELCOME.md" << 'EOF'
-# 🔒 Welcome to Cybersecurity Sandbox Demo
+cat > /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md << 'EOF'
+# 🔒 Welcome to Practical_Application_Of_Secure_Architecture_Sandbox_Testing
 
-This environment is ready for cybersecurity education and testing!
+This environment is ready for sandbox testing for secure architecture!
 
 ## Quick Start
 
@@ -289,7 +254,7 @@ This environment is ready for cybersecurity education and testing!
 ## Project Structure
 
 ```
-$(basename "$WORKSPACE_DIR")/
+/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/
 ├── src/           # Source code (Python packages)
 ├── samples/       # Sample vulnerable applications
 ├── docs/          # Documentation
@@ -321,7 +286,7 @@ if __name__ == '__main__':
 
 ## Next Steps
 
-1. Explore the \`$(basename "$WORKSPACE_DIR")/src\` directory
+1. Explore the `/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/src` directory
 2. Check out sample vulnerable applications in `samples/`
 3. Read documentation in `docs/`
 4. Start building your cybersecurity analysis tools!
@@ -331,7 +296,7 @@ Happy learning! 🎓🔍
 EOF
 
 echo "✅ Environment setup complete!"
-echo "📚 Check $WORKSPACE_DIR/WELCOME.md for getting started instructions"
+echo "📚 Check /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
 echo "� Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
@@ -340,8 +305,8 @@ echo "�🐳 Use 'cd docker && docker-compose up -d' to start isolated testing 
 # Run a quick verification test
 echo ""
 echo "🔍 Running comprehensive verification..."
-if [ -f "$WORKSPACE_DIR/.devcontainer/verify_environment.py" ]; then
-    python3 "$WORKSPACE_DIR/.devcontainer/verify_environment.py"
+if [ -f "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/verify_environment.py" ]; then
+    python3 /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/verify_environment.py
 else
     echo "🔍 Quick verification test..."
     python3 --version
@@ -354,7 +319,7 @@ else
 fi
 
 echo ""
-echo "🎉 Cybersecurity Sandbox Demo is ready!"
+echo "🎉 Secure Architecture Sandbox Testing Environment is ready!"
 echo ""
 echo "📖 IMPORTANT: Please open WELCOME.md for complete setup instructions!"
 echo "   • You can open it by clicking: WELCOME.md in the file explorer"
