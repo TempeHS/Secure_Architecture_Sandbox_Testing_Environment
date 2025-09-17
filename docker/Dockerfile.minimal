@@ -41,9 +41,16 @@ RUN pip install --no-cache-dir \
     && pip cache purge
 
 # Create workspace structure
+
+# Create workspace structure
 RUN mkdir -p /workspace/{src,samples,reports,logs} \
     && mkdir -p /opt/tools \
     && chown -R vscode:vscode /workspace /opt/tools
+
+# Copy sample folders for security analysis
+COPY samples/backdoor-apps /workspace/samples/backdoor-apps
+COPY samples/network-scenarios /workspace/samples/network-scenarios
+COPY samples/resource-abuse /workspace/samples/resource-abuse
 
 # Create simple startup script
 RUN echo '#!/bin/bash\n\
