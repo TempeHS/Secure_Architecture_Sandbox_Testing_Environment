@@ -3,7 +3,7 @@ services:
   sandbox:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.minimal
     container_name: cybersec_sandbox
     hostname: sandbox
     networks:
@@ -16,7 +16,6 @@ services:
       - sandbox_logs:/workspace/logs
     ports:
       - "8080:8080" # Analysis web interface
-      - "8000:8000" # Development server
     environment:
       - PYTHONPATH=/workspace/src
       - SANDBOX_MODE=educational
@@ -29,14 +28,12 @@ services:
       - NET_RAW # For nmap and network tools
       - NET_ADMIN # For network analysis
     # Resource limits for Codespaces
-    mem_limit: 1g
-    cpus: 0.8
+    mem_limit: 512m
+    cpus: 0.5
     restart: unless-stopped
     # Keep container running and allow interactive access
     stdin_open: true
     tty: true
-    # Services will start automatically via the startup script
-    # To access bash interactively: docker exec -it cybersec_sandbox /bin/bash
 
   # PWA Flask application - completely independent
   unsecure-pwa:

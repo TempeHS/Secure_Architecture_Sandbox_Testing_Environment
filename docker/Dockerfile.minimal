@@ -1,0 +1,67 @@
+# Minimal, robust sandbox Dockerfile for cybersecurity education
+FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
+
+# Install essential system packages only (no downloads)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Core utilities
+    curl \
+    wget \
+    git \
+    # Network tools  
+    nmap \
+    netcat-traditional \
+    net-tools \
+    dnsutils \
+    tcpdump \
+    # Directory enumeration
+    dirb \
+    # Analysis tools
+    binutils \
+    file \
+    tree \
+    # Archive tools
+    unzip \
+    zip \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy runtime tool installer for additional tools
+COPY docker/install-tools.sh /usr/local/bin/install-tools.sh
+RUN chmod +x /usr/local/bin/install-tools.sh
+
+# Install minimal Python packages for security analysis
+RUN pip install --no-cache-dir \
+    requests \
+    beautifulsoup4 \
+    bandit \
+    pytest \
+    flask \
+    && pip cache purge
+
+# Create workspace structure
+RUN mkdir -p /workspace/{src,samples,reports,logs} \
+    && mkdir -p /opt/tools \
+    && chown -R vscode:vscode /workspace /opt/tools
+
+# Create simple startup script
+RUN echo '#!/bin/bash\n\
+    echo "Cybersecurity Sandbox Starting..."\n\
+    echo "Available tools: nmap, dirb, curl, wget, bandit, pytest"\n\
+    echo "Additional tools can be installed with: /usr/local/bin/install-tools.sh"\n\
+    echo "Workspace: /workspace"\n\
+    exec tail -f /dev/null' > /usr/local/bin/sandbox-startup.sh && \
+    chmod +x /usr/local/bin/sandbox-startup.sh
+
+# Switch to vscode user
+USER vscode
+
+# Set working directory
+WORKDIR /workspace
+
+# Expose ports
+EXPOSE 8080 8000
+
+# Simple startup command
+CMD ["/usr/local/bin/sandbox-startup.sh"]
