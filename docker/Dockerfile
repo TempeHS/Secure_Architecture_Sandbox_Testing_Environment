@@ -87,29 +87,12 @@ RUN pip install --no-cache-dir \
     # Clean up
     rm /tmp/requirements.txt /tmp/flask-requirements.txt
 
-# Create application directories with proper permissions
-RUN mkdir -p /workspace/src/sandbox \
-    /workspace/src/analyzer \
-    /workspace/src/reporter \
-    /workspace/samples/scripts \
-    /workspace/docs/lesson-plans \
-    /workspace/docs/exercises \
-    /workspace/reports \
-    /workspace/logs && \
-    chown -R vscode:vscode /workspace
-
-# Set working directory
+# Set working directory and copy files
 WORKDIR /workspace
-
-# Copy application files into the container
 COPY . /workspace/
 
-# Create basic Python package structure as root then fix permissions
-RUN touch /workspace/src/__init__.py && \
-    touch /workspace/src/sandbox/__init__.py && \
-    touch /workspace/src/analyzer/__init__.py && \
-    touch /workspace/src/reporter/__init__.py && \
-    chown -R vscode:vscode /workspace
+# Set proper permissions for vscode user
+RUN chown -R vscode:vscode /workspace
 
 # Create a non-root user for enhanced security (already exists in base image)
 USER vscode
@@ -117,9 +100,5 @@ USER vscode
 # Expose common ports for educational testing
 EXPOSE 8080 8000 3000 9090
 
-# Health check to ensure container is ready
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:9090 || exit 1
-
-# Default command - run the vulnerable Flask app directly
-CMD ["sh", "-c", "cd /workspace/samples/vulnerable-flask-app && python3 app.py"]
+# Default command - keep container alive and allow manual Flask app start
+CMD ["sh", "-c", "echo 'Sandbox container ready. Use docker exec to start applications.' && tail -f /dev/null"]
