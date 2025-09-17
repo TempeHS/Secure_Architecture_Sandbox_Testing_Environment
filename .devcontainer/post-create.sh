@@ -10,7 +10,7 @@ echo "📦 Updating system packages..."
 sudo apt-get update -y
 
 # Install essential security tools availableecho "✅ Environment setup complete!"
-echo "📚 Check /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md for getting started instructions"
+echo "📚 Check /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
 echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
@@ -19,7 +19,7 @@ echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing env
 # Make sure WELCOME.md is prominently visible by echoing its location
 echo ""
 echo "📖 Opening WELCOME.md for getting started guide..."
-echo "   File location: /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md"t
+echo "   File location: /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md"t
 echo "🔧 Installing security tools..."
 sudo apt-get install -y --no-install-recommends \
     nmap \
@@ -89,16 +89,16 @@ sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
 cd /opt/security-tools
 
 # Ensure proper permissions for workspace
-sudo chown -R vscode:vscode /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing
+sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 
 # Install Python security packages for development and analysis
 echo "🐍 Installing Python security packages..."
 python3 -m pip install --upgrade pip
 
 # Install from requirements.txt if it exists, otherwise install individually
-if [ -f "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/requirements.txt" ]; then
+if [ -f "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt" ]; then
     echo "📋 Installing from requirements.txt..."
-    if python3 -m pip install -r /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/requirements.txt; then
+    if python3 -m pip install -r /workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt; then
         echo "✅ Python packages installed successfully from requirements.txt"
     else
         echo "⚠️  Some packages from requirements.txt failed, trying individual installation..."
@@ -142,10 +142,10 @@ else
 fi
 
 # Create a simple test script to verify security tools
-cat > /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/test_tools.py << 'EOF'
+cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py << 'EOF'
 #!/usr/bin/env python3
 """
-Quick test script to verify security tools are available
+Quick test script to verify security tools are available.
 """
 import subprocess
 import sys
@@ -193,7 +193,7 @@ if __name__ == "__main__":
     sys.exit(main())
 EOF
 
-chmod +x /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/test_tools.py
+chmod +x /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py
 
 # Set up git if not already configured
 if [ ! -f ~/.gitconfig ]; then
@@ -208,12 +208,12 @@ echo "📦 Installing docker-compose..."
 sudo apt-get update -y && sudo apt-get install -y docker-compose
 
 echo "🚀 Starting Docker Compose services..."
-cd /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing
+cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 docker-compose -f docker/docker-compose.yml up -d
 
 # Create a welcome message
-cat > /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md << 'EOF'
-# 🔒 Welcome to Practical_Application_Of_Secure_Architecture_Sandbox_Testing
+cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md << 'EOF'
+# 🔒 Welcome to Secure_Architecture_Sandbox_Testing_Environment
 
 This environment is ready for sandbox testing for secure architecture!
 
@@ -254,7 +254,7 @@ This environment is ready for sandbox testing for secure architecture!
 ## Project Structure
 
 ```
-/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/
+/workspaces/Secure_Architecture_Sandbox_Testing_Environment/
 ├── src/           # Source code (Python packages)
 ├── samples/       # Sample vulnerable applications
 ├── docs/          # Documentation
@@ -286,7 +286,7 @@ if __name__ == '__main__':
 
 ## Next Steps
 
-1. Explore the `/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/src` directory
+1. Explore the `/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src` directory
 2. Check out sample vulnerable applications in `samples/`
 3. Read documentation in `docs/`
 4. Start building your cybersecurity analysis tools!
@@ -296,7 +296,7 @@ Happy learning! 🎓🔍
 EOF
 
 echo "✅ Environment setup complete!"
-echo "📚 Check /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/WELCOME.md for getting started instructions"
+echo "📚 Check /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
 echo "� Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
@@ -305,8 +305,8 @@ echo "�🐳 Use 'cd docker && docker-compose up -d' to start isolated testing 
 # Run a quick verification test
 echo ""
 echo "🔍 Running comprehensive verification..."
-if [ -f "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/verify_environment.py" ]; then
-    python3 /workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/.devcontainer/verify_environment.py
+if [ -f "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/verify_environment.py" ]; then
+    python3 /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/verify_environment.py
 else
     echo "🔍 Quick verification test..."
     python3 --version
