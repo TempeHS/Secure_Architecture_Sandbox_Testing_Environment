@@ -1,7 +1,7 @@
 {
   "name": "Cybersecurity Sandbox Demo",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
-  "workspaceFolder": "/workspaces/Docker_Sandbox_Demo",
+  "workspaceFolder": "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing",
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "moby": true,
@@ -111,7 +111,7 @@
   "postAttachCommand": "bash .devcontainer/open-welcome.sh",
   "remoteUser": "vscode",
   "containerEnv": {
-    "PYTHONPATH": "/workspaces/Docker_Sandbox_Demo/src",
+    "PYTHONPATH": "/workspaces/Practical_Application_Of_Secure_Architecture_Sandbox_Testing/src",
     "SANDBOX_MODE": "educational",
     "FLASK_ENV": "development"
   }
