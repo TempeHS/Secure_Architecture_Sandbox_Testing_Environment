@@ -1,5 +1,5 @@
 services:
-  # Main sandbox container for cybersecurity analysis
+  # Dedicated sandbox environment for cybersecurity tools
   sandbox:
     build:
       context: ..
@@ -15,15 +15,11 @@ services:
       - sandbox_reports:/workspace/reports
       - sandbox_logs:/workspace/logs
     ports:
-      - "8080:8080" # Main web server
+      - "8080:8080" # Analysis web interface
       - "8000:8000" # Development server
-      - "3000:3000" # Node.js apps
-      - "9090:9090" # Flask apps (running on port 9090)
     environment:
       - PYTHONPATH=/workspace/src
       - SANDBOX_MODE=educational
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
     # Security settings appropriate for educational use
     security_opt:
       - no-new-privileges:true
@@ -42,13 +38,13 @@ services:
     # Services will start automatically via the startup script
     # To access bash interactively: docker exec -it cybersec_sandbox /bin/bash
 
-  # PWA Flask application service
-  pwa-flask:
+  # PWA Flask application - completely independent
+  unsecure-pwa:
     build:
       context: ..
       dockerfile: docker/Dockerfile.unsecure-pwa
-    container_name: pwa_flask_app
-    hostname: pwa-flask
+    container_name: unsecure_pwa
+    hostname: unsecure-pwa
     networks:
       - sandbox_network
     ports:
@@ -57,8 +53,24 @@ services:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
     restart: unless-stopped
-    depends_on:
-      - sandbox
+    # NO depends_on - runs independently
+
+  # Vulnerable Flask app - separate service
+  vulnerable-flask:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.vulnerable-flask
+    container_name: vulnerable_flask
+    hostname: vulnerable-flask
+    networks:
+      - sandbox_network
+    ports:
+      - "9090:9090" # Map host 9090 to vulnerable Flask app port
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+    # NO depends_on - runs independently
 
 networks:
   sandbox_network:

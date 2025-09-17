@@ -1,0 +1,33 @@
+# Dockerfile for Vulnerable Flask Application
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python packages
+COPY samples/vulnerable-flask-app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY samples/vulnerable-flask-app/ .
+
+# Create required directories and sample files
+RUN mkdir -p files uploads && \
+    echo "This is a sample file for path traversal testing." > files/sample.txt && \
+    chmod 644 files/sample.txt
+
+# Set proper permissions for Flask app files
+RUN chmod 755 . && \
+    chmod 644 *.py && \
+    chmod 755 files uploads
+
+# Expose port 9090
+EXPOSE 9090
+
+# Run the vulnerable Flask application
+CMD ["python", "app.py"]
