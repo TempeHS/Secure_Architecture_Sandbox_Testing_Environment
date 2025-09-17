@@ -105,9 +105,15 @@ RUN pip install --no-cache-dir \
     && pip cache purge \
     && rm -rf /tmp/*.txt /root/.cache/pip
 
-# Set working directory and copy files
+# Set working directory and copy files (using PWA pattern for file copying)
 WORKDIR /workspace
 COPY . /workspace/
+
+# Ensure Flask app files are properly accessible and create required directories
+RUN mkdir -p /workspace/samples/vulnerable-flask-app/files \
+    && mkdir -p /workspace/samples/vulnerable-flask-app/uploads \
+    && echo "This is a sample file for path traversal testing." > /workspace/samples/vulnerable-flask-app/files/sample.txt \
+    && chmod -R 755 /workspace/samples/vulnerable-flask-app
 
 # Set proper permissions for vscode user
 RUN chown -R vscode:vscode /workspace
