@@ -72,6 +72,40 @@ services:
     restart: unless-stopped
     # NO depends_on - runs independently
 
+  # Student uploads Flask app - independent service
+  student-uploads:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.student-uploads
+    container_name: student_uploads
+    hostname: student-uploads
+    networks:
+      - sandbox_network
+    ports:
+      - "8000:8000" # Map host 8000 to student uploads Flask app port
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+    # NO depends_on - runs independently
+
+  # Vulnerable Node.js app - independent service
+  vulnerable-nodejs:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.vulnerable-nodejs
+    container_name: vulnerable_nodejs
+    hostname: vulnerable-nodejs
+    networks:
+      - sandbox_network
+    ports:
+      - "3000:3000" # Map host 3000 to vulnerable Node.js app port
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    restart: unless-stopped
+    # NO depends_on - runs independently
+
 networks:
   sandbox_network:
     driver: bridge

@@ -1,0 +1,37 @@
+# Dockerfile for Vulnerable Node.js Application
+FROM node:18-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package files first for better caching
+COPY samples/vulnerable-nodejs-app/package*.json ./
+
+# Install Node.js dependencies
+RUN npm install --production
+
+# Copy application files
+COPY samples/vulnerable-nodejs-app/ .
+
+# Create required directories and sample files
+RUN mkdir -p uploads public views && \
+    echo "This is a sample file for path traversal testing." > uploads/sample.txt && \
+    chmod 755 uploads public views && \
+    chmod 644 uploads/sample.txt
+
+# Set proper permissions for Node.js app files
+RUN chmod 755 . && \
+    chmod 644 *.js *.json && \
+    chmod 644 views/*.ejs && \
+    chmod 644 public/*
+
+# Expose port 3000 (as configured in app.js)
+EXPOSE 3000
+
+# Run the vulnerable Node.js application
+CMD ["npm", "start"]

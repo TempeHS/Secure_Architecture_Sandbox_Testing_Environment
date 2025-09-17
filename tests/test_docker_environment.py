@@ -78,7 +78,10 @@ class DockerSandboxValidationTest(unittest.TestCase):
             )
 
             running_services = result.stdout.strip().split("\n")
-            expected_services = ["sandbox", "unsecure-pwa", "vulnerable-flask"]
+            expected_services = [
+                "sandbox", "unsecure-pwa", "vulnerable-flask",
+                "student-uploads", "vulnerable-nodejs"
+            ]
             for service in expected_services:
                 self.assertIn(
                     service, running_services, f"{service} service not running"
