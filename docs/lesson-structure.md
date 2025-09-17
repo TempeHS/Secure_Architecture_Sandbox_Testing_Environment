@@ -57,13 +57,13 @@ thinking skills that complement automated testing.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/manual-code-review-exercise.md`](exercises/manual-code-review-exercise.md)
+  [`exercises/1.manual-code-review-exercise.md`](exercises/1.manual-code-review-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/manual-code-review-instructor-guide.md`](instructor-guides/manual-code-review-instructor-guide.md)
+  [`instructor-guides/1.manual-code-review-instructor-guide.md`](instructor-guides/1.manual-code-review-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/manual-code-review-student-worksheet.md`](student-worksheets/manual-code-review-student-worksheet.md)
+  [`student-worksheets/1.manual-code-review-student-worksheet.md`](student-worksheets/1.manual-code-review-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/manual-code-review-quick-reference.md`](quick-reference-guides/manual-code-review-quick-reference.md)
+  [`quick-reference-guides/1.manual-code-review-quick-reference.md`](quick-reference-guides/1.manual-code-review-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -115,13 +115,13 @@ skills.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/sandbox-security-analysis-exercise.md`](exercises/sandbox-security-analysis-exercise.md)
+  [`exercises/2.sandbox-security-analysis-exercise.md`](exercises/2.sandbox-security-analysis-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/sandbox-instructor-guide.md`](instructor-guides/sandbox-instructor-guide.md)
+  [`instructor-guides/2.sandbox-instructor-guide.md`](instructor-guides/2.sandbox-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/sandbox-student-worksheet.md`](student-worksheets/sandbox-student-worksheet.md)
+  [`student-worksheets/2.sandbox-student-worksheet.md`](student-worksheets/2.sandbox-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/sandbox-quick-reference.md`](quick-reference-guides/sandbox-quick-reference.md)
+  [`quick-reference-guides/2.sandbox-quick-reference.md`](quick-reference-guides/2.sandbox-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -181,13 +181,13 @@ skills.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/sandbox-security-analysis-exercise.md`](exercises/sandbox-security-analysis-exercise.md)
+  [`exercises/2.sandbox-security-analysis-exercise.md`](exercises/2.sandbox-security-analysis-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/sandbox-instructor-guide.md`](instructor-guides/sandbox-instructor-guide.md)
+  [`instructor-guides/2.sandbox-instructor-guide.md`](instructor-guides/2.sandbox-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/sandbox-student-worksheet.md`](student-worksheets/sandbox-student-worksheet.md)
+  [`student-worksheets/2.sandbox-student-worksheet.md`](student-worksheets/2.sandbox-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/sandbox-quick-reference.md`](quick-reference-guides/sandbox-quick-reference.md)
+  [`quick-reference-guides/2.sandbox-quick-reference.md`](quick-reference-guides/2.sandbox-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -247,13 +247,13 @@ applications run.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/static-application-security-testing-exercise.md`](exercises/static-application-security-testing-exercise.md)
+  [`exercises/3.static-application-security-testing-exercise.md`](exercises/3.static-application-security-testing-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/sast-instructor-guide.md`](instructor-guides/sast-instructor-guide.md)
+  [`instructor-guides/3.sast-instructor-guide.md`](instructor-guides/3.sast-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/sast-student-worksheet.md`](student-worksheets/sast-student-worksheet.md)
+  [`student-worksheets/3.sast-student-worksheet.md`](student-worksheets/3.sast-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/sast-quick-reference.md`](quick-reference-guides/sast-quick-reference.md)
+  [`quick-reference-guides/3.sast-quick-reference.md`](quick-reference-guides/3.sast-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -301,13 +301,13 @@ complementing their static analysis skills with runtime testing techniques.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/dynamic-application-security-testing-exercise.md`](exercises/dynamic-application-security-testing-exercise.md)
+  [`exercises/4.dynamic-application-security-testing-exercise.md`](exercises/4.dynamic-application-security-testing-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/dast-instructor-guide.md`](instructor-guides/dast-instructor-guide.md)
+  [`instructor-guides/4.dast-instructor-guide.md`](instructor-guides/4.dast-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/dast-student-worksheet.md`](student-worksheets/dast-student-worksheet.md)
+  [`student-worksheets/4.dast-student-worksheet.md`](student-worksheets/4.dast-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/dast-quick-reference.md`](quick-reference-guides/dast-quick-reference.md)
+  [`quick-reference-guides/4.dast-quick-reference.md`](quick-reference-guides/4.dast-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -358,13 +358,13 @@ ethical considerations.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/penetration-testing-exercise.md`](exercises/penetration-testing-exercise.md)
+  [`exercises/6.penetration-testing-exercise.md`](exercises/6.penetration-testing-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/penetration-testing-instructor-guide.md`](instructor-guides/penetration-testing-instructor-guide.md)
+  [`instructor-guides/6.penetration-testing-instructor-guide.md`](instructor-guides/6.penetration-testing-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/penetration-testing-student-worksheet.md`](student-worksheets/penetration-testing-student-worksheet.md)
+  [`student-worksheets/6.penetration-testing-student-worksheet.md`](student-worksheets/6.penetration-testing-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/penetration-testing-quick-reference.md`](quick-reference-guides/penetration-testing-quick-reference.md)
+  [`quick-reference-guides/6.penetration-testing-quick-reference.md`](quick-reference-guides/6.penetration-testing-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -415,13 +415,13 @@ security analysis.
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/network-traffic-analysis-exercise.md`](exercises/network-traffic-analysis-exercise.md)
+  [`exercises/5.network-traffic-analysis-exercise.md`](exercises/5.network-traffic-analysis-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/network-instructor-guide.md`](instructor-guides/network-instructor-guide.md)
+  [`instructor-guides/5.network-instructor-guide.md`](instructor-guides/5.network-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/network-student-worksheet.md`](student-worksheets/network-student-worksheet.md)
+  [`student-worksheets/5.network-student-worksheet.md`](student-worksheets/5.network-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/network-quick-reference.md`](quick-reference-guides/network-quick-reference.md)
+  [`quick-reference-guides/5.network-quick-reference.md`](quick-reference-guides/5.network-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
@@ -482,13 +482,13 @@ organizational analysis
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/organizational-vulnerability-assessment-exercise.md`](exercises/organizational-vulnerability-assessment-exercise.md)
+  [`exercises/7.organizational-vulnerability-assessment-exercise.md`](exercises/7.organizational-vulnerability-assessment-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/organizational-vulnerability-assessment-instructor-guide.md`](instructor-guides/organizational-vulnerability-assessment-instructor-guide.md)
+  [`instructor-guides/7.organizational-vulnerability-assessment-instructor-guide.md`](instructor-guides/7.organizational-vulnerability-assessment-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/organizational-vulnerability-assessment-student-worksheet.md`](student-worksheets/organizational-vulnerability-assessment-student-worksheet.md)
+  [`student-worksheets/7.organizational-vulnerability-assessment-student-worksheet.md`](student-worksheets/7.organizational-vulnerability-assessment-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/organizational-vulnerability-assessment-quick-reference.md`](quick-reference-guides/organizational-vulnerability-assessment-quick-reference.md)
+  [`quick-reference-guides/7.organizational-vulnerability-assessment-quick-reference.md`](quick-reference-guides/7.organizational-vulnerability-assessment-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 

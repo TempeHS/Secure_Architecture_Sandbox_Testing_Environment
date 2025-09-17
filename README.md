@@ -84,7 +84,7 @@ python src/analyzer/network_cli.py --capture-traffic --educational
 
 ### 🛡️ Static Application Security Testing (SAST) Exercise
 
-**Location**: `docs/exercises/static-application-security-testing-exercise.md`
+**Location**: `docs/exercises/3.static-application-security-testing-exercise.md`
 
 A comprehensive 3-4 hour exercise teaching students:
 
@@ -103,7 +103,7 @@ A comprehensive 3-4 hour exercise teaching students:
 
 ### 🌐 Dynamic Application Security Testing (DAST) Exercise
 
-**Location**: `docs/exercises/dynamic-application-security-testing-exercise.md`
+**Location**: `docs/exercises/4.dynamic-application-security-testing-exercise.md`
 
 A comprehensive 3-4 hour exercise teaching students:
 
@@ -122,7 +122,7 @@ A comprehensive 3-4 hour exercise teaching students:
 
 ### 🕸️ Network Traffic Analysis Exercise
 
-**Location**: `docs/exercises/network-traffic-analysis-exercise.md`
+**Location**: `docs/exercises/5.network-traffic-analysis-exercise.md`
 
 A comprehensive 3-4 hour exercise teaching students:
 
@@ -151,7 +151,7 @@ A comprehensive 3-4 hour exercise teaching students:
 
 ### 🧪 Sandbox Security Analysis Exercise
 
-**Location**: `docs/exercises/sandbox-security-analysis-exercise.md`
+**Location**: `docs/exercises/2.sandbox-security-analysis-exercise.md`
 
 A comprehensive 3-4 hour exercise teaching students:
 
@@ -176,7 +176,7 @@ A comprehensive 3-4 hour exercise teaching students:
 
 ### ⚔️ Penetration Testing Exercise
 
-**Location**: `docs/exercises/penetration-testing-exercise.md`
+**Location**: `docs/exercises/6.penetration-testing-exercise.md`
 
 A comprehensive 4-5 hour **advanced** exercise teaching students:
 
@@ -459,15 +459,15 @@ After completing the exercises, students will be able to:
 
    - **Foundation Sequence** (Recommended for beginners):
      1. Start with SAST:
-        `docs/exercises/static-application-security-testing-exercise.md`
+        `docs/exercises/3.static-application-security-testing-exercise.md`
      2. Continue with DAST:
-        `docs/exercises/dynamic-application-security-testing-exercise.md`
+        `docs/exercises/4.dynamic-application-security-testing-exercise.md`
      3. Add Network Analysis:
-        `docs/exercises/network-traffic-analysis-exercise.md`
+        `docs/exercises/5.network-traffic-analysis-exercise.md`
      4. Practice Sandbox Analysis:
-        `docs/exercises/sandbox-security-analysis-exercise.md`
+        `docs/exercises/2.sandbox-security-analysis-exercise.md`
    - **Advanced Integration**: Complete Penetration Testing:
-     `docs/exercises/penetration-testing-exercise.md`
+     `docs/exercises/6.penetration-testing-exercise.md`
    - **Individual Focus**: Choose specific exercises based on interest and skill
      level
 
