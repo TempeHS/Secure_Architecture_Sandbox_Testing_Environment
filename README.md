@@ -1,9 +1,9 @@
-# Docker Sandbox Demo - Cybersecurity Education Platform
+# Secure Architecture Sandbox Test Environment
 
 ## 🎯 Overview
 
 This repository contains a comprehensive Docker-based sandbox environment for
-teaching cybersecurity concepts to high school students. The platform provides
+teaching secure architecture concepts to high school students. The platform provides
 hands-on experience with security analysis, vulnerability detection, and
 remediation techniques using real applications in a safe, controlled
 environment.
