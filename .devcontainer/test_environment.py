@@ -94,15 +94,21 @@ def test_directory_structure():
     """Test if the required directory structure exists"""
     print_header("Testing Directory Structure")
     
+    # Get workspace directory dynamically
+    import os
+    workspace_dir = os.environ.get('CODESPACE_VSCODE_FOLDER', os.getcwd())
+    if not os.path.exists(workspace_dir):
+        workspace_dir = f"/workspaces/{os.path.basename(os.getcwd())}"
+    
     required_dirs = [
-        "/workspaces/Docker_Sandbox_Demo/src",
-        "/workspaces/Docker_Sandbox_Demo/src/sandbox",
-        "/workspaces/Docker_Sandbox_Demo/src/analyzer", 
-        "/workspaces/Docker_Sandbox_Demo/src/reporter",
-        "/workspaces/Docker_Sandbox_Demo/samples",
-        "/workspaces/Docker_Sandbox_Demo/docs",
-        "/workspaces/Docker_Sandbox_Demo/reports",
-        "/workspaces/Docker_Sandbox_Demo/logs"
+        f"{workspace_dir}/src",
+        f"{workspace_dir}/src/sandbox",
+        f"{workspace_dir}/src/analyzer", 
+        f"{workspace_dir}/src/reporter",
+        f"{workspace_dir}/samples",
+        f"{workspace_dir}/docs",
+        f"{workspace_dir}/reports",
+        f"{workspace_dir}/logs"
     ]
     
     all_good = True
@@ -199,8 +205,13 @@ def test_environment():
     """Test environment variables and settings"""
     print_header("Testing Environment")
     
+    # Get workspace directory dynamically
+    workspace_dir = os.environ.get('CODESPACE_VSCODE_FOLDER', os.getcwd())
+    if not os.path.exists(workspace_dir):
+        workspace_dir = f"/workspaces/{os.path.basename(os.getcwd())}"
+    
     env_vars = [
-        ("PYTHONPATH", "/workspaces/Docker_Sandbox_Demo/src"),
+        ("PYTHONPATH", f"{workspace_dir}/src"),
         ("USER", "vscode"),
     ]
     
@@ -230,10 +241,15 @@ def test_file_permissions():
     """Test file permissions and accessibility"""
     print_header("Testing File Permissions")
     
+    # Get workspace directory dynamically
+    workspace_dir = os.environ.get('CODESPACE_VSCODE_FOLDER', os.getcwd())
+    if not os.path.exists(workspace_dir):
+        workspace_dir = f"/workspaces/{os.path.basename(os.getcwd())}"
+    
     test_files = [
-        "/workspaces/Docker_Sandbox_Demo/.devcontainer/test_tools.py",
-        "/workspaces/Docker_Sandbox_Demo/WELCOME.md",
-        "/workspaces/Docker_Sandbox_Demo/src/__init__.py",
+        f"{workspace_dir}/.devcontainer/test_tools.py",
+        f"{workspace_dir}/WELCOME.md",
+        f"{workspace_dir}/src/__init__.py",
     ]
     
     all_good = True
@@ -248,7 +264,7 @@ def test_file_permissions():
             print_warning(f"File not found: {file_path}")
     
     # Test write permission to reports directory
-    reports_dir = "/workspaces/Docker_Sandbox_Demo/reports"
+    reports_dir = f"{workspace_dir}/reports"
     if os.path.exists(reports_dir) and os.access(reports_dir, os.W_OK):
         print_success(f"Can write to: {reports_dir}")
     else:
