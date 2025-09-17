@@ -19,8 +19,7 @@
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
 *.tar.bz2 filter=lfs diff=lfs merge=lfs -text
 
-# Database files
-*.db filter=lfs diff=lfs merge=lfs -text
+# Database files (excluding *.db files which are now tracked with regular Git)
 *.sqlite filter=lfs diff=lfs merge=lfs -text
 *.sqlite3 filter=lfs diff=lfs merge=lfs -text
 
