@@ -1,6 +1,6 @@
-# 🔒 Welcome to Cybersecurity Sandbox Demo
+# 🔒 Welcome to Secure Architecture Sandbox Testing Environment
 
-This environment is ready for cybersecurity education and testing!
+This environment is ready for secure architecture education and testing!
 
 ## Quick Start
 
