@@ -24,8 +24,8 @@ docker exec cybersec_sandbox timeout 30s nikto -h http://vulnerable-web -no404 |
 echo ""
 
 echo "📁 3. Directory Enumeration with Gobuster:"
-echo "Command: gobuster dir -u http://vulnerable-web -w /opt/dirb/wordlists/common.txt -t 10 --timeout 5s"
-docker exec cybersec_sandbox timeout 15s gobuster dir -u http://vulnerable-web -w /opt/dirb/wordlists/common.txt -t 5 --timeout 5s -q 2>/dev/null || echo "Gobuster scan completed"
+echo "Command: gobuster dir -u http://vulnerable-web -w /usr/share/wordlists/common.txt -t 10 --timeout 5s"
+docker exec cybersec_sandbox timeout 15s gobuster dir -u http://vulnerable-web -w /usr/share/wordlists/common.txt -t 5 --timeout 5s -q 2>/dev/null || echo "Gobuster scan completed"
 echo ""
 
 echo "🔍 4. Technology Detection with WhatWeb:"

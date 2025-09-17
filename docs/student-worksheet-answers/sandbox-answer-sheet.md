@@ -156,7 +156,7 @@ malicious? **Expected Answer**:
 - **http://localhost:5000/contact**: Contact page or 404 error
 
 **Hidden Endpoints Discovery**: **Command**:
-`gobuster dir -u http://localhost:5000 -w /usr/share/wordlists/dirb/common.txt`
+`gobuster dir -u http://localhost:5000 -w /usr/share/wordlists/common.txt`
 
 **Expected Hidden Endpoints**:
 

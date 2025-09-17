@@ -541,12 +541,21 @@ class DynamicAnalyzer:
         findings = []
 
         try:
-            # Create a simple wordlist for educational purposes
-            wordlist_content = "admin\ntest\nbackup\nconfig\n.git\n.env\ndebug\nlogin\napi"
+            # Use standard wordlist if available, otherwise create temporary one
+            standard_wordlist = "/usr/share/wordlists/common.txt"
+            if os.path.exists(standard_wordlist):
+                wordlist_path = standard_wordlist
+                cleanup_needed = False
+            else:
+                # Create a simple wordlist for educational purposes (fallback)
+                wordlist_content = ("admin\ntest\nbackup\nconfig\n.git\n"
+                                    ".env\ndebug\nlogin\napi")
 
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
-                f.write(wordlist_content)
-                wordlist_path = f.name
+                with tempfile.NamedTemporaryFile(mode='w', suffix='.txt',
+                                                 delete=False) as f:
+                    f.write(wordlist_content)
+                    wordlist_path = f.name
+                    cleanup_needed = True
 
             try:
                 cmd = ['gobuster', 'dir', '-u', url, '-w', wordlist_path, '-q']
@@ -563,7 +572,8 @@ class DynamicAnalyzer:
                                     tool="gobuster",
                                     severity="info",
                                     title=f"Directory/File Found: {path}",
-                                    description=f"Gobuster discovered an accessible path: {path}",
+                                    description=(f"Gobuster discovered an "
+                                                 f"accessible path: {path}"),
                                     url=urljoin(url, path),
                                     method="GET",
                                     status_code=200,
@@ -572,7 +582,8 @@ class DynamicAnalyzer:
                                 findings.append(finding)
 
             finally:
-                os.unlink(wordlist_path)
+                if cleanup_needed:
+                    os.unlink(wordlist_path)
 
         except subprocess.TimeoutExpired:
             logger.warning("Gobuster scan timed out")
