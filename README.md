@@ -1,4 +1,4 @@
-# Secure Architecture Sandbox Test Environment
+# Secure Architecture Sandbox Testing Environment
 
 ## 🎯 Overview
 
