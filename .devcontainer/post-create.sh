@@ -88,6 +88,24 @@ chmod +x whatweb
 sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
 cd /opt/security-tools
 
+# Clone the Unsecure PWA repository
+echo "📥 Cloning Unsecure PWA repository..."
+cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples
+if [ ! -d "unsecure-pwa/.git" ]; then
+    if [ -d "unsecure-pwa" ] && [ "$(ls -A unsecure-pwa)" ]; then
+        echo "⚠️  Unsecure PWA directory exists but is not empty, backing up..."
+        mv unsecure-pwa unsecure-pwa.backup.$(date +%s)
+    fi
+    
+    if git clone -b sandbox_version https://github.com/TempeHS/The_Unsecure_PWA.git unsecure-pwa; then
+        echo "✅ Unsecure PWA cloned successfully from sandbox_version branch"
+    else
+        echo "❌ Failed to clone Unsecure PWA repository"
+    fi
+else
+    echo "✅ Unsecure PWA repository already exists"
+fi
+
 # Ensure proper permissions for workspace
 sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 
