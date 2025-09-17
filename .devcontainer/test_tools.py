@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick test script to verify security tools are available
+Quick test script to verify security tools are available.
 """
 import subprocess
 import sys

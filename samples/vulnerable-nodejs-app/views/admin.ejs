@@ -1,0 +1,109 @@
+<%- include('layout') %>
+
+    <h1>⚠️ Admin Panel</h1>
+
+    <div class="warning">
+        <strong>Security Issue:</strong> This admin panel is accessible without proper authentication!
+    </div>
+
+    <div class="vuln-demo">
+        <h3>👥 User Management</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 8px;">ID</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px;">Username</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px;">Email</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px;">Role</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (users && users.length> 0) { %>
+                    <% users.forEach(user=> { %>
+                        <tr>
+                            <td style="border: 1px solid #dee2e6; padding: 8px;">
+                                <%= user.id %>
+                            </td>
+                            <td style="border: 1px solid #dee2e6; padding: 8px;">
+                                <%= user.username %>
+                            </td>
+                            <td style="border: 1px solid #dee2e6; padding: 8px;">
+                                <%= user.email %>
+                            </td>
+                            <td style="border: 1px solid #dee2e6; padding: 8px;">
+                                <%= user.role %>
+                            </td>
+                            <td style="border: 1px solid #dee2e6; padding: 8px;">
+                                <a href="/user/<%= user.id %>" class="btn"
+                                    style="font-size: 12px; padding: 4px 8px;">View</a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="5"
+                                        style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">No users
+                                        found</td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="vuln-demo">
+        <h3>📊 System Information</h3>
+        <a href="/debug" class="btn">View Debug Info</a>
+        <a href="/api/users" class="btn">Users API</a>
+        <p><em>These endpoints expose sensitive system information</em></p>
+    </div>
+
+    <div class="vuln-demo">
+        <h3>🔍 Direct Object Access Test</h3>
+        <p>Try accessing user profiles directly:</p>
+        <div>
+            <input type="number" id="userIdInput" placeholder="User ID" min="1">
+            <button onclick="viewUser()" class="btn">View User</button>
+        </div>
+        <div id="userResult" class="output" style="display: none;"></div>
+        <p><em>This demonstrates Insecure Direct Object References (IDOR)</em></p>
+    </div>
+
+    </div>
+    </body>
+
+    <script>
+        // View user function
+        async function viewUser() {
+            const userId = document.getElementById('userIdInput').value;
+            if (!userId) {
+                alert('Please enter a user ID');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/user/${userId}`);
+                const result = await response.json();
+                const resultDiv = document.getElementById('userResult');
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/logout', { method: 'POST' });
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+
+    </html>

@@ -85,6 +85,7 @@
     8080,
     8000,
     5000,
+    3000,
     9090
   ],
   "portsAttributes": {
@@ -97,11 +98,15 @@
       "onAutoForward": "silent"
     },
     "5000": {
-      "label": "Flask Application",
+      "label": "Unsecure PWA",
       "onAutoForward": "notify"
     },
     "9090": {
-      "label": "Vulnerable Web App",
+      "label": "Vulnerable Flask App",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Vulnerable Node.js App",
       "onAutoForward": "notify"
     }
   },

@@ -1,0 +1,38 @@
+{
+        "python.defaultInterpreterPath": "/usr/local/bin/python3",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "python.terminal.activateEnvironment": false,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "files.associations": {
+          "*.dockerfile": "dockerfile",
+          "*.yml": "yaml",
+          "*.yaml": "yaml"
+        },
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "workbench.colorTheme": "Default Dark+",
+        "workbench.editorAssociations": {
+          "*.md": "vscode.markdown.preview.editor"
+        },
+        "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+        },
+            "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "json.format.enable": true,
+        "terminal.integrated.fontSize": 14,
+        // Suppress popup notifications in Codespaces
+        "extensions.ignoreRecommendations": true,
+        "security.workspace.trust.startupPrompt": "never",
+        // Disable the dev container rebuild notifications
+        "remote.containers.showRebuildNotification": false,
+        "dev.containers.showRebuildNotification": false
+      }

@@ -87,9 +87,6 @@ RUN pip install --no-cache-dir \
     # Clean up
     rm /tmp/requirements.txt /tmp/flask-requirements.txt
 
-# Copy startup script
-COPY docker/start-services.sh /usr/local/bin/start-services.sh
-
 # Create application directories with proper permissions
 RUN mkdir -p /workspace/src/sandbox \
     /workspace/src/analyzer \
@@ -99,12 +96,13 @@ RUN mkdir -p /workspace/src/sandbox \
     /workspace/docs/exercises \
     /workspace/reports \
     /workspace/logs && \
-    chown -R vscode:vscode /workspace && \
-    # Make startup script executable
-    chmod +x /usr/local/bin/start-services.sh
+    chown -R vscode:vscode /workspace
 
 # Set working directory
 WORKDIR /workspace
+
+# Copy application files into the container
+COPY . /workspace/
 
 # Create basic Python package structure as root then fix permissions
 RUN touch /workspace/src/__init__.py && \
@@ -117,11 +115,11 @@ RUN touch /workspace/src/__init__.py && \
 USER vscode
 
 # Expose common ports for educational testing
-EXPOSE 8080 8000 3000 5000
+EXPOSE 8080 8000 3000 9090
 
 # Health check to ensure container is ready
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000 || exit 1
+    CMD curl -f http://localhost:9090 || exit 1
 
-# Default command - start services automatically
-CMD ["/usr/local/bin/start-services.sh"]
+# Default command - run the vulnerable Flask app directly
+CMD ["sh", "-c", "cd /workspace/samples/vulnerable-flask-app && python3 app.py"]

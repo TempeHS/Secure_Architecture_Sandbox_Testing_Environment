@@ -1,0 +1,89 @@
+<%- include('layout') %>
+
+    <h1>📊 Dashboard</h1>
+
+    <div class="vuln-demo">
+        <h3>📝 Create Post (XSS Test)</h3>
+        <form id="postForm">
+            <input type="text" name="title" placeholder="Post title" style="width: 300px;" required>
+            <br><br>
+            <textarea name="content" placeholder="Post content" rows="4" cols="50" required></textarea>
+            <br><br>
+            <button type="submit" class="btn">Create Post</button>
+        </form>
+        <p><em>Try XSS: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></em></p>
+        <p><em>Try HTML injection: <code>&lt;img src=x onerror=alert('XSS')&gt;</code></em></p>
+        <div id="postResult" class="output" style="display: none;"></div>
+    </div>
+
+    <div class="vuln-demo">
+        <h3>📄 Recent Posts</h3>
+        <% if (posts && posts.length> 0) { %>
+            <% posts.forEach(post=> { %>
+                <div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px; border-radius: 5px;">
+                    <!-- VULNERABILITY: Raw HTML rendering allows XSS -->
+                    <h4><%- post.title %></h4>
+                    <div><%- post.content %></div>
+                    <small>By <%= post.author %> on <%= new Date(post.created_at).toLocaleString() %></small>
+                </div>
+                <% }) %>
+                    <% } else { %>
+                        <p>No posts found.</p>
+                        <% } %>
+    </div>
+
+    <div class="vuln-demo">
+        <h3>🔐 Access Control Test</h3>
+        <a href="/admin" class="btn">Admin Panel</a>
+        <a href="/user/1" class="btn">View User 1</a>
+        <a href="/user/2" class="btn">View User 2</a>
+        <p><em>These links should require proper authorization but don't!</em></p>
+    </div>
+
+    </div>
+    </body>
+
+    <script>
+        // Post form handler
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('postResult');
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+
+                if (result.success) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/logout', { method: 'POST' });
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+
+    </html>

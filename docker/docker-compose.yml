@@ -10,7 +10,7 @@ services:
       - sandbox_network
     volumes:
       # Mount workspace for development
-      - ../:/workspace:cached
+      - /workspaces/Secure_Architecture_Sandbox_Testing_Environment:/workspace:cached
       # Persistent volumes for data
       - sandbox_reports:/workspace/reports
       - sandbox_logs:/workspace/logs
