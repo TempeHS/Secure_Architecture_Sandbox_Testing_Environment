@@ -11,23 +11,9 @@ concepts in cybersecurity architecture.
 
 ### Why Two Containers? Professional Security Testing Design
 
-Our sandbox uses a **dual-container architecture** that mirrors real-world
-cybersecurity practices:
+This sandbox uses a **multi-layer isolation and containerized architecture** using Codespaces and Docker that mirrors real-world cybersecurity practices.
 
-```
-Professional Security Testing Environment
-
-┌─────────────────────────┐    Network    ┌─────────────────────────┐
-│   ANALYST WORKSTATION   │◄─────────────►│   TARGET APPLICATION    │
-│                         │   (Controlled) │                         │
-│ 🛠️ Security Tools:       │               │ 🎯 Test Targets:        │
-│ • Static analysis       │               │ • Vulnerable web apps   │
-│ • Dynamic testing       │               │ • Suspicious scripts    │
-│ • Network monitoring    │               │ • Malware samples       │
-│ • Behavioral analysis   │               │ • Resource abuse tools  │
-└─────────────────────────┘               └─────────────────────────┘
-```
-
+![Docker/CodesSpaces Topology!](images/secure_architecture_sandbox_network_topology.png "Docker/CodesSpaces Topology")
 **Educational Benefits:**
 
 - **Separation of Concerns**: Clear distinction between testing tools and

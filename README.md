@@ -8,6 +8,12 @@ hands-on experience with security analysis, vulnerability detection, and
 remediation techniques using real applications in a safe, controlled
 environment.
 
+## Sandbox Architecture
+
+This sandbox uses a **multi-layer isolation and containerized architecture** using Codespaces and Docker that mirrors real-world cybersecurity practices.
+
+![Docker/CodesSpaces Topology!](/docs/images/secure_architecture_sandbox_network_topology.png "Docker/CodesSpaces Topology")
+
 ## 🚀 Quick Start
 
 ### GitHub Codespaces (Recommended)
