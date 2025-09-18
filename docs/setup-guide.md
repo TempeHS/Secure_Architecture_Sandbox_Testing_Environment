@@ -1,4 +1,4 @@
-# Docker Sandbox Demo - Student Flask App Requirements
+# Secure Architecture Sandbox Testing Environment - Student Flask App Requirements
 
 ## 🎯 Overview
 

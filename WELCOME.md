@@ -1,4 +1,4 @@
-# 🔒 Welcome to Secure_Architecture_Sandbox_Testing_Environment
+# 🔒 Welcome to Secure Architecture Sandbox Testing Environment
 
 This environment is ready for sandbox testing for secure architecture!
 

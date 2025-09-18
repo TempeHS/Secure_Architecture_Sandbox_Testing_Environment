@@ -6,7 +6,7 @@ Educational tool for demonstrating DNS-based security threats.
 This script simulates various DNS-based attack patterns including DNS tunneling,
 domain generation algorithms, and malicious domain queries.
 
-Author: Docker Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 Purpose: Educational cybersecurity training
 """
 

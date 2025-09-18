@@ -6,7 +6,7 @@ Educational tool for demonstrating backdoor/malware communication patterns.
 This script simulates the network behavior of backdoors and malware to help
 students understand and identify these threats in network traffic.
 
-Author: Docker Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 Purpose: Educational cybersecurity training
 """
 

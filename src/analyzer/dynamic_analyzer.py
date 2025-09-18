@@ -15,7 +15,7 @@ Supported Analysis Types:
 - Configuration Testing
 - Educational Vulnerability Demonstrations
 
-Author: Cybersecurity Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 License: MIT (Educational Use)
 """
 

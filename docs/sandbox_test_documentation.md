@@ -1,92 +1,38 @@
-# Unit Test Sandbox Documentation
+# Sandbox Test Documentation
 
 ## Overview
 
-This document describes the comprehensive unit testing framework for the Docker
-Sandbox Demo project. The test suite validates all cybersecurity analysis tools,
-commands, and workflows documented in the quick reference guides.
+This document describes the comprehensive unit testing framework for the Docker Secure Architecture Sandbox Testing Environment project. The test suite validates all cybersecurity analysis tools, commands, and workflows documented in the quick reference guides.
 
 ## Architecture
 
 ### Test Structure
 
-The testing framework consists of 5 specialized test modules plus 1
-comprehensive system runner:
+The testing framework consists of 6 specialized test modules plus 1 comprehensive system runner:
 
 ```
 tests/
-├── run_all_tests.py      #### 6. Module Import Errors
-
-**Symptoms**:
+├── run_all_tests.py                       # Master test runner
+├── test_sast_commands.py                  # Static Analysis tests (12 tests)
+├── test_dast_commands.py                  # Dynamic Analysis tests (15 tests)
+├── test_network_commands.py               # Network Analysis tests (20 tests)
+├── test_sandbox_commands.py               # Sandbox Security tests (15 tests)
+├── test_penetration_testing_commands.py   # Integrated Pentest tests (14 tests)
+├── test_penetration_analyzer_unit.py      # Penetration Analyzer Unit tests (35 tests)
+└── test_docker_environment.py             # Docker/Infrastructure tests (optional)
 ```
-
-❌ DAST Command Validation: ERROR  
-Error running Gobuster: name 'tempfile' is not defined
-
-````
-
-**Solution**:
-```bash
-# Check dynamic_analyzer.py for missing imports
-grep -n "import tempfile" src/analyzer/dynamic_analyzer.py
-
-# Add missing import if not found
-# Add 'import tempfile' to the import section of dynamic_analyzer.py
-````
-
-#### 7. Educational Mode Not Displaying
-
-**Symptoms**:
-
-```
-❌ Network test failed: Educational insights not found in output
-```
-
-**Solution**:
-
-```bash
-# Verify educational mode implementation in network modules
-python src/analyzer/network_cli.py --monitor-connections --educational
-
-# Check for "🎓 EDUCATIONAL INSIGHTS" header in output
-# Update network_analyzer.py and network_cli.py if missing
-```
-
-#### 8. JSON Output Key Mismatches
-
-**Symptoms**:
-
-```
-❌ KeyError: 'connections' not found in JSON output
-```
-
-**Solution**:
-
-````bash
-# Check actual JSON structure
-python src/analyzer/network_cli.py --monitor-connections --format json
-
-# Update test expectations to match actual implementation
-# Use "active_connections" instead of "connections" key
-```aster test runner
-├── test_sast_commands.py                 # Static Analysis tests (12 tests)
-├── test_dast_commands.py                 # Dynamic Analysis tests (15 tests)
-├── test_network_commands.py              # Network Analysis tests (20 tests)
-├── test_sandbox_commands.py              # Sandbox Security tests (15 tests)
-├── test_penetration_testing_commands.py  # Integrated Pentest tests (14 tests)
-└── test_docker_environment.py            # Docker/Infrastructure tests (optional)
-````
 
 ### Test Execution Order
 
-Tests are executed in logical dependency order with **76 total tests**:
+Tests are executed in logical dependency order with **111 total tests**:
 
 1. **SAST Commands** (12 tests) - Tests static analysis capabilities
 2. **DAST Commands** (15 tests) - Tests dynamic analysis capabilities
 3. **Network Commands** (20 tests) - Tests network monitoring capabilities
 4. **Sandbox Commands** (15 tests) - Tests container-based security analysis
 5. **Penetration Testing** (14 tests) - Tests integrated workflows
-6. **Docker Environment** (optional) - Validates infrastructure is ready
+6. **Penetration Analyzer Unit Tests** (35 tests) - Tests individual modules and components
+7. **Docker Environment** (optional) - Validates infrastructure is ready
 
 ## Quick Start
 
@@ -114,18 +60,19 @@ docker exec -d cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-
 
 ```bash
 # Run the complete test suite
-cd /workspaces/Docker_Sandbox_Demo
+cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 python tests/run_all_tests.py
 
 # Expected output:
 # ================================================================================
-# DOCKER SANDBOX DEMO - COMPREHENSIVE SYSTEM TEST SUITE
+# SECURE ARCHITECTURE SANDBOX TESTING ENVIRONMENT - COMPREHENSIVE SYSTEM TEST SUITE
 # ================================================================================
-# [1/5] Running SAST Command Validation...
-# [2/5] Running DAST Command Validation...
-# [3/5] Running Network Analysis Validation...
-# [4/5] Running Sandbox Command Validation...
-# [5/5] Running Penetration Testing Validation...
+# [1/6] Running SAST Command Validation...
+# [2/6] Running DAST Command Validation...
+# [3/6] Running Network Analysis Validation...
+# [4/6] Running Sandbox Command Validation...
+# [5/6] Running Penetration Testing Validation...
+# [6/6] Running Penetration Analyzer Unit Tests...
 # 🎉 SYSTEM STATUS: ALL TESTS PASSED!
 ```
 
@@ -146,6 +93,9 @@ python -m pytest tests/test_sandbox_commands.py -v
 
 # Test Penetration testing workflows only (14 tests)
 python -m pytest tests/test_penetration_testing_commands.py -v
+
+# Test Penetration analyzer unit tests only (35 tests)
+python -m pytest tests/test_penetration_analyzer_unit.py -v
 
 # Optional: Test Docker environment
 python -m pytest tests/test_docker_environment.py -v
@@ -341,6 +291,79 @@ python src/analyzer/network_cli.py --monitor-connections --duration 60 --educati
 **Test Validation**: All 14 tests pass consistently, validating complete
 penetration testing workflow integration
 
+### 6. Penetration Analyzer Unit Tests (`test_penetration_analyzer_unit.py`) - 35 tests
+
+**Purpose**: Comprehensive unit testing of penetration analyzer internal components
+
+**Key Test Classes**:
+
+#### TestPentestFinding (2 tests)
+- Finding dataclass creation and validation
+- Risk score calculation logic
+
+#### TestReconnaissanceEngine (4 tests)  
+- Port scanning with mocked socket connections
+- HTTP service enumeration and header analysis
+- Directory enumeration using external tools
+- Closed port detection and error handling
+
+#### TestVulnerabilityScanner (6 tests)
+- Debug console detection with response mocking
+- Open redirect vulnerability testing
+- SQL injection pattern matching
+- Brute force authentication testing
+- CSRF token validation
+- Complete vulnerability scan integration
+
+#### TestExploitEngine (2 tests)
+- Exploit engine initialization and configuration
+- Exploit findings processing and validation
+
+#### TestPentestReporter (4 tests)
+- JSON report generation and structure validation
+- Markdown report generation and content verification
+- Risk assessment calculation algorithms
+- Finding statistics and categorization
+
+#### TestPenetrationAnalyzerIntegration (4 tests)
+- Complete analyzer initialization
+- Full penetration test workflow execution
+- Configuration parameter validation
+- Error handling and graceful failure modes
+
+#### TestPenetrationCLIIntegration (3 tests)
+- CLI help command functionality
+- Command-line argument validation
+- CLI execution flow and output verification
+
+**Example**:
+
+```bash
+# What it tests:
+# Unit tests with mocking - no external dependencies
+python -m pytest tests/test_penetration_analyzer_unit.py::TestVulnerabilityScanner::test_01_debug_console_detection -v
+
+# Integration tests with real components
+python -m pytest tests/test_penetration_analyzer_unit.py::TestPenetrationAnalyzerIntegration -v
+
+# CLI interface testing
+python -m pytest tests/test_penetration_analyzer_unit.py::TestPenetrationCLIIntegration -v
+```
+
+**Dependencies**: unittest.mock for component isolation, tempfile for report testing
+
+**Technical Approach**: 
+- **Unit Testing**: Individual component testing with mocked dependencies
+- **Integration Testing**: Component interaction validation  
+- **Mock Strategies**: HTTP responses, file system operations, subprocess calls
+- **Coverage Areas**: Error handling, edge cases, configuration validation
+
+**Recent Enhancements**:
+- Comprehensive test coverage for all penetration analyzer components
+- Mock-based testing for reliable, fast execution
+- Integration tests validating component interactions
+- CLI testing ensuring command-line interface functionality
+
 ## System Test Runner (`run_all_tests.py`)
 
 ### Features
@@ -356,9 +379,9 @@ penetration testing workflow integration
 
 ```
 ================================================================================
-DOCKER SANDBOX DEMO - COMPREHENSIVE SYSTEM TEST SUITE
+SECURE ARCHITECTURE SANDBOX TESTING ENVIRONMENT - COMPREHENSIVE SYSTEM TEST SUITE
 ================================================================================
-Project Root: /workspaces/Docker_Sandbox_Demo
+Project Root: /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 Test Time: 2025-09-16 14:30:15
 ================================================================================
 
@@ -405,7 +428,7 @@ Module Results:
 
 ================================================================================
 🎉 SYSTEM STATUS: ALL TESTS PASSED!
-✅ Docker Sandbox Demo is fully operational and validated.
+✅ Secure Architecture Sandbox Testing Environment is fully operational and validated.
 ✅ All command workflows are working correctly.
 ✅ All security analysis tools are functional.
 ================================================================================
@@ -542,7 +565,7 @@ Could not import test_sast_commands
 
 ```bash
 # Ensure you're in the project root
-cd /workspaces/Docker_Sandbox_Demo
+cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 
 # Check Python path
 export PYTHONPATH=$PYTHONPATH:$(pwd)
@@ -591,7 +614,7 @@ python src/analyzer/network_cli.py --help
 
 ```yaml
 # Example GitHub Actions workflow
-name: Docker Sandbox Tests
+name: Secure Architecture Sandbox Tests
 on: [push, pull_request]
 
 jobs:
@@ -625,7 +648,7 @@ repos:
 - repo: local
   hooks:
   - id: run-tests
-    name: Run Docker Sandbox Tests
+    name: Run Secure Architecture Sandbox Tests
     entry: python tests/run_all_tests.py
     language: system
     pass_filenames: false
@@ -639,14 +662,15 @@ pre-commit install
 
 ### Expected Test Execution Times
 
-| Test Module         | Duration         | Test Count   | Key Operations                       |
-| ------------------- | ---------------- | ------------ | ------------------------------------ |
-| SAST Commands       | 60-120s          | 12 tests     | File analysis, report generation     |
-| DAST Commands       | 120-300s         | 15 tests     | Web scanning, deep analysis          |
-| Network Analysis    | 90-180s          | 20 tests     | Network monitoring, traffic capture  |
-| Sandbox Commands    | 60-120s          | 15 tests     | Container operations, tool execution |
-| Penetration Testing | 180-360s         | 14 tests     | Integrated workflows, manual testing |
-| **Total**           | **8-18 minutes** | **76 tests** | **Full system validation**           |
+| Test Module                    | Duration         | Test Count   | Key Operations                         |
+| ------------------------------ | ---------------- | ------------ | -------------------------------------- |
+| SAST Commands                  | 60-120s          | 12 tests     | File analysis, report generation       |
+| DAST Commands                  | 120-300s         | 15 tests     | Web scanning, deep analysis            |
+| Network Analysis               | 90-180s          | 20 tests     | Network monitoring, traffic capture    |
+| Sandbox Commands               | 60-120s          | 15 tests     | Container operations, tool execution   |
+| Penetration Testing            | 180-360s         | 14 tests     | Integrated workflows, manual testing   |
+| Penetration Analyzer Unit      | 30-60s           | 35 tests     | Unit tests, mocked components          |
+| **Total**                      | **9-21 minutes** | **111 tests** | **Full system validation**            |
 
 ### Resource Usage
 
@@ -735,13 +759,13 @@ def test_99_new_feature_validation(self):
 ## Conclusion
 
 This comprehensive testing framework ensures that all components of the Docker
-Sandbox Demo are functional and meet educational objectives. The tests validate
+Secure Architecture Sandbox Testing Environment are functional and meet educational objectives. The tests validate
 that students can successfully learn cybersecurity analysis techniques using the
 provided tools and workflows.
 
 For questions or issues with the testing framework, refer to the troubleshooting
 section or check the individual test module documentation within each test file.
 
-**Total Test Coverage**: 76 individual tests across 5 modules **Estimated
-Runtime**: 8-18 minutes for complete suite **Validation Coverage**: 100% of
-documented quick reference commands
+**Total Test Coverage**: 111 individual tests across 6 modules **Estimated
+Runtime**: 9-21 minutes for complete suite **Validation Coverage**: 100% of
+documented quick reference commands plus comprehensive unit test coverage

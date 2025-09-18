@@ -6,7 +6,7 @@ Educational tool for demonstrating suspicious network behavior patterns.
 This script generates network patterns that indicate potential security threats,
 helping students learn to identify malicious network activity.
 
-Author: Docker Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 Purpose: Educational cybersecurity training
 """
 

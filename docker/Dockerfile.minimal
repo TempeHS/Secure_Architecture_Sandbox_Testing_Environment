@@ -51,6 +51,7 @@ RUN mkdir -p /workspace/{src,samples,reports,logs} \
 COPY samples/backdoor-apps /workspace/samples/backdoor-apps
 COPY samples/network-scenarios /workspace/samples/network-scenarios
 COPY samples/resource-abuse /workspace/samples/resource-abuse
+COPY samples/suspicious-scripts /workspace/samples/suspicious-scripts
 
 # Create simple startup script
 RUN echo '#!/bin/bash\n\

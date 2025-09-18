@@ -4,7 +4,7 @@
 
 **⚠️ WARNING: This application contains intentional security vulnerabilities for educational purposes only. Do NOT deploy in production environments!**
 
-This Node.js application demonstrates common web application security vulnerabilities that students can identify, exploit, and learn to remediate. It's designed to complement the vulnerable Flask application in the cybersecurity sandbox environment.
+This Node.js application demonstrates common web application security vulnerabilities that students can identify, exploit, and learn to remediate. It's designed to complement the vulnerable Flask application in the secure architecture sandbox environment.
 
 ## Features & Vulnerabilities
 

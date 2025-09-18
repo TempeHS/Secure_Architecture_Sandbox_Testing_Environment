@@ -1,9 +1,9 @@
-# Docker Sandbox Demo - Maintenance Guide
+# Secure Architecture Sandbox Testing Environment - Maintenance Guide
 
 ## 📋 Overview
 
 This maintenance guide provides comprehensive instructions for maintaining,
-updating, and extending the Docker Sandbox Demo project. It covers folder
+updating, and extending the Secure Architecture Sandbox Testing Environment project. It covers folder
 organization, content style guides, Docker requirements, and repository
 management standards.
 
@@ -40,7 +40,7 @@ management standards.
 ### Root Directory Structure
 
 ```
-Docker_Sandbox_Demo/
+Secure_Architecture_Sandbox_Testing_Environment/
 ├── .devcontainer/             # GitHub Codespaces configuration
 ├── .vscode/                   # VS Code workspace settings
 ├── .gitattributes            # Git LFS file tracking configuration
@@ -630,4 +630,4 @@ major changes **Command**: `python -m pytest tests/test_*.py -v`
 
 _Last Updated: September 15, 2025_  
 _Version: 1.0_  
-_Maintainer: TempeHS Docker Sandbox Demo Team_
+_Maintainer: TempeHS Secure Architecture Sandbox Testing Environment Team_

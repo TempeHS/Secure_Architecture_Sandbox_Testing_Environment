@@ -231,7 +231,7 @@ docker-compose -f docker/docker-compose.yml up -d
 
 # Create a welcome message
 cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md << 'EOF'
-# 🔒 Welcome to Secure_Architecture_Sandbox_Testing_Environment
+# 🔒 Welcome to Secure Architecture Sandbox Testing Environment
 
 This environment is ready for sandbox testing for secure architecture!
 

@@ -9,15 +9,14 @@ services:
     networks:
       - sandbox_network
     volumes:
-      # Mount workspace for development
-      - /workspaces/Secure_Architecture_Sandbox_Testing_Environment:/workspace:cached
-      # Persistent volumes for data
-      - sandbox_reports:/workspace/reports
-      - sandbox_logs:/workspace/logs
+      # Mount workspace for development - use bind mount to a clean path
+      - type: bind
+        source: /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+        target: /project
     ports:
       - "8080:8080" # Analysis web interface
     environment:
-      - PYTHONPATH=/workspace/src
+      - PYTHONPATH=/project/src
       - SANDBOX_MODE=educational
     # Security settings appropriate for educational use
     security_opt:

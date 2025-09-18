@@ -104,7 +104,7 @@ pip install requests scapy python-nmap psutil
 
 ### Environment Setup
 
-1. Ensure you're running in the Docker sandbox environment
+1. Ensure you're running in the secure architecture sandbox environment
 2. All scenarios run on localhost to prevent network interference
 3. Use educational mode for all tools: `--educational` flag
 

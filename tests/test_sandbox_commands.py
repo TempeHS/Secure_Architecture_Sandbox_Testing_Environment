@@ -341,7 +341,7 @@ class SandboxCommandValidationTest(unittest.TestCase):
 
         # Check if suspicious script exists in samples
         exit_code, _ = self._exec_in_container(
-            "test -f /samples/suspicious-scripts/suspicious_script.py"
+            "test -f /workspace/samples/suspicious-scripts/suspicious_script.py"
         )
 
         if exit_code != 0:
@@ -367,7 +367,7 @@ print("Suspicious activity complete")"""
 
             script_path = "test_suspicious.py"
         else:
-            script_path = "/samples/suspicious-scripts/suspicious_script.py"
+            script_path = "/workspace/samples/suspicious-scripts/suspicious_script.py"
 
         # Run the script with strace monitoring
         exit_code, output = self._exec_in_container(

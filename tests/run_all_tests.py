@@ -3,8 +3,8 @@
 Comprehensive System Test Runner
 
 This is the master test runner that executes all unit tests in the correct
-order and provides comprehensive validation of the entire Docker Sandbox
-Demo system.
+order and provides comprehensive validation of the entire Secure Architecture
+Sandbox Testing Environment system.
 """
 
 import unittest
@@ -27,7 +27,8 @@ def run_test_suite():
     sys.path.insert(0, str(project_root / "tests"))
 
     print("=" * 80)
-    print("DOCKER SANDBOX DEMO - COMPREHENSIVE SYSTEM TEST SUITE")
+    print("SECURE ARCHITECTURE SANDBOX TESTING ENVIRONMENT - "
+          "COMPREHENSIVE SYSTEM TEST SUITE")
     print("=" * 80)
     print(f"Project Root: {project_root}")
     print(f"Test Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -64,6 +65,11 @@ def run_test_suite():
             "name": "Penetration Testing Validation",
             "module": "test_penetration_testing_commands",
             "description": "Tests integrated penetration testing workflows",
+        },
+        {
+            "name": "Penetration Analyzer Unit Tests",
+            "module": "test_penetration_analyzer_unit",
+            "description": "Unit tests for penetration analyzer modules and components",
         },
     ]
 
@@ -206,7 +212,7 @@ def run_test_suite():
     print("\n" + "=" * 80)
     if overall_results["passed_modules"] == overall_results["total_modules"]:
         print("🎉 SYSTEM STATUS: ALL TESTS PASSED!")
-        print("✅ Docker Sandbox Demo is fully operational and validated.")
+        print("✅ Secure Architecture Sandbox Testing Environment is fully operational and validated.")
         print("✅ All command workflows are working correctly.")
         print("✅ All security analysis tools are functional.")
         exit_code = 0
@@ -245,7 +251,8 @@ def run_test_suite():
 def main():
     """Main entry point for the system test runner."""
     try:
-        print("Starting Docker Sandbox Demo System Test Suite...")
+        print(
+            "Starting Secure Architecture Sandbox Testing Environment System Test Suite...")
         results, exit_code = run_test_suite()
 
         # Save results to file for future reference
@@ -256,7 +263,8 @@ def main():
         results_file = results_dir / f"system_test_results_{timestamp}.txt"
 
         with open(results_file, "w") as f:
-            f.write("Docker Sandbox Demo - System Test Results\n")
+            f.write(
+                "Secure Architecture Sandbox Testing Environment - System Test Results\n")
             f.write("=" * 50 + "\n")
             f.write(f"Test Date: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"Total Modules: {results['total_modules']}\n")

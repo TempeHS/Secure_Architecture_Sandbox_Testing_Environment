@@ -237,4 +237,4 @@ nikto -h localhost:5001
 ---
 
 **Remember:** These applications are powerful learning tools when used
-responsibly within the cybersecurity sandbox environment! 🛡️
+responsibly within the secure architecture sandbox environment! 🛡️

@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 """
-Docker Network Visualization Tool for Cybersecurity Sandbox
+Docker Network Visualization Tool for Secure Architecture Sandbox Testing Environment
 
 This script generates a detailed network topology visualization of the Docker sandbox
-environment, showing container isolation, network configuration, and security boundaries.
+environment, showing container isol    dot_lines = [
+        'digraph "Docker Network Topology" {',
+        '    rankdir=TB;',
+        '    compound=true;',
+        '    node [shape=box, style=rounded, fontname="Roboto"];',
+        '    edge [style=solid, fontname="Roboto"];',
+        '    ',
+        '    // Graph styling',
+        '    bgcolor="transparent";',
+        '    fontname="Roboto";',
+        '    fontsize=14;'work configuration, and security boundaries.
 
 Dependencies are automatically installed when needed.
 """
@@ -240,7 +250,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '    edge [style=solid, fontname="Roboto"];',
         '    ',
         '    // Graph styling',
-        '    bgcolor="#f8f9fa";',
+        '    bgcolor="#ffffff";',
         '    fontname="Roboto";',
         '    fontsize=14;',
         '    label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8"><TR><TD><FONT POINT-SIZE="32">Secure Architecture Sandbox - Docker Network Topology</FONT></TD></TR><TR><TD><FONT POINT-SIZE="22">https://github.com/TempeHS/Secure_Architecture_Sandbox_Testing_Environment</FONT></TD></TR><TR><TD><FONT POINT-SIZE="4"> </FONT></TD></TR></TABLE>>;',
@@ -251,17 +261,21 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        label="Student Browser Environment\\n(Isolated from Local System)";',
         '        labelloc=t;',
         '        labeljust=l;',
-        '        style=dashed;',
+        '        style="dashed,filled";',
         '        color=purple;',
+        '        fillcolor="#f8f0ff";',
         '        fontcolor=purple;',
+        '        margin=20;',
         '        ',
         '        subgraph cluster_codespaces {',
         '            label="Codespaces Cloud Environment\\n(Isolated from Student Network)";',
         '            labelloc=t;',
         '            labeljust=l;',
-        '            style=solid;',
+        '            style="solid,filled";',
         '            color="#228B22";',
+        '            fillcolor="#f0fff0";',
         '            fontcolor="#228B22";',
+        '            margin=20;',
         '            ',
         '            "Host System" [',
         '                label="Codespaces Host\\nDocker Runtime\\nPorts: 3000, 5000, 8000, 8080, 9090";',
@@ -275,9 +289,11 @@ def generate_custom_dot_graph(docker_info, analysis):
         '                label="Sandbox Network (172.20.0.0/16)";',
         '                labelloc=t;',
         '                labeljust=l;',
-        '                style=dashed;',
+        '                style="dashed,filled";',
         '                color=blue;',
+        '                fillcolor="#f0f8ff";',
         '                fontcolor=blue;',
+        '                margin=20;',
         '                ',
     ]
 
@@ -408,6 +424,19 @@ def generate_custom_dot_graph(docker_info, analysis):
     dot_lines.append('')
 
     dot_lines.append('            }')  # Close sandbox cluster
+    dot_lines.append('            ')
+    dot_lines.append(
+        '            // Host to cybersec_sandbox connection with cluster constraints')
+    dot_lines.append('            "Host System" -> "cybersec_sandbox" [')
+    dot_lines.append('                label="8080:8080\\n(sandbox_tools)";')
+    dot_lines.append('                labeldistance=1.5;')
+    dot_lines.append('                labelangle=0;')
+    dot_lines.append('                style=bold;')
+    dot_lines.append('                color="#228B22";')
+    dot_lines.append('                ltail=cluster_codespaces;')
+    dot_lines.append('                lhead=cluster_sandbox;')
+    dot_lines.append('            ];')
+    dot_lines.append('            ')
     dot_lines.append('        }')     # Close codespaces cluster
     dot_lines.append('    }')         # Close browser cluster
     dot_lines.append('    ')
@@ -463,13 +492,6 @@ def generate_custom_dot_graph(docker_info, analysis):
         '    ];',
         '    "Host System" -> "vulnerable_flask" [',
         '        label="9090:9090\\n(Vulnerable Flask)";',
-        '        labeldistance=1.5;',
-        '        labelangle=0;',
-        '    ];',
-        '    ',
-        '    // Center line from cybersec_sandbox to host',
-        '    "Host System" -> "cybersec_sandbox" [',
-        '        label="8080:8080\\n(sandbox_tools)";',
         '        labeldistance=1.5;',
         '        labelangle=0;',
         '    ];',

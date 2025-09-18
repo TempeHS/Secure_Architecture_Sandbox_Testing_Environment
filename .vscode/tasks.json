@@ -34,7 +34,7 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "detail": "Starts all Docker services for the cybersecurity sandbox"
+            "detail": "Starts all Docker services for the secure architecture sandbox"
         },
         {
             "label": "Stop Docker Services",

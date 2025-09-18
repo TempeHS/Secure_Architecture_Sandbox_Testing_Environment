@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Docker Sandbox Environment Validation Tests
+Secure Architecture Sandbox Testing Environment Validation Tests
 
 This test suite validates that the Docker sandbox environment is properly
 configured and all sample applications are accessible for security testing.
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class DockerSandboxValidationTest(unittest.TestCase):
-    """Test suite to validate Docker sandbox environment setup."""
+    """Test suite to validate secure architecture sandbox environment setup."""
 
     @classmethod
     def setUpClass(cls):

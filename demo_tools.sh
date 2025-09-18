@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Cybersecurity Sandbox Demo Script
+# Secure Architecture Sandbox Testing Environment Demo Script
 # This script demonstrates the security tools working in the container environment
 
-echo "🔒 Cybersecurity Sandbox Demo"
+echo "🔒 Secure Architecture Sandbox Testing Environment"
 echo "=============================="
 echo ""
 

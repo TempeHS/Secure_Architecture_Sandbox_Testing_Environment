@@ -6,7 +6,7 @@ Educational tool for demonstrating normal network behavior patterns.
 This script generates legitimate network activity to establish baseline
 patterns for comparison with suspicious traffic.
 
-Author: Docker Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 Purpose: Educational cybersecurity training
 """
 

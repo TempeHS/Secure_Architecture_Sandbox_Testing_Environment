@@ -12,7 +12,7 @@ Supported Analysis Types:
 - Pattern-based Security Analysis
 - Educational Vulnerability Explanations
 
-Author: Cybersecurity Sandbox Demo
+Author: Secure Architecture Sandbox Testing Environment
 License: MIT (Educational Use)
 """
 

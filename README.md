@@ -337,7 +337,7 @@ python samples/network-scenarios/suspicious_traffic_generator.py
 ## 📁 Project Structure
 
 ```
-Docker_Sandbox_Demo/
+Secure_Architecture_Sandbox_Testing_Environment/
 ├── docs/                       # All educational and documentation materials
 │   ├── exercises/              # Main exercise files
 │   │   ├── static-application-security-testing-exercise.md
