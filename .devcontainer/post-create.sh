@@ -278,7 +278,9 @@ This environment is ready for sandbox testing for secure architecture!
 ├── docs/          # Documentation
 ├── docker/        # Docker configuration
 ├── reports/       # Generated security reports
-└── logs/          # Application logs
+|   └──examples/  # Example reports
+├── tests/         # Unit and integration tests
+└── uploads/       # Folder for students to upload a flask app for testing on port 8000
 ```
 
 ## Flask Application Development
@@ -296,10 +298,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello from Cybersecurity Sandbox!"
+    return "Hello from the Secure Architecture Testing Sandbox!"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8000)
 ```
 
 ## Next Steps

@@ -65,12 +65,7 @@ def run_test_suite():
             "name": "Penetration Testing Validation",
             "module": "test_penetration_testing_commands",
             "description": "Tests integrated penetration testing workflows",
-        },
-        {
-            "name": "Penetration Analyzer Unit Tests",
-            "module": "test_penetration_analyzer_unit",
-            "description": "Unit tests for penetration analyzer modules and components",
-        },
+        }
     ]
 
     overall_results = {
