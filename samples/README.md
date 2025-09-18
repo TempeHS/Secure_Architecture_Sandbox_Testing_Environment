@@ -45,7 +45,7 @@ npm start
 ### 2. **Vulnerable Flask Application** (`vulnerable-flask-app/`)
 
 **Technology Stack:** Python, Flask, SQLite, Jinja2 **Primary Language:** Python
-**Port:** 5000
+**Port:** 9090
 
 **Key Vulnerabilities Demonstrated:**
 
@@ -66,7 +66,7 @@ npm start
 cd vulnerable-flask-app
 pip install -r requirements.txt
 python app.py
-# Access: http://localhost:5000
+# Access: http://localhost:9090
 ```
 
 **Default Credentials:** `admin` / `admin123` or `user` / `user123`

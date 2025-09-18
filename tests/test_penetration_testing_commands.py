@@ -31,8 +31,8 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         cls.timeout = 120  # seconds - Pentest workflows take longer
         cls.reports_dir = cls.project_root / "reports"
         cls.reports_dir.mkdir(exist_ok=True)
-        cls.flask_url = "http://localhost:5000"
-        cls.pwa_url = "http://localhost:9090"
+        cls.pwa_url = "http://localhost:5000"
+        cls.flask_url = "http://localhost:9090"
 
         # Wait for applications to be available
         cls._wait_for_applications()
@@ -86,7 +86,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--quick",
                     "--educational",
                 ],
@@ -118,7 +118,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                 ],
                 cwd=self.project_root,
@@ -137,7 +137,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--deep-scan",
                     "--educational",
                 ],
@@ -167,7 +167,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         try:
             # Basic authentication bypass attempt
             response = requests.post(
-                f"{self.flask_url}/login",
+                f"{self.pwa_url}/login",
                 data={"username": "admin' OR '1'='1", "password": "test"},
                 timeout=10,
                 allow_redirects=False,
@@ -180,7 +180,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
 
             # XSS testing attempt
             response = requests.get(
-                f"{self.flask_url}/search",
+                f"{self.pwa_url}/search",
                 params={"q": "<script>alert('XSS')</script>"},
                 timeout=10,
             )
@@ -403,7 +403,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--quick",
                     "--educational",
                 ],
@@ -418,7 +418,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--deep-scan",
                     "--educational",
                 ],
@@ -437,9 +437,9 @@ class PenetrationTestingValidationTest(unittest.TestCase):
 
             # Manual enumeration with curl (test common endpoints)
             manual_tests = [
-                f"{self.flask_url}/",
-                f"{self.flask_url}/robots.txt",
-                f"{self.flask_url}/admin",
+                f"{self.pwa_url}/",
+                f"{self.pwa_url}/robots.txt",
+                f"{self.pwa_url}/admin",
             ]
 
             for url in manual_tests:
@@ -464,7 +464,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                     "--verbose",
                 ],
@@ -478,7 +478,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/unsecure-pwa",
+                    "samples/vulnerable-flask-app",
                     "--educational",
                     "--verbose",
                 ],
@@ -613,7 +613,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         for payload in test_payloads:
             try:
                 response = requests.post(
-                    f"{self.flask_url}/login",
+                    f"{self.pwa_url}/login",
                     data={"username": payload, "password": "test"},
                     timeout=10,
                     allow_redirects=False,
@@ -648,7 +648,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         for payload in test_payloads:
             try:
                 response = requests.get(
-                    f"{self.flask_url}/search", params={"q": payload}, timeout=10
+                    f"{self.pwa_url}/search", params={"q": payload}, timeout=10
                 )
                 # We're testing that requests complete
                 logger.info(
@@ -668,7 +668,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         for endpoint in config_endpoints:
             try:
                 response = requests.get(
-                    f"{self.flask_url}{endpoint}", timeout=10)
+                    f"{self.pwa_url}{endpoint}", timeout=10)
                 logger.info(f"Config test {endpoint}: {response.status_code}")
             except requests.exceptions.RequestException:
                 logger.info(f"Config test {endpoint}: Connection failed")
@@ -731,7 +731,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                 ],
                 "Static Analysis",
@@ -741,7 +741,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--quick",
                     "--educational",
                 ],
@@ -874,7 +874,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--check-dependencies"
                 ],
                 "dependency check"
@@ -884,7 +884,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--severity",
                     "high,critical"
                 ],
@@ -895,7 +895,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                     "--verbose"
                 ],
@@ -967,7 +967,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--test-xss",
                     "--test-sqli",
                     "--educational"
@@ -979,7 +979,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--check-headers",
                     "--educational"
                 ],
@@ -1144,27 +1144,27 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 [
                     "python",
                     "src/analyzer/analyze_cli.py",
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                     "--output",
-                    "reports/pentest_sast_flask.json"
+                    "reports/pentest_sast_pwa.json"
                 ],
-                "SAST report for Flask app",
-                "reports/pentest_sast_flask.json"
+                "SAST report for PWA app",
+                "reports/pentest_sast_pwa.json"
             ),
             # DAST report generation
             (
                 [
                     "python",
                     "src/analyzer/dast_cli.py",
-                    self.flask_url,
+                    self.pwa_url,
                     "--quick",
                     "--educational",
                     "--output",
-                    "reports/pentest_dast_flask.json"
+                    "reports/pentest_dast_pwa.json"
                 ],
-                "DAST report for Flask app",
-                "reports/pentest_dast_flask.json"
+                "DAST report for PWA app",
+                "reports/pentest_dast_pwa.json"
             ),
             # Network report generation
             (
@@ -1238,15 +1238,15 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         # These are safe educational tests in our controlled environment
         manual_test_commands = [
             # Basic connectivity tests
-            (f"curl -I {self.flask_url}", "Flask app connectivity"),
             (f"curl -I {self.pwa_url}", "PWA app connectivity"),
+            (f"curl -I {self.flask_url}", "Flask app connectivity"),
 
             # Basic endpoint discovery
-            (f"curl {self.flask_url}/robots.txt", "robots.txt discovery"),
-            (f"curl {self.flask_url}/sitemap.xml", "sitemap.xml discovery"),
+            (f"curl {self.pwa_url}/robots.txt", "robots.txt discovery"),
+            (f"curl {self.pwa_url}/sitemap.xml", "sitemap.xml discovery"),
 
             # Header analysis
-            (f"curl -I {self.flask_url}", "header analysis"),
+            (f"curl -I {self.pwa_url}", "header analysis"),
         ]
 
         successful_tests = 0

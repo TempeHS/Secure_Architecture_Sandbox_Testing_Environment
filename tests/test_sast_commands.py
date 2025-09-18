@@ -61,13 +61,13 @@ class SASTCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("SAST help command timed out")
 
-    def test_02_sast_simple_analysis_flask(self):
-        """Test simple SAST analysis on Flask application."""
-        logger.info("Testing simple SAST analysis on Flask app...")
+    def test_02_sast_simple_analysis_pwa(self):
+        """Test simple SAST analysis on PWA application (primary target)."""
+        logger.info("Testing simple SAST analysis on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.sast_cli, "samples/vulnerable-flask-app"],
+                ["python", self.sast_cli, "samples/unsecure-pwa"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -86,21 +86,21 @@ class SASTCommandValidationTest(unittest.TestCase):
                 "High", result.stdout, "Analysis output missing severity levels"
             )
 
-            logger.info("✅ Simple SAST analysis on Flask app works")
+            logger.info("✅ Simple SAST analysis on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("SAST analysis timed out")
 
-    def test_03_sast_educational_mode_flask(self):
-        """Test SAST analysis with educational explanations on Flask app."""
-        logger.info("Testing SAST educational mode on Flask app...")
+    def test_03_sast_educational_mode_pwa(self):
+        """Test SAST analysis with educational explanations on PWA app."""
+        logger.info("Testing SAST educational mode on PWA app...")
 
         try:
             result = subprocess.run(
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--educational",
                 ],
                 cwd=self.project_root,
@@ -123,18 +123,18 @@ class SASTCommandValidationTest(unittest.TestCase):
                 "SQL", result.stdout, "Missing expected SQL injection findings"
             )
 
-            logger.info("✅ SAST educational mode on Flask app works")
+            logger.info("✅ SAST educational mode on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("SAST educational analysis timed out")
 
-    def test_04_sast_verbose_mode_flask(self):
-        """Test SAST analysis with verbose output on Flask app."""
-        logger.info("Testing SAST verbose mode on Flask app...")
+    def test_04_sast_verbose_mode_pwa(self):
+        """Test SAST analysis with verbose output on PWA app."""
+        logger.info("Testing SAST verbose mode on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.sast_cli, "samples/vulnerable-flask-app", "--verbose"],
+                ["python", self.sast_cli, "samples/unsecure-pwa", "--verbose"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -149,23 +149,23 @@ class SASTCommandValidationTest(unittest.TestCase):
                 len(result.stdout), 1000, "Verbose output seems too short"
             )
 
-            logger.info("✅ SAST verbose mode on Flask app works")
+            logger.info("✅ SAST verbose mode on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("SAST verbose analysis timed out")
 
-    def test_05_sast_json_output_flask(self):
-        """Test SAST analysis with JSON output on Flask app."""
-        logger.info("Testing SAST JSON output on Flask app...")
+    def test_05_sast_json_output_pwa(self):
+        """Test SAST analysis with JSON output on PWA app."""
+        logger.info("Testing SAST JSON output on PWA app...")
 
-        output_file = self.reports_dir / "test_sast_flask.json"
+        output_file = self.reports_dir / "test_sast_pwa.json"
 
         try:
             result = subprocess.run(
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--output",
                     str(output_file),
                     "--format",
@@ -194,7 +194,7 @@ class SASTCommandValidationTest(unittest.TestCase):
                     data["findings"], list, "Findings should be a list"
                 )
 
-            logger.info("✅ SAST JSON output on Flask app works")
+            logger.info("✅ SAST JSON output on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("SAST JSON analysis timed out")
@@ -205,13 +205,14 @@ class SASTCommandValidationTest(unittest.TestCase):
             if output_file.exists():
                 output_file.unlink()
 
-    def test_06_sast_analysis_pwa(self):
-        """Test SAST analysis on PWA application."""
-        logger.info("Testing SAST analysis on PWA app...")
+    def test_06_sast_analysis_flask_secondary(self):
+        """Test SAST analysis on Flask application (secondary target)."""
+        logger.info("Testing SAST analysis on Flask app...")
 
         try:
             result = subprocess.run(
-                ["python", self.sast_cli, "samples/unsecure-pwa", "--educational"],
+                ["python", self.sast_cli,
+                    "samples/vulnerable-flask-app", "--educational"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -219,18 +220,18 @@ class SASTCommandValidationTest(unittest.TestCase):
             )
 
             self.assertEqual(
-                result.returncode, 0, f"SAST PWA analysis failed: {result.stderr}"
+                result.returncode, 0, f"SAST Flask analysis failed: {result.stderr}"
             )
             self.assertIn(
                 "Total:",
                 result.stdout,
-                "PWA analysis output missing findings summary",
+                "Flask analysis output missing findings summary",
             )
 
-            logger.info("✅ SAST analysis on PWA app works")
+            logger.info("✅ SAST analysis on Flask app works")
 
         except subprocess.TimeoutExpired:
-            self.fail("SAST PWA analysis timed out")
+            self.fail("SAST Flask analysis timed out")
 
     def test_07_sast_demo_apps_analysis(self):
         """Test SAST analysis on all demo applications."""
@@ -271,7 +272,7 @@ class SASTCommandValidationTest(unittest.TestCase):
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--tools",
                     "bandit",
                     "--educational",
@@ -303,7 +304,7 @@ class SASTCommandValidationTest(unittest.TestCase):
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--tools",
                     "safety",
                     "--educational",
@@ -334,7 +335,7 @@ class SASTCommandValidationTest(unittest.TestCase):
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--tools",
                     "bandit",
                     "safety",
@@ -363,7 +364,7 @@ class SASTCommandValidationTest(unittest.TestCase):
 
         try:
             result = subprocess.run(
-                ["python", self.sast_cli, "samples/vulnerable-flask-app", "--quiet"],
+                ["python", self.sast_cli, "samples/unsecure-pwa", "--quiet"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -387,14 +388,14 @@ class SASTCommandValidationTest(unittest.TestCase):
         """Test SAST analysis with text output format."""
         logger.info("Testing SAST text output format...")
 
-        output_file = self.reports_dir / "test_sast_flask.txt"
+        output_file = self.reports_dir / "test_sast_pwa.txt"
 
         try:
             result = subprocess.run(
                 [
                     "python",
                     self.sast_cli,
-                    "samples/vulnerable-flask-app",
+                    "samples/unsecure-pwa",
                     "--output",
                     str(output_file),
                     "--format",

@@ -157,6 +157,7 @@ the other test modules verify application availability as part of their setup.
 ```bash
 # What it tests:
 python src/analyzer/analyze_cli.py --help
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
 python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 ```
@@ -180,9 +181,10 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 
 ```bash
 # What it tests:
+python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
 python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
 python src/analyzer/dast_cli.py --demo-apps --tools nikto gobuster
-python src/analyzer/dast_cli.py http://localhost:9090 --output scan.json --format json
+python src/analyzer/dast_cli.py http://localhost:5000 --output scan.json --format json
 ```
 
 **Dependencies**: dast_cli.py, running web applications, HTTP client
@@ -273,14 +275,15 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 # What it tests:
 # Phase 1: Reconnaissance
 python src/analyzer/network_cli.py --scan-services localhost --educational
-python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
+python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
 
 # Phase 2: Vulnerability Assessment
+python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
 python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
-python src/analyzer/dast_cli.py http://localhost:9090 --deep-scan --educational
+python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
 
 # Phase 3: Controlled Exploitation
-curl -X POST "http://localhost:9090/login" -d "username=admin' OR '1'='1&password=test"
+curl -X POST "http://localhost:5000/login" -d "username=admin' OR '1'='1&password=test"
 
 # Phase 4: Post-Exploitation Analysis
 python src/analyzer/network_cli.py --monitor-connections --duration 60 --educational
@@ -465,8 +468,8 @@ pytest-cov
 ```bash
 # Required containers
 cybersec_sandbox          # Main analysis container
-vulnerable-flask-app      # Test application (port 5000)
-unsecure-pwa              # Test application (port 9090)
+vulnerable-flask-app      # Test application (port 9090)
+unsecure-pwa              # Test application (port 5000)
 ```
 
 ## Configuration

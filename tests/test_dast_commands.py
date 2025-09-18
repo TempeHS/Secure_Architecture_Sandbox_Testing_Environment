@@ -32,8 +32,8 @@ class DASTCommandValidationTest(unittest.TestCase):
         cls.timeout = 120  # seconds - DAST takes longer
         cls.reports_dir = cls.project_root / "reports"
         cls.reports_dir.mkdir(exist_ok=True)
-        cls.flask_url = "http://localhost:5000"
-        cls.pwa_url = "http://localhost:9090"
+        cls.pwa_url = "http://localhost:5000"
+        cls.flask_url = "http://localhost:9090"
 
         # Wait for applications to be available
         cls._wait_for_applications()
@@ -90,13 +90,13 @@ class DASTCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("DAST help command timed out")
 
-    def test_02_dast_basic_scan_flask(self):
-        """Test basic DAST scan on Flask application."""
-        logger.info("Testing basic DAST scan on Flask app...")
+    def test_02_dast_basic_scan_pwa(self):
+        """Test basic DAST scan on PWA application (primary target)."""
+        logger.info("Testing basic DAST scan on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.dast_cli, self.flask_url],
+                ["python", self.dast_cli, self.pwa_url],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -112,18 +112,18 @@ class DASTCommandValidationTest(unittest.TestCase):
                 "Scan output missing report header",
             )
 
-            logger.info("✅ Basic DAST scan on Flask app works")
+            logger.info("✅ Basic DAST scan on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("DAST basic scan timed out")
 
-    def test_03_dast_quick_scan_flask(self):
-        """Test quick DAST scan on Flask application."""
-        logger.info("Testing quick DAST scan on Flask app...")
+    def test_03_dast_quick_scan_pwa(self):
+        """Test quick DAST scan on PWA application."""
+        logger.info("Testing quick DAST scan on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.dast_cli, self.flask_url, "--quick"],
+                ["python", self.dast_cli, self.pwa_url, "--quick"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -134,18 +134,18 @@ class DASTCommandValidationTest(unittest.TestCase):
                 result.returncode, 0, f"DAST quick scan failed: {result.stderr}"
             )
 
-            logger.info("✅ Quick DAST scan on Flask app works")
+            logger.info("✅ Quick DAST scan on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("DAST quick scan timed out")
 
-    def test_04_dast_educational_mode_flask(self):
-        """Test DAST analysis with educational explanations on Flask app."""
-        logger.info("Testing DAST educational mode on Flask app...")
+    def test_04_dast_educational_mode_pwa(self):
+        """Test DAST analysis with educational explanations on PWA app."""
+        logger.info("Testing DAST educational mode on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.dast_cli, self.flask_url, "--educational"],
+                ["python", self.dast_cli, self.pwa_url, "--educational"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -159,18 +159,18 @@ class DASTCommandValidationTest(unittest.TestCase):
                 "Description:", result.stdout, "Educational mode missing detailed descriptions"
             )
 
-            logger.info("✅ DAST educational mode on Flask app works")
+            logger.info("✅ DAST educational mode on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("DAST educational scan timed out")
 
-    def test_05_dast_deep_scan_flask(self):
-        """Test DAST deep scan on Flask application."""
-        logger.info("Testing DAST deep scan on Flask app...")
+    def test_05_dast_deep_scan_pwa(self):
+        """Test DAST deep scan on PWA application."""
+        logger.info("Testing DAST deep scan on PWA app...")
 
         try:
             result = subprocess.run(
-                ["python", self.dast_cli, self.flask_url, "--deep-scan"],
+                ["python", self.dast_cli, self.pwa_url, "--deep-scan"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -181,23 +181,23 @@ class DASTCommandValidationTest(unittest.TestCase):
                 result.returncode, 0, f"DAST deep scan failed: {result.stderr}"
             )
 
-            logger.info("✅ DAST deep scan on Flask app works")
+            logger.info("✅ DAST deep scan on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("DAST deep scan timed out")
 
-    def test_06_dast_json_output_flask(self):
-        """Test DAST analysis with JSON output on Flask app."""
-        logger.info("Testing DAST JSON output on Flask app...")
+    def test_06_dast_json_output_pwa(self):
+        """Test DAST analysis with JSON output on PWA app."""
+        logger.info("Testing DAST JSON output on PWA app...")
 
-        output_file = self.reports_dir / "test_dast_flask.json"
+        output_file = self.reports_dir / "test_dast_pwa.json"
 
         try:
             result = subprocess.run(
                 [
                     "python",
                     self.dast_cli,
-                    self.flask_url,
+                    self.pwa_url,
                     "--output",
                     str(output_file),
                     "--format",
@@ -223,7 +223,7 @@ class DASTCommandValidationTest(unittest.TestCase):
                 self.assertIn("target_url", data,
                               "JSON output missing target_url key")
 
-            logger.info("✅ DAST JSON output on Flask app works")
+            logger.info("✅ DAST JSON output on PWA app works")
 
         except subprocess.TimeoutExpired:
             self.fail("DAST JSON scan timed out")
@@ -442,7 +442,7 @@ class DASTCommandValidationTest(unittest.TestCase):
                 result.returncode, 0, f"DAST demo apps scan failed: {result.stderr}"
             )
             self.assertIn(
-                "localhost:5000", result.stdout, "Demo apps scan missing Flask app"
+                "localhost:5000", result.stdout, "Demo apps scan missing PWA app"
             )
 
             logger.info("✅ DAST demo apps scan works")
@@ -450,13 +450,13 @@ class DASTCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("DAST demo apps scan timed out")
 
-    def test_15_dast_scan_pwa_app(self):
-        """Test DAST scan on PWA application."""
-        logger.info("Testing DAST scan on PWA app...")
+    def test_15_dast_scan_flask_secondary(self):
+        """Test DAST scan on Flask application (secondary target)."""
+        logger.info("Testing DAST scan on Flask app...")
 
         try:
             result = subprocess.run(
-                ["python", self.dast_cli, self.pwa_url, "--educational"],
+                ["python", self.dast_cli, self.flask_url, "--educational"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -464,13 +464,13 @@ class DASTCommandValidationTest(unittest.TestCase):
             )
 
             self.assertEqual(
-                result.returncode, 0, f"DAST PWA scan failed: {result.stderr}"
+                result.returncode, 0, f"DAST Flask scan failed: {result.stderr}"
             )
 
-            logger.info("✅ DAST scan on PWA app works")
+            logger.info("✅ DAST scan on Flask app works")
 
         except subprocess.TimeoutExpired:
-            self.fail("DAST PWA scan timed out")
+            self.fail("DAST Flask scan timed out")
 
 
 if __name__ == "__main__":
