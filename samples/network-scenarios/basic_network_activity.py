@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Basic Network Activity Generator
-Educational tool for demonstrating normal network behavior patterns.
+Educational tool for demonstrating normal network behaviour patterns.
 
 This script generates legitimate network activity to establish baseline
 patterns for comparison with suspicious traffic.
@@ -135,7 +135,7 @@ class BasicNetworkActivity:
                     f"Connection to {host}:{port} failed: {str(e)}"
                 )
 
-        print("✅ Service connectivity checks completed")
+        print("✅ Service connectivity cheques completed")
 
     def generate_local_activity(self, duration=60):
         """Generate normal local network activity."""
@@ -265,7 +265,7 @@ def main():
     print("  • Normal web browsing requests")
     print("  • Legitimate DNS queries")
     print("  • Local network connectivity tests")
-    print("  • Service availability checks")
+    print("  • Service availability cheques")
     print()
 
     input("Press Enter to start the scenario...")
@@ -289,14 +289,14 @@ def main():
         print(
             f"  • Local connections: {len([a for a in activity_log if a['type'] == 'LOCAL_CONNECTION'])}")
         print(
-            f"  • Service checks: {len([a for a in activity_log if a['type'] == 'SERVICE_CHECK'])}")
+            f"  • Service cheques: {len([a for a in activity_log if a['type'] == 'SERVICE_CHECK'])}")
         print(
             f"  • Errors: {len([a for a in activity_log if 'ERROR' in a['type']])}")
 
         print("\n🔍 Analysis Instructions:")
         print("  1. Use network monitoring tools to observe this traffic")
         print("  2. Compare patterns with suspicious traffic scenarios")
-        print("  3. Document normal baseline behavior for future reference")
+        print("  3. Document normal baseline behaviour for future reference")
         print(f"  4. Review detailed report: {report_file}")
 
         print("\n💡 Educational Notes:")

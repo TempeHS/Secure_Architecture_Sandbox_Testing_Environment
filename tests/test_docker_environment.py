@@ -324,20 +324,20 @@ class DockerSandboxValidationTest(unittest.TestCase):
 
         logger.info(f"✅ All {len(required_samples)} sample applications exist")
 
-    def test_09_analyzer_tools_exist(self):
-        """Test that all analyzer CLI tools exist and are executable."""
-        logger.info("Testing analyzer tool existence...")
+    def test_09_analyser_tools_exist(self):
+        """Test that all analyser CLI tools exist and are executable."""
+        logger.info("Testing analyser tool existence...")
 
         required_tools = [
-            "src/analyzer/analyze_cli.py",
-            "src/analyzer/dast_cli.py",
-            "src/analyzer/network_cli.py",
+            "src/analyser/analyse_cli.py",
+            "src/analyser/dast_cli.py",
+            "src/analyser/network_cli.py",
         ]
 
         for tool_path in required_tools:
             full_path = self.project_root / tool_path
             self.assertTrue(full_path.exists(),
-                            f"Analyzer tool not found: {tool_path}")
+                            f"Analyser tool not found: {tool_path}")
 
             # Test if the tool can show help
             try:
@@ -357,7 +357,7 @@ class DockerSandboxValidationTest(unittest.TestCase):
             except subprocess.TimeoutExpired:
                 self.fail(f"Tool {tool_path} --help timed out")
 
-        logger.info(f"✅ All {len(required_tools)} analyzer tools available")
+        logger.info(f"✅ All {len(required_tools)} analyser tools available")
 
     def test_10_network_scenarios_exist(self):
         """Test that network scenario generators exist."""

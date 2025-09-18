@@ -40,7 +40,7 @@ Examples:
     parser.add_argument(
         '--type',
         choices=['sast', 'dast', 'network', 'sandbox'],
-        help='Analyzer type (auto-detected if not specified)'
+        help='Analyser type (auto-detected if not specified)'
     )
 
     # Output options
@@ -164,7 +164,7 @@ Examples:
             # Use custom output filename
             output_path = generator.generate_markdown_report(
                 json_data=_load_json_file(input_path),
-                analyzer_type=args.type or _detect_analyzer_type(input_path),
+                analyser_type=args.type or _detect_analyser_type(input_path),
                 output_file=args.output
             )
         else:
@@ -189,8 +189,8 @@ def _load_json_file(file_path: Path) -> dict:
         return json.load(f)
 
 
-def _detect_analyzer_type(file_path: Path) -> str:
-    """Detect analyzer type from filename or content."""
+def _detect_analyser_type(file_path: Path) -> str:
+    """Detect analyser type from filename or content."""
     filename = file_path.name.lower()
     if 'sast' in filename:
         return 'sast'

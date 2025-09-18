@@ -133,15 +133,15 @@ def index():
     <head>
         <title>🚨 Vulnerable Flask Demo</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+            body { font-family: Arial, sans-serif; margin: 40px; background-colour: #f5f5f5; }
             .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-            .vuln-demo { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #dc3545; }
-            nav { background-color: #343a40; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
-            nav a { color: white; text-decoration: none; margin-right: 20px; padding: 5px 10px; }
-            nav a:hover { background-color: #495057; border-radius: 3px; }
-            .btn { padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
-            .btn:hover { background-color: #0056b3; }
+            .warning { background-colour: #fff3cd; border: 1px solid #ffeaa7; colour: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+            .vuln-demo { background-colour: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #dc3545; }
+            nav { background-colour: #343a40; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+            nav a { colour: white; text-decoration: none; margin-right: 20px; padding: 5px 10px; }
+            nav a:hover { background-colour: #495057; border-radius: 3px; }
+            .btn { padding: 8px 15px; background-colour: #007bff; colour: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
+            .btn:hover { background-colour: #0056b3; }
             input, textarea { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
         </style>
     </head>

@@ -25,32 +25,32 @@ This tool is designed for educational purposes and provides:
 
 ```bash
 # Comprehensive assessment of a web application
-python src/analyzer/comprehensive_security_report.py http://localhost:5000
+python src/analyser/comprehensive_security_report.py http://localhost:5000
 
 # Test demo applications with educational mode
-python src/analyzer/comprehensive_security_report.py --demo-apps --educational
+python src/analyser/comprehensive_security_report.py --demo-apps --educational
 
 # Full assessment including penetration testing (requires permission)
-python src/analyzer/comprehensive_security_report.py http://localhost:5000 --include-pentest
+python src/analyser/comprehensive_security_report.py http://localhost:5000 --include-pentest
 
 # Quick assessment (faster scans)
-python src/analyzer/comprehensive_security_report.py http://localhost:5000 --quick-scan
+python src/analyser/comprehensive_security_report.py http://localhost:5000 --quick-scan
 ```
 
 ### Advanced Usage
 
 ```bash
 # Test both source code and running application
-python src/analyzer/comprehensive_security_report.py http://localhost:5000 \
+python src/analyser/comprehensive_security_report.py http://localhost:5000 \
     --target-path /path/to/source/code \
     --educational
 
 # Custom output filename
-python src/analyzer/comprehensive_security_report.py http://localhost:5000 \
+python src/analyser/comprehensive_security_report.py http://localhost:5000 \
     --output my_security_report
 
 # Skip network analysis (faster)
-python src/analyzer/comprehensive_security_report.py http://localhost:5000 \
+python src/analyser/comprehensive_security_report.py http://localhost:5000 \
     --skip-network
 ```
 
@@ -75,14 +75,14 @@ The tool generates two main output files:
 
 ### 1. JSON Report (`*_report_[session_id].json`)
 - Complete machine-readable results
-- All individual analyzer outputs
+- All individual analyser outputs
 - Detailed findings data
 - Metadata and execution log
 
 ### 2. Markdown Report (`*_report_[session_id].md`)
 - Human-readable comprehensive report
 - Executive summary with risk assessment
-- Detailed findings by analyzer type
+- Detailed findings by analyser type
 - Educational insights (if enabled)
 - Actionable recommendations
 
@@ -118,8 +118,8 @@ The tool generates two main output files:
    ```
 
 2. **Python Dependencies**:
-   - All analyzer modules (SAST, DAST, Network, Pentest)
-   - Individual CLI tools in `src/analyzer/`
+   - All analyser modules (SAST, DAST, Network, Pentest)
+   - Individual CLI tools in `src/analyser/`
 
 ## Security Considerations
 
@@ -147,7 +147,7 @@ This tool is designed for cybersecurity education with features like:
 
 2. **Run Comprehensive Assessment**:
    ```bash
-   python src/analyzer/comprehensive_security_report.py --demo-apps --educational
+   python src/analyser/comprehensive_security_report.py --demo-apps --educational
    ```
 
 3. **Review Generated Reports**:
@@ -180,7 +180,7 @@ The tool can be integrated into CI/CD pipelines for automated security testing:
 # Example GitHub Actions workflow
 - name: Run Security Assessment
   run: |
-    python src/analyzer/comprehensive_security_report.py \
+    python src/analyser/comprehensive_security_report.py \
       http://test-environment:5000 \
       --quick-scan \
       --output security_assessment

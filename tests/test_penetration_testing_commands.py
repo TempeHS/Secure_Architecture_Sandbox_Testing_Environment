@@ -65,7 +65,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_network = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--scan-services",
                     "localhost",
                     "--educational",
@@ -85,7 +85,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_dast = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--quick",
                     "--educational",
@@ -117,7 +117,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_sast = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational",
                 ],
@@ -136,7 +136,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_deep_dast = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--deep-scan",
                     "--educational",
@@ -205,7 +205,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--monitor-connections",
                     "--duration",
                     "30",
@@ -242,7 +242,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_sast = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/",
                     "--educational",
                     "--output",
@@ -260,7 +260,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_dast = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     "--demo-apps",
                     "--educational",
                     "--output",
@@ -278,7 +278,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result_network = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--demo-network",
                     "--educational",
                     "--output",
@@ -333,7 +333,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result1 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--scan-services",
                     "localhost",
                     "--educational",
@@ -348,7 +348,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result2 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--monitor-connections",
                     "--educational",
                     "--duration",
@@ -364,7 +364,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result3 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--dns-analysis",
                     "--educational",
                     "--duration",
@@ -402,7 +402,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result1 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--quick",
                     "--educational",
@@ -417,7 +417,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--deep-scan",
                     "--educational",
@@ -463,7 +463,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result1 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational",
                     "--verbose",
@@ -477,7 +477,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result2 = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/vulnerable-flask-app",
                     "--educational",
                     "--verbose",
@@ -515,7 +515,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             subprocess.run(
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/",
                     "--educational",
                     "--output",
@@ -533,7 +533,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             subprocess.run(
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     "--demo-apps",
                     "--educational",
                     "--output",
@@ -551,7 +551,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--demo-network",
                     "--educational",
                     "--output",
@@ -685,7 +685,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             result = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--monitor-connections",
                     "--duration",
                     "30",
@@ -719,7 +719,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--scan-services",
                     "localhost",
                     "--educational",
@@ -730,7 +730,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational",
                 ],
@@ -740,7 +740,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--quick",
                     "--educational",
@@ -779,16 +779,16 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         logger.info("✅ Professional workflow validation completed")
 
     def test_15_automated_penetration_testing_tool(self):
-        """Test the new automated penetration testing analyzer tool."""
+        """Test the new automated penetration testing analyser tool."""
         logger.info("Testing automated penetration testing tool...")
 
-        # Test if the penetration analyzer tool exists and can be called
+        # Test if the penetration analyser tool exists and can be called
         try:
             # Test help functionality
             result = subprocess.run(
                 [
                     "python",
-                    "src/analyzer/penetration_analyzer.py",
+                    "src/analyser/penetration_analyser.py",
                     "--help"
                 ],
                 cwd=self.project_root,
@@ -803,18 +803,18 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 )
             else:
                 logger.warning(
-                    "⚠️ Penetration analyzer help not available - "
+                    "⚠️ Penetration analyser help not available - "
                     "tool may not exist yet"
                 )
 
         except FileNotFoundError:
             logger.warning(
-                "⚠️ Penetration analyzer tool not found - "
+                "⚠️ Penetration analyser tool not found - "
                 "may not be implemented yet"
             )
         except subprocess.TimeoutExpired:
             logger.warning(
-                "⚠️ Penetration analyzer tool help command timed out"
+                "⚠️ Penetration analyser tool help command timed out"
             )
 
         # Test penetration testing against localhost applications
@@ -823,7 +823,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 result = subprocess.run(
                     [
                         "python",
-                        "src/analyzer/penetration_analyzer.py",
+                        "src/analyser/penetration_analyser.py",
                         f"localhost:{port}"
                     ],
                     cwd=self.project_root,
@@ -853,7 +853,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
 
             except FileNotFoundError:
                 logger.warning(
-                    f"⚠️ Penetration analyzer tool not found for port {port}"
+                    f"⚠️ Penetration analyser tool not found for port {port}"
                 )
             except subprocess.TimeoutExpired:
                 logger.warning(
@@ -873,7 +873,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--check-dependencies"
                 ],
@@ -883,7 +883,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--severity",
                     "high,critical"
@@ -894,7 +894,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational",
                     "--verbose"
@@ -905,7 +905,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/suspicious-scripts",
                     "--educational"
                 ],
@@ -915,7 +915,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational"
                 ],
@@ -966,7 +966,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--test-xss",
                     "--test-sqli",
@@ -978,7 +978,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--check-headers",
                     "--educational"
@@ -989,7 +989,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     "--demo-apps",
                     "--educational"
                 ],
@@ -999,7 +999,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     "http://localhost:8080",
                     "--quick",
                     "--educational"
@@ -1050,7 +1050,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--scan-services",
                     "localhost",
                     "--ports",
@@ -1062,7 +1062,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--monitor-connections",
                     "--educational",
                     "--duration",
@@ -1074,7 +1074,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--capture-traffic",
                     "--duration",
                     "30",
@@ -1086,7 +1086,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--dns-analysis",
                     "--educational",
                     "--duration",
@@ -1143,7 +1143,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/analyze_cli.py",
+                    "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
                     "--educational",
                     "--output",
@@ -1156,7 +1156,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/dast_cli.py",
+                    "src/analyser/dast_cli.py",
                     self.pwa_url,
                     "--quick",
                     "--educational",
@@ -1170,7 +1170,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             (
                 [
                     "python",
-                    "src/analyzer/network_cli.py",
+                    "src/analyser/network_cli.py",
                     "--monitor-connections",
                     "--educational",
                     "--duration",

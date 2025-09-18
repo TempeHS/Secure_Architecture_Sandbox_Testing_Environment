@@ -25,8 +25,8 @@ This sandbox uses a **multi-layer isolation and containerized architecture** usi
 ```bash
 cd uploads/
 # Deploy and test your app (see uploads/README.md)
-python3 src/analyzer/analyze_cli.py uploads/ --educational
-python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
+python3 src/analyser/analyse_cli.py uploads/ --educational
+python3 src/analyser/dast_cli.py http://localhost:8000 --educational
 ```
 
 ## 🤖 AI Learning Assistant
@@ -42,10 +42,10 @@ Built-in knowledge of the NESA Software Engineering Syllabus and safety features
 **Automated Report Generation:**
 ```bash
 # All tools support --educational mode with timestamped reports
-python src/analyzer/analyze_cli.py <target> --educational          # SAST
-python src/analyzer/dast_cli.py <url> --educational               # DAST  
-python src/analyzer/network_cli.py --monitor-connections --educational  # Network
-python src/analyzer/penetration_analyzer.py localhost:5000       # Penetration Testing
+python src/analyser/analyse_cli.py <target> --educational          # SAST
+python src/analyser/dast_cli.py <url> --educational               # DAST  
+python src/analyser/network_cli.py --monitor-connections --educational  # Network
+python src/analyser/penetration_analyser.py localhost:5000       # Penetration Testing
 ```
 
 Reports auto-save to `reports/` with timestamps. Manual output: `--output reports/my_report.json`
@@ -84,16 +84,16 @@ See [uploads/README.md](uploads/README.md) for deployment instructions.
 **Quick Commands:**
 ```bash
 # Static Analysis
-python src/analyzer/analyze_cli.py <target> --educational
+python src/analyser/analyse_cli.py <target> --educational
 
 # Dynamic Analysis  
-python src/analyzer/dast_cli.py <url> --educational
+python src/analyser/dast_cli.py <url> --educational
 
 # Network Analysis
-python src/analyzer/network_cli.py --monitor-connections --educational
+python src/analyser/network_cli.py --monitor-connections --educational
 
 # Penetration Testing
-python src/analyzer/penetration_analyzer.py <host:port>
+python src/analyser/penetration_analyser.py <host:port>
 ```
 
 ## 🎓 Learning Features
@@ -106,7 +106,7 @@ python src/analyzer/penetration_analyzer.py <host:port>
 
 ```
 ├── docs/                    # Educational materials (exercises, guides, worksheets)
-├── src/analyzer/           # Security analysis tools (SAST, DAST, Network, Penetration)  
+├── src/analyser/           # Security analysis tools (SAST, DAST, Network, Penetration)  
 ├── samples/                # Vulnerable applications for testing
 ├── uploads/                # Deploy your own Flask app
 ├── docker/                 # Container configuration
@@ -124,7 +124,7 @@ Students will master:
 
 ## 🚀 Getting Started
 
-1. **Verify Tools**: `python src/analyzer/analyze_cli.py --help`
+1. **Verify Tools**: `python src/analyser/analyse_cli.py --help`
 2. **Read Quick References**: `docs/quick-reference-guides/`  
 3. **Choose Learning Path**:
    - **Foundation**: SAST → DAST → Network → Sandbox → Penetration Testing
@@ -142,8 +142,8 @@ All security tools auto-install in the environment.
 
 - **Issues**: [Create repository issues](https://github.com/TempeHS/Secure_Architecture_Sandbox_Testing_Environment/issues)
 - **Contributing**: Raise a pull request or issue.  
-- **License**: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+- **Licence**: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
 ---
 
-<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/TempeHS/Secure_Architecture_Sandbox_Testing_Environment">Secure Architecture Testing Environment</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/benpaddlejones">Ben Jones</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/TempeHS/Secure_Architecture_Sandbox_Testing_Environment">Secure Architecture Testing Environment</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/benpaddlejones">Ben Jones</a> is licenced under <a href="https://creativecommons.org/licences/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="licence noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
 

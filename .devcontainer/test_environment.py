@@ -107,7 +107,7 @@ def test_directory_structure():
     required_dirs = [
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/sandbox",
-        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/analyzer",
+        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/analyser",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/reporter",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/docs",

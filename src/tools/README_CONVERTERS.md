@@ -246,7 +246,7 @@ python src/tools/cloudconvert_converter.py --file sast-student-worksheet.md
 
 ## ⚠️ Important Notes
 
-- **Overwrite Behavior**: Both converters will overwrite existing DOCX files
+- **Overwrite Behaviour**: Both converters will overwrite existing DOCX files
 - **File Names**: DOCX files will have the same name as MD files (with .docx
   extension)
 - **Error Handling**: Both converters include comprehensive error handling and

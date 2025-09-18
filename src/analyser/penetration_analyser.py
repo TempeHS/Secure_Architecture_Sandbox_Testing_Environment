@@ -16,7 +16,7 @@ Supported Testing Types:
 - Educational Vulnerability Demonstrations
 
 Author: Secure Architecture Sandbox Testing Environment
-License: MIT (Educational Use)
+Licence: MIT (Educational Use)
 """
 
 import os
@@ -1769,7 +1769,7 @@ if __name__ == "__main__":
             if finding.exploitation_proof:
                 print(f"  Exploitation: {finding.exploitation_proof}")
     else:
-        print("Usage: python penetration_analyzer.py <target_url>")
+        print("Usage: python penetration_analyser.py <target_url>")
         print("Options: --deep (thorough testing), --exploit (attempt exploitation)")
         print(
-            "Example: python penetration_analyzer.py http://localhost:5000 --deep --exploit")
+            "Example: python penetration_analyser.py http://localhost:5000 --deep --exploit")

@@ -2,7 +2,7 @@
 Comprehensive Markdown Report Generator for Security Analysis Tools
 
 A clean, well-structured report generator that creates professional markdown
-reports for all security analyzer types with educational content.
+reports for all security analyser types with educational content.
 """
 
 import json
@@ -25,12 +25,12 @@ class MarkdownReportGenerator:
         self.reports_dir = Path(reports_directory)
         self.reports_dir.mkdir(exist_ok=True)
 
-        # Analyzer configurations
-        self.analyzer_config = {
+        # Analyser configurations
+        self.analyser_config = {
             'sast': {
                 'icon': '🔍',
                 'name': 'Static Application Security Testing (SAST)',
-                'description': 'Analyzes source code for security vulnerabilities without executing the program'
+                'description': 'Analyses source code for security vulnerabilities without executing the programme'
             },
             'dast': {
                 'icon': '🌐',
@@ -40,63 +40,63 @@ class MarkdownReportGenerator:
             'network': {
                 'icon': '🔌',
                 'name': 'Network Traffic Analysis',
-                'description': 'Monitors and analyzes network connections and traffic patterns for threats'
+                'description': 'Monitors and analyses network connections and traffic patterns for threats'
             },
             'sandbox': {
                 'icon': '📦',
                 'name': 'Sandbox Security Analysis',
-                'description': 'Analyzes application behavior in an isolated environment to detect malicious activities'
+                'description': 'Analyses application behaviour in an isolated environment to detect malicious activities'
             }
         }
 
-        # Learning objectives by analyzer type
+        # Learning objectives by analyser type
         self.learning_objectives = {
             'sast': [
                 'Understand how static code analysis identifies security vulnerabilities',
-                'Learn to interpret SAST tool outputs and prioritize findings',
-                'Recognize common code patterns that lead to security issues',
+                'Learn to interpret SAST tool outputs and prioritise findings',
+                'Recognise common code patterns that lead to security issues',
                 'Apply secure coding practices to prevent vulnerabilities'
             ],
             'dast': [
                 'Understand how dynamic testing identifies runtime vulnerabilities',
-                'Learn to analyze web application security through external testing',
-                'Recognize common web vulnerabilities like XSS and SQL injection',
-                'Apply defense-in-depth strategies for web application security'
+                'Learn to analyse web application security through external testing',
+                'Recognise common web vulnerabilities like XSS and SQL injection',
+                'Apply defence-in-depth strategies for web application security'
             ],
             'network': [
                 'Understand network traffic analysis and monitoring techniques',
-                'Learn to identify suspicious network patterns and behaviors',
-                'Recognize common network-based attack indicators',
+                'Learn to identify suspicious network patterns and behaviours',
+                'Recognise common network-based attack indicators',
                 'Apply network security monitoring best practices'
             ],
             'sandbox': [
-                'Understand behavioral analysis in isolated environments',
-                'Learn to identify malicious application behaviors',
-                'Recognize system-level security threats and indicators',
+                'Understand behavioural analysis in isolated environments',
+                'Learn to identify malicious application behaviours',
+                'Recognise system-level security threats and indicators',
                 'Apply sandboxing techniques for security analysis'
             ]
         }
 
     def _create_severity_badge(self, severity: str) -> str:
         """Create markdown badge for severity level."""
-        colors = {
+        colours = {
             'critical': 'red',
             'high': 'orange',
             'medium': 'yellow',
             'low': 'green',
             'info': 'blue'
         }
-        color = colors.get(severity.lower(), 'lightgrey')
-        return f"![{severity.upper()}](https://img.shields.io/badge/{severity.upper()}-{color}?style=flat)"
+        colour = colours.get(severity.lower(), 'lightgrey')
+        return f"![{severity.upper()}](https://img.shields.io/badge/{severity.upper()}-{colour}?style=flat)"
 
     def _create_tool_badge(self, tool: str) -> str:
         """Create markdown badge for analysis tool."""
         return f"![{tool}](https://img.shields.io/badge/Tool-{tool}-blue?style=flat)"
 
-    def _create_report_header(self, analyzer_type: str, data: Dict[str, Any]) -> str:
+    def _create_report_header(self, analyser_type: str, data: Dict[str, Any]) -> str:
         """Generate the report header with metadata."""
-        config = self.analyzer_config.get(analyzer_type, {
-            'icon': '🔍', 'name': f'{analyzer_type.upper()} Analysis',
+        config = self.analyser_config.get(analyser_type, {
+            'icon': '🔍', 'name': f'{analyser_type.upper()} Analysis',
             'description': 'Security analysis report'
         })
 
@@ -121,24 +121,24 @@ class MarkdownReportGenerator:
             except:
                 lines.append(f"| **Generated** | {timestamp} |")
 
-        # Add analyzer-specific metadata
-        if analyzer_type == 'sast':
+        # Add analyser-specific metadata
+        if analyser_type == 'sast':
             target = data.get('target_path', 'Unknown')
-            files = data.get('total_files_analyzed', 0)
+            files = data.get('total_files_analysed', 0)
             tools = ', '.join(data.get('tools_used', []))
             lines.extend([
                 f"| **Target Path** | `{target}` |",
-                f"| **Files Analyzed** | {files} |",
+                f"| **Files Analysed** | {files} |",
                 f"| **Tools Used** | {tools} |"
             ])
-        elif analyzer_type == 'dast':
+        elif analyser_type == 'dast':
             target = data.get('target_url', 'Unknown')
             duration = data.get('scan_duration', 0)
             lines.extend([
                 f"| **Target URL** | {target} |",
                 f"| **Scan Duration** | {duration:.2f} seconds |"
             ])
-        elif analyzer_type == 'network':
+        elif analyser_type == 'network':
             total = data.get('total_connections', 0)
             active = len(data.get('active_connections', []))
             lines.extend([
@@ -158,7 +158,7 @@ class MarkdownReportGenerator:
             lines.extend([
                 "✅ **Great news!** No security vulnerabilities were detected in this analysis.",
                 "",
-                "This indicates that the analyzed target follows good security practices. However, remember that security is an ongoing process, and different tools may detect different types of issues.",
+                "This indicates that the analysed target follows good security practices. However, remember that security is an ongoing process, and different tools may detect different types of issues.",
                 ""
             ])
         else:
@@ -197,14 +197,14 @@ class MarkdownReportGenerator:
 
         return "\n".join(lines)
 
-    def _create_learning_objectives(self, analyzer_type: str) -> str:
+    def _create_learning_objectives(self, analyser_type: str) -> str:
         """Generate learning objectives section."""
-        objectives = self.learning_objectives.get(analyzer_type, [])
+        objectives = self.learning_objectives.get(analyser_type, [])
 
         lines = [
             "## 🎯 Learning Objectives",
             "",
-            f"After reviewing this {analyzer_type.upper()} analysis report, you should be able to:",
+            f"After reviewing this {analyser_type.upper()} analysis report, you should be able to:",
             ""
         ]
 
@@ -308,7 +308,7 @@ class MarkdownReportGenerator:
 
         return "\n".join(lines)
 
-    def _create_recommendations(self, findings: List[Dict], analyzer_type: str) -> str:
+    def _create_recommendations(self, findings: List[Dict], analyser_type: str) -> str:
         """Generate recommendations section."""
         lines = ["## 💡 Recommendations", ""]
 
@@ -340,16 +340,16 @@ class MarkdownReportGenerator:
                 "Regularly audit network connections and services"
             ],
             'sandbox': [
-                "Use sandboxing for analyzing suspicious applications",
-                "Monitor system behavior for indicators of compromise",
-                "Implement application behavior monitoring in production",
+                "Use sandboxing for analysing suspicious applications",
+                "Monitor system behaviour for indicators of compromise",
+                "Implement application behaviour monitoring in production",
                 "Regular security assessment of deployed applications"
             ]
         }
 
         lines.append("### General Security Recommendations:")
         lines.append("")
-        for i, rec in enumerate(general_recs.get(analyzer_type, []), 1):
+        for i, rec in enumerate(general_recs.get(analyser_type, []), 1):
             lines.append(f"{i}. {rec}")
 
         # Priority actions for high/critical issues
@@ -375,7 +375,7 @@ class MarkdownReportGenerator:
         lines.append("")
         return "\n".join(lines)
 
-    def _create_learning_resources(self, analyzer_type: str) -> str:
+    def _create_learning_resources(self, analyser_type: str) -> str:
         """Generate learning resources section."""
         lines = [
             "## 📚 Additional Learning Resources",
@@ -387,7 +387,7 @@ class MarkdownReportGenerator:
             "- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework) - Cybersecurity best practices"
         ]
 
-        # Add analyzer-specific resources
+        # Add analyser-specific resources
         specific_resources = {
             'sast': "- [OWASP Static Analysis Tools](https://owasp.org/www-community/Source_Code_Analysis_Tools)",
             'dast': "- [OWASP ZAP User Guide](https://www.zaproxy.org/docs/)",
@@ -395,31 +395,31 @@ class MarkdownReportGenerator:
             'sandbox': "- [NIST SP 800-83 Malware Incident Prevention](https://csrc.nist.gov/publications/detail/sp/800-83/rev-1/final)"
         }
 
-        if analyzer_type in specific_resources:
-            lines.append(specific_resources[analyzer_type])
+        if analyser_type in specific_resources:
+            lines.append(specific_resources[analyser_type])
 
         lines.append("")
         return "\n".join(lines)
 
-    def _create_footer(self, analyzer_type: str) -> str:
+    def _create_footer(self, analyser_type: str) -> str:
         """Generate report footer."""
         current_time = datetime.now().strftime('%B %d, %Y at %I:%M %p')
         return "\n".join([
             "---",
             "",
             "*This report was generated by the Secure Architecture Sandbox Testing Environment Security Analysis Platform*",
-            f"*Report Type: {analyzer_type.upper()} Analysis*",
+            f"*Report Type: {analyser_type.upper()} Analysis*",
             f"*Generated: {current_time}*",
             ""
         ])
 
-    def generate_markdown_report(self, json_data: Dict[str, Any], analyzer_type: str, output_file: Optional[str] = None) -> str:
+    def generate_markdown_report(self, json_data: Dict[str, Any], analyser_type: str, output_file: Optional[str] = None) -> str:
         """
         Generate comprehensive markdown report from JSON data.
 
         Args:
             json_data: Analysis results in JSON format
-            analyzer_type: Type of analyzer (sast, dast, network, sandbox)
+            analyser_type: Type of analyser (sast, dast, network, sandbox)
             output_file: Optional output filename
 
         Returns:
@@ -428,7 +428,7 @@ class MarkdownReportGenerator:
         # Generate filename if not provided
         if not output_file:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            output_file = f"{analyzer_type}_report_{timestamp}.md"
+            output_file = f"{analyser_type}_report_{timestamp}.md"
 
         output_path = self.reports_dir / output_file
 
@@ -445,9 +445,9 @@ class MarkdownReportGenerator:
 
         # Build markdown content
         content_sections = [
-            self._create_report_header(analyzer_type, json_data),
+            self._create_report_header(analyser_type, json_data),
             self._create_executive_summary(findings, summary),
-            self._create_learning_objectives(analyzer_type)
+            self._create_learning_objectives(analyser_type)
         ]
 
         # Add findings or no issues message
@@ -480,9 +480,9 @@ class MarkdownReportGenerator:
 
         # Add recommendations and resources
         content_sections.extend([
-            self._create_recommendations(findings, analyzer_type),
-            self._create_learning_resources(analyzer_type),
-            self._create_footer(analyzer_type)
+            self._create_recommendations(findings, analyser_type),
+            self._create_learning_resources(analyser_type),
+            self._create_footer(analyser_type)
         ])
 
         # Write the file
@@ -492,38 +492,38 @@ class MarkdownReportGenerator:
 
         return str(output_path)
 
-    def convert_json_to_markdown(self, json_file_path: str, analyzer_type: str = None) -> str:
+    def convert_json_to_markdown(self, json_file_path: str, analyser_type: str = None) -> str:
         """Convert existing JSON report to markdown."""
         with open(json_file_path, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
 
-        # Auto-detect analyzer type if not provided
-        if not analyzer_type:
+        # Auto-detect analyser type if not provided
+        if not analyser_type:
             filename = os.path.basename(json_file_path).lower()
             if 'sast' in filename:
-                analyzer_type = 'sast'
+                analyser_type = 'sast'
             elif 'dast' in filename:
-                analyzer_type = 'dast'
+                analyser_type = 'dast'
             elif 'network' in filename:
-                analyzer_type = 'network'
+                analyser_type = 'network'
             elif 'sandbox' in filename:
-                analyzer_type = 'sandbox'
+                analyser_type = 'sandbox'
             else:
                 # Detect from structure
                 if 'target_path' in json_data and 'tools_used' in json_data:
-                    analyzer_type = 'sast'
+                    analyser_type = 'sast'
                 elif 'target_url' in json_data and 'scan_duration' in json_data:
-                    analyzer_type = 'dast'
+                    analyser_type = 'dast'
                 elif 'active_connections' in json_data or 'total_connections' in json_data:
-                    analyzer_type = 'network'
+                    analyser_type = 'network'
                 else:
-                    analyzer_type = 'general'
+                    analyser_type = 'general'
 
         # Generate output filename
         base_name = os.path.splitext(os.path.basename(json_file_path))[0]
         output_file = f"{base_name}.md"
 
-        return self.generate_markdown_report(json_data, analyzer_type, output_file)
+        return self.generate_markdown_report(json_data, analyser_type, output_file)
 
 
 def main():
@@ -534,7 +534,7 @@ def main():
         description='Generate markdown reports from JSON analysis files')
     parser.add_argument('json_file', help='Path to JSON report file')
     parser.add_argument(
-        '--type', choices=['sast', 'dast', 'network', 'sandbox'], help='Analyzer type')
+        '--type', choices=['sast', 'dast', 'network', 'sandbox'], help='Analyser type')
     parser.add_argument('--output', help='Output markdown filename')
     parser.add_argument('--reports-dir', default='reports',
                         help='Reports directory')

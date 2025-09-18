@@ -19,21 +19,21 @@ logger = logging.getLogger(__name__)
 
 
 class NetworkCommandValidationTest(unittest.TestCase):
-    """Test suite to validate network analyzer commands."""
+    """Test suite to validate network analyser commands."""
 
     @classmethod
     def setUpClass(cls):
         """Set up test environment once for all tests."""
         cls.project_root = Path(__file__).parent.parent
         os.chdir(cls.project_root)
-        cls.network_cli = "src/analyzer/network_cli.py"
+        cls.network_cli = "src/analyser/network_cli.py"
         cls.timeout = 90  # seconds
         cls.reports_dir = cls.project_root / "reports"
         cls.reports_dir.mkdir(exist_ok=True)
 
     def test_01_network_help_command(self):
-        """Test network analyzer help command."""
-        logger.info("Testing network analyzer help command...")
+        """Test network analyser help command."""
+        logger.info("Testing network analyser help command...")
 
         try:
             result = subprocess.run(

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Suspicious Traffic Generator
-Educational tool for demonstrating suspicious network behavior patterns.
+Educational tool for demonstrating suspicious network behaviour patterns.
 
 This script generates network patterns that indicate potential security threats,
 helping students learn to identify malicious network activity.
@@ -50,10 +50,10 @@ class SuspiciousTrafficGenerator:
             'SUSPICIOUS_PORT': 'Connections on non-standard ports may indicate malicious activity',
             'REPEATED_FAILURES': 'Repeated connection failures may indicate brute force attacks'
         }
-        return notes.get(activity_type, 'Analyze this pattern for potential security implications')
+        return notes.get(activity_type, 'Analyse this pattern for potential security implications')
 
     def simulate_port_scanning(self, target='127.0.0.1', duration=60):
-        """Simulate port scanning behavior - a common reconnaissance technique."""
+        """Simulate port scanning behaviour - a common reconnaissance technique."""
         print(
             f"\n🔍 Simulating port scan against {target} for {duration} seconds...")
 
@@ -90,7 +90,7 @@ class SuspiciousTrafficGenerator:
 
                 scan_count += 1
 
-                # Rapid scanning - suspicious behavior
+                # Rapid scanning - suspicious behaviour
                 time.sleep(random.uniform(0.1, 0.5))
 
             except Exception as e:
@@ -130,7 +130,7 @@ class SuspiciousTrafficGenerator:
 
                 connection_count += 1
 
-                # Simulate periodic beacon behavior
+                # Simulate periodic beacon behaviour
                 time.sleep(random.uniform(5, 15))
 
             except Exception as e:
@@ -306,7 +306,7 @@ class SuspiciousTrafficGenerator:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             filename = f"suspicious_traffic_{timestamp}.json"
 
-        # Categorize activities by risk level
+        # Categorise activities by risk level
         risk_summary = {
             'CRITICAL': len([a for a in self.activity_log if a['risk_level'] == 'CRITICAL']),
             'HIGH': len([a for a in self.activity_log if a['risk_level'] == 'HIGH']),
@@ -323,7 +323,7 @@ class SuspiciousTrafficGenerator:
             'activities': self.activity_log,
             'educational_objectives': [
                 'Identify port scanning patterns',
-                'Recognize backdoor communication attempts',
+                'Recognise backdoor communication attempts',
                 'Detect DNS tunneling indicators',
                 'Spot rapid/automated connection patterns',
                 'Understand risk levels of different activities'
@@ -398,7 +398,7 @@ def main():
 
         print("\n🔍 Analysis Instructions:")
         print("  1. Compare this traffic with baseline normal activity")
-        print("  2. Identify patterns that distinguish malicious behavior")
+        print("  2. Identify patterns that distinguish malicious behaviour")
         print("  3. Note the risk levels and educational explanations")
         print(f"  4. Review detailed analysis in: {report_file}")
 

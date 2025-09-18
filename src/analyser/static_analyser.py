@@ -2,7 +2,7 @@
 Static Code Analysis Module for Cybersecurity Education
 
 This module provides comprehensive static analysis capabilities for educational
-cybersecurity demonstrations. It integrates multiple security tools to analyze
+cybersecurity demonstrations. It integrates multiple security tools to analyse
 code and generate educational reports about security vulnerabilities.
 
 Supported Analysis Types:
@@ -13,7 +13,7 @@ Supported Analysis Types:
 - Educational Vulnerability Explanations
 
 Author: Secure Architecture Sandbox Testing Environment
-License: MIT (Educational Use)
+Licence: MIT (Educational Use)
 """
 
 import os
@@ -61,7 +61,7 @@ class AnalysisReport:
     """Comprehensive analysis report containing all findings"""
     target_path: str
     analysis_timestamp: str
-    total_files_analyzed: int
+    total_files_analysed: int
     tools_used: List[str]
     findings: List[Finding]
     summary: Dict[str, int]
@@ -440,19 +440,19 @@ class SecurityToolRunner:
                                      "Review the code and implement appropriate security controls.")
 
 
-class StaticAnalyzer:
+class StaticAnalyser:
     """Main static analysis orchestrator for educational cybersecurity"""
 
     def __init__(self, working_directory: str = None):
         self.working_dir = working_directory or os.getcwd()
         self.tool_runner = SecurityToolRunner(working_directory)
 
-    def analyze_target(self, target_path: str, analysis_types: List[str] = None) -> AnalysisReport:
+    def analyse_target(self, target_path: str, analysis_types: List[str] = None) -> AnalysisReport:
         """
         Perform comprehensive static analysis on target path
 
         Args:
-            target_path: Path to analyze (file or directory)
+            target_path: Path to analyse (file or directory)
             analysis_types: List of analysis types to run ['python', 'nodejs', 'all']
                           If None, auto-detect based on files present
 
@@ -510,19 +510,19 @@ class StaticAnalyzer:
         # Generate summary statistics
         summary = self._generate_summary(all_findings)
 
-        # Count analyzed files
+        # Count analysed files
         total_files = self._count_source_files(target_path)
 
         # Create analysis report
         report = AnalysisReport(
             target_path=target_path,
             analysis_timestamp=datetime.now().isoformat(),
-            total_files_analyzed=total_files,
+            total_files_analysed=total_files,
             tools_used=tools_used,
             findings=all_findings,
             summary=summary,
             metadata={
-                'analyzer_version': '1.0.0',
+                'analyser_version': '1.0.0',
                 'analysis_types': analysis_types,
                 'total_runtime_seconds': 0,  # TODO: Add timing
                 'tools_available': self.tool_runner.tools_available,
@@ -612,24 +612,24 @@ class StaticAnalyzer:
 
 
 # Convenience functions for direct usage
-def analyze_python_file(file_path: str) -> AnalysisReport:
+def analyse_python_file(file_path: str) -> AnalysisReport:
     """Quick analysis of a single Python file"""
-    analyzer = StaticAnalyzer()
-    return analyzer.analyze_target(file_path, ['python'])
+    analyser = StaticAnalyser()
+    return analyser.analyse_target(file_path, ['python'])
 
 
-def analyze_directory(directory_path: str) -> AnalysisReport:
+def analyse_directory(directory_path: str) -> AnalysisReport:
     """Comprehensive analysis of a directory"""
-    analyzer = StaticAnalyzer()
-    return analyzer.analyze_target(directory_path, ['all'])
+    analyser = StaticAnalyser()
+    return analyser.analyse_target(directory_path, ['all'])
 
 
-def analyze_demo_applications() -> Dict[str, AnalysisReport]:
-    """Analyze all demo applications in the samples directory"""
+def analyse_demo_applications() -> Dict[str, AnalysisReport]:
+    """Analyse all demo applications in the samples directory"""
     samples_dir = Path(__file__).parent.parent.parent / 'samples'
 
     results = {}
-    analyzer = StaticAnalyzer()
+    analyser = StaticAnalyser()
 
     demo_apps = [
         'vulnerable-flask-app',
@@ -640,8 +640,8 @@ def analyze_demo_applications() -> Dict[str, AnalysisReport]:
     for app in demo_apps:
         app_path = samples_dir / app
         if app_path.exists():
-            logger.info(f"Analyzing demo application: {app}")
-            results[app] = analyzer.analyze_target(str(app_path))
+            logger.info(f"Analysing demo application: {app}")
+            results[app] = analyser.analyse_target(str(app_path))
 
     return results
 
@@ -652,8 +652,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         target = sys.argv[1]
-        analyzer = StaticAnalyzer()
-        report = analyzer.analyze_target(target)
+        analyser = StaticAnalyser()
+        report = analyser.analyse_target(target)
 
         print(f"Analysis Report for: {target}")
         print(f"Total findings: {report.summary['total']}")
@@ -668,5 +668,5 @@ if __name__ == "__main__":
                 f"  File: {finding.file_path}:{finding.line_number or 'N/A'}")
             print(f"  Description: {finding.description[:100]}...")
     else:
-        print("Usage: python static_analyzer.py <target_path>")
-        print("Example: python static_analyzer.py /path/to/vulnerable/app")
+        print("Usage: python static_analyser.py <target_path>")
+        print("Example: python static_analyser.py /path/to/vulnerable/app")

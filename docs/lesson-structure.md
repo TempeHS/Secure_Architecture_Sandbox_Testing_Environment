@@ -2,7 +2,7 @@
 
 ## 📚 Course Overview
 
-This comprehensive cybersecurity education program provides hands-on experience
+This comprehensive cybersecurity education programme provides hands-on experience
 with security analysis techniques through a structured learning progression.
 Students will master foundational concepts before advancing to integrated
 methodologies and strategic security assessment.
@@ -71,15 +71,15 @@ thinking skills that complement automated testing.
   testing
 - ✅ Apply systematic code review methodology to identify security
   vulnerabilities
-- ✅ Recognize common security anti-patterns through manual source code
+- ✅ Recognise common security anti-patterns through manual source code
   inspection
 - ✅ Evaluate authentication, authorization, and input validation
   implementations
 - ✅ Document security findings with clear explanations and remediation
   recommendations
-- ✅ Understand the role of human judgment in security assessment
+- ✅ Understand the role of human judgement in security assessment
 
-### 🧪 Sample Applications Analyzed
+### 🧪 Sample Applications Analysed
 
 - **Unsecure PWA**: [`samples/unsecure-pwa/`](../samples/unsecure-pwa/) - Focus
   on manual analysis of Python backend and HTML templates
@@ -102,12 +102,12 @@ thinking skills that complement automated testing.
 
 ## 📖 Lesson 2: Sandbox Security Analysis
 
-**Foundation Building - Understanding Malicious Behavior**
+**Foundation Building - Understanding Malicious Behaviour**
 
 ### 📍 Overview
 
-Students learn to safely analyze suspicious applications in controlled
-environments, developing fundamental threat detection and behavioral analysis
+Students learn to safely analyse suspicious applications in controlled
+environments, developing fundamental threat detection and behavioural analysis
 skills.
 
 ### ⏱️ Duration: 3-4 hours
@@ -134,12 +134,12 @@ skills.
   multi-container environments**
 - ✅ Safely execute and monitor suspicious applications using system call
   tracing
-- ✅ Identify behavioral indicators of malicious software (malware, backdoors,
+- ✅ Identify behavioural indicators of malicious software (malware, backdoors,
   miners)
 - ✅ Use network monitoring and resource analysis to detect threats
 - ✅ **Understand how container isolation mirrors real-world security testing
   environments**
-- ✅ Document security findings and behavioral patterns professionally
+- ✅ Document security findings and behavioural patterns professionally
 
 ### 🧪 Sample Applications Used
 
@@ -155,12 +155,12 @@ skills.
 - System call monitoring and process analysis
 - Network connection monitoring
 - Resource usage analysis
-- Behavioral pattern recognition
+- Behavioural pattern recognition
 
 ### 📊 Assessment Focus
 
 - Threat detection accuracy
-- Behavioral analysis skills
+- Behavioural analysis skills
 - Professional documentation
 - Safety protocol adherence
 
@@ -168,12 +168,12 @@ skills.
 
 ## 📖 Lesson 2: Sandbox Security Analysis
 
-**Foundation Building - Understanding Malicious Behavior**
+**Foundation Building - Understanding Malicious Behaviour**
 
 ### 📍 Overview
 
-Students learn to safely analyze suspicious applications in controlled
-environments, developing fundamental threat detection and behavioral analysis
+Students learn to safely analyse suspicious applications in controlled
+environments, developing fundamental threat detection and behavioural analysis
 skills.
 
 ### ⏱️ Duration: 3-4 hours
@@ -200,12 +200,12 @@ skills.
   multi-container environments**
 - ✅ Safely execute and monitor suspicious applications using system call
   tracing
-- ✅ Identify behavioral indicators of malicious software (malware, backdoors,
+- ✅ Identify behavioural indicators of malicious software (malware, backdoors,
   miners)
 - ✅ Use network monitoring and resource analysis to detect threats
 - ✅ **Understand how container isolation mirrors real-world security testing
   environments**
-- ✅ Document security findings and behavioral patterns professionally
+- ✅ Document security findings and behavioural patterns professionally
 
 ### 🧪 Sample Applications Used
 
@@ -221,12 +221,12 @@ skills.
 - System call monitoring and process analysis
 - Network connection monitoring
 - Resource usage analysis
-- Behavioral pattern recognition
+- Behavioural pattern recognition
 
 ### 📊 Assessment Focus
 
 - Threat detection accuracy
-- Behavioral analysis skills
+- Behavioural analysis skills
 - Professional documentation
 - Safety protocol adherence
 
@@ -238,7 +238,7 @@ skills.
 
 ### 📍 Overview
 
-Students learn to analyze source code for security vulnerabilities using
+Students learn to analyse source code for security vulnerabilities using
 automated tools, developing skills to identify common coding flaws before
 applications run.
 
@@ -260,11 +260,11 @@ applications run.
 - ✅ Understand what Static Application Security Testing is and when to use it
 - ✅ Execute automated security analysis using industry-standard tools (Bandit,
   Semgrep, Safety)
-- ✅ Interpret SAST tool outputs and prioritize security findings by severity
+- ✅ Interpret SAST tool outputs and prioritise security findings by severity
 - ✅ Apply remediation techniques to fix common security vulnerabilities
 - ✅ Understand OWASP Top 10 vulnerabilities through hands-on code analysis
 
-### 🧪 Sample Applications Analyzed
+### 🧪 Sample Applications Analysed
 
 - **Vulnerable Flask App**:
   [`samples/vulnerable-flask-app/`](../samples/vulnerable-flask-app/)
@@ -276,7 +276,7 @@ applications run.
 - **Semgrep**: Pattern-based static analysis for security anti-patterns
 - **Safety**: Python dependency vulnerability scanner
 - **CLI Interface**:
-  [`src/analyzer/analyze_cli.py`](../src/analyzer/analyze_cli.py)
+  [`src/analyser/analyse_cli.py`](../src/analyser/analyse_cli.py)
 
 ### 📊 Assessment Focus
 
@@ -328,7 +328,7 @@ complementing their static analysis skills with runtime testing techniques.
 - **Nikto**: Web vulnerability scanner
 - **Gobuster**: Directory/file enumeration
 - **Custom XSS/SQLi Testers**: Educational vulnerability detection
-- **CLI Interface**: [`src/analyzer/dast_cli.py`](../src/analyzer/dast_cli.py)
+- **CLI Interface**: [`src/analyser/dast_cli.py`](../src/analyser/dast_cli.py)
 
 ### 📊 Assessment Focus
 
@@ -373,7 +373,7 @@ ethical considerations.
 - ✅ Conduct systematic reconnaissance using multiple security analysis
   techniques
 - ✅ Integrate findings from SAST, DAST, Network Analysis, and Sandbox testing
-- ✅ Perform controlled exploitation in authorized, safe environments
+- ✅ Perform controlled exploitation in authorised, safe environments
 - ✅ Create comprehensive professional security reports with risk assessments
 - ✅ Appreciate legal and ethical responsibilities of cybersecurity
   professionals
@@ -388,7 +388,7 @@ ethical considerations.
 ### ⚖️ Ethical Focus
 
 - **Strong Ethical Guidelines**: Legal and responsible testing principles
-- **Authorized Testing Only**: Clear boundaries and permission requirements
+- **Authorised Testing Only**: Clear boundaries and permission requirements
 - **Professional Standards**: Industry-standard ethical practices
 
 ### 📊 Assessment Focus
@@ -430,7 +430,7 @@ security analysis.
 - ✅ Monitor network connections and identify suspicious communication patterns
 - ✅ Perform service discovery and DNS traffic analysis using network scanning
   tools
-- ✅ Distinguish between normal and malicious network behavior patterns
+- ✅ Distinguish between normal and malicious network behaviour patterns
 - ✅ Use real-time network monitoring tools for threat detection and incident
   response
 
@@ -451,7 +451,7 @@ security analysis.
 - **Nmap**: Network scanning and service discovery
 - **DNS Analysis**: DNS query monitoring and threat detection
 - **CLI Interface**:
-  [`src/analyzer/network_cli.py`](../src/analyzer/network_cli.py)
+  [`src/analyser/network_cli.py`](../src/analyser/network_cli.py)
 
 ### 📊 Assessment Focus
 
@@ -496,7 +496,7 @@ organizational analysis
   technical testing
 - ✅ Evaluate technology stack security posture and architectural decisions
 - ✅ Assess security policies, procedures, and organizational practices
-- ✅ Analyze development lifecycle security integration and security culture
+- ✅ Analyse development lifecycle security integration and security culture
 - ✅ Document comprehensive security recommendations for organizational
   improvement
 - ✅ Understand the business impact and strategic importance of security
@@ -504,7 +504,7 @@ organizational analysis
 
 ### 🧪 Assessment Focus
 
-- **Case Study**: Comprehensive analysis of the Unsecure PWA organization using
+- **Case Study**: Comprehensive analysis of the Unsecure PWA organisation using
   all previous technical findings
 - **Root Cause Analysis**: Connecting technical vulnerabilities to
   organizational factors
@@ -657,7 +657,7 @@ Each lesson requires:
 ### Career Pathways
 
 - **Cybersecurity Analyst**: Entry-level security monitoring and analysis roles
-- **Penetration Tester**: Specialized ethical hacking and vulnerability
+- **Penetration Tester**: Specialised ethical hacking and vulnerability
   assessment
 - **Security Engineer**: Security tool development and infrastructure protection
 - **Security Consultant**: Independent security assessment and advisory services
@@ -676,7 +676,7 @@ Each lesson requires:
 - **Ethical Understanding**: Demonstrated knowledge of responsible security
   testing principles
 
-### Program Success Metrics
+### Programme Success Metrics
 
 - **Completion Rate**: Percentage of students successfully completing all 5
   lessons

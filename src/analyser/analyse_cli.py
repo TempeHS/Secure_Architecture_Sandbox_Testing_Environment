@@ -3,32 +3,34 @@
 Command-line interface for the Static Application Security Testing (SAST) Module
 
 This script provides an easy-to-use CLI for running static security analysis
-on code files and applications. SAST analyzes source code without executing it.
+on code files and applications. SAST analyses source code without executing it.
 
 For Dynamic Application Security Testing (DAST), use dast_cli.py instead.
 SAST and DAST are kept separate for educational clarity:
-- SAST: Analyzes source code (this tool)
+- SAST: Analyses source code (this tool)
 - DAST: Tests running applications (dast_cli.py)
 
 Usage Examples:
-    # Analyze a single file
-    python analyze_cli.py /path/to/file.py
+    # Analyse a single file
+    python analyse_cli.py /path/to/file.py
 
-    # Analyze a directory with specific tools
-    python analyze_cli.py /path/to/app --tools bandit safety
+    # Analyse a directory with specific tools
+    python analyse_cli.py /path/to/app --tools bandit safety
 
-    # Analyze all demo applications
-    python analyze_cli.py --demo-apps
+    # Analyse all demo applications
+    python analyse_cli.py --demo-apps
 
     # Generate detailed report
-    python analyze_cli.py /path/to/app --output report.json --format json
+    python analyse_cli.py /path/to/app --output report.json --format json
 
     # Educational mode with explanations
-    python analyze_cli.py /path/to/app --educational
+    python analyse_cli.py /path/to/app --educational
 """
 
-from analyzer.static_analyzer import (
-    StaticAnalyzer, AnalysisReport, analyze_demo_applications, logger
+import os
+import sys
+from analyser.static_analyser import (
+    StaticAnalyser, AnalysisReport, analyse_demo_applications, logger
 )
 import argparse
 import json
@@ -54,13 +56,13 @@ class AnalysisCLI:
     """Command-line interface for static security analysis"""
 
     def __init__(self):
-        self.analyzer = StaticAnalyzer()
+        self.analyser = StaticAnalyser()
 
     def run_analysis(self, args) -> None:
         """Execute analysis based on command-line arguments"""
 
         if args.demo_apps:
-            self._analyze_demo_applications(args)
+            self._analyse_demo_applications(args)
             return
 
         if not args.target:
@@ -80,7 +82,7 @@ class AnalysisCLI:
             print(f"🔍 Starting security analysis of: {args.target}")
             print(f"📊 Analysis types: {', '.join(analysis_types)}")
 
-            report = self.analyzer.analyze_target(args.target, analysis_types)
+            report = self.analyser.analyse_target(args.target, analysis_types)
 
             # Output results
             if args.output:
@@ -104,12 +106,12 @@ class AnalysisCLI:
                 traceback.print_exc()
             sys.exit(1)
 
-    def _analyze_demo_applications(self, args) -> None:
-        """Analyze all demo applications"""
-        print("🎯 Analyzing all demo applications...")
+    def _analyse_demo_applications(self, args) -> None:
+        """Analyse all demo applications"""
+        print("🎯 Analysing all demo applications...")
 
         try:
-            results = analyze_demo_applications()
+            results = analyse_demo_applications()
 
             if not results:
                 print("❌ No demo applications found or analysis failed")
@@ -216,7 +218,7 @@ class AnalysisCLI:
 
         print(f"📂 Target: {report.target_path}")
         print(f"⏰ Analysis Time: {report.analysis_timestamp}")
-        print(f"📁 Files Analyzed: {report.total_files_analyzed}")
+        print(f"📁 Files Analysed: {report.total_files_analysed}")
         print(
             f"🔧 Tools Used: {', '.join(report.tools_used) if report.tools_used else 'None'}")
 
@@ -256,7 +258,7 @@ class AnalysisCLI:
         print(f"\n🎓 EDUCATIONAL INSIGHTS")
         print("-" * 40)
 
-        # Categorize findings for educational purposes
+        # Categorise findings for educational purposes
         categories = {}
         for finding in report.findings:
             category = finding.category or 'other'
@@ -334,7 +336,7 @@ class AnalysisCLI:
             report_dict = {
                 'target_path': report.target_path,
                 'analysis_timestamp': report.analysis_timestamp,
-                'total_files_analyzed': report.total_files_analyzed,
+                'total_files_analysed': report.total_files_analysed,
                 'tools_used': report.tools_used,
                 'findings': [
                     {
@@ -367,7 +369,7 @@ class AnalysisCLI:
                     markdown_path = output_path.replace('.json', '.md')
                     generator.generate_markdown_report(
                         json_data=report_dict,
-                        analyzer_type='sast',
+                        analyser_type='sast',
                         output_file=os.path.basename(markdown_path)
                     )
                     logger.info(f"Generated markdown report: {markdown_path}")
@@ -381,7 +383,7 @@ class AnalysisCLI:
 
                 f.write(f"Target: {report.target_path}\n")
                 f.write(f"Analysis Time: {report.analysis_timestamp}\n")
-                f.write(f"Files Analyzed: {report.total_files_analyzed}\n")
+                f.write(f"Files Analysed: {report.total_files_analysed}\n")
                 f.write(f"Tools Used: {', '.join(report.tools_used)}\n\n")
 
                 f.write("SUMMARY:\n")
@@ -421,7 +423,7 @@ class AnalysisCLI:
 
             combined_findings.extend(report.findings)
             combined_tools.update(report.tools_used)
-            total_files += report.total_files_analyzed
+            total_files += report.total_files_analysed
 
         # Generate combined summary
         summary = {'total': len(combined_findings), 'critical': 0,
@@ -435,7 +437,7 @@ class AnalysisCLI:
             target_path="Combined Demo Applications",
             analysis_timestamp=reports_dict[list(reports_dict.keys())[
                 0]].analysis_timestamp,
-            total_files_analyzed=total_files,
+            total_files_analysed=total_files,
             tools_used=list(combined_tools),
             findings=combined_findings,
             summary=summary,
@@ -450,25 +452,25 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Analyze a Python file
-  python analyze_cli.py /path/to/app.py
+  # Analyse a Python file
+  python analyse_cli.py /path/to/app.py
   
-  # Analyze directory with specific tools
-  python analyze_cli.py /path/to/app --tools bandit safety
+  # Analyse directory with specific tools
+  python analyse_cli.py /path/to/app --tools bandit safety
   
-  # Analyze all demo applications
-  python analyze_cli.py --demo-apps --educational
+  # Analyse all demo applications
+  python analyse_cli.py --demo-apps --educational
   
   # Generate detailed JSON report
-  python analyze_cli.py /path/to/app --output report.json --format json --verbose
+  python analyse_cli.py /path/to/app --output report.json --format json --verbose
         """
     )
 
     parser.add_argument('target', nargs='?',
-                        help='Target file or directory to analyze')
+                        help='Target file or directory to analyse')
 
     parser.add_argument('--demo-apps', action='store_true',
-                        help='Analyze all demo applications in samples directory')
+                        help='Analyse all demo applications in samples directory')
 
     parser.add_argument('--tools', nargs='+',
                         choices=['bandit', 'safety', 'semgrep', 'npm', 'all'],

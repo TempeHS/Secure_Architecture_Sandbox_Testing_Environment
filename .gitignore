@@ -1,3 +1,9 @@
+# Ignore everything in reports
+reports/*
+
+# But do NOT ignore samples subfolder
+!reports/samples/
+
 # Python
 __pycache__/
 *.py[cod]

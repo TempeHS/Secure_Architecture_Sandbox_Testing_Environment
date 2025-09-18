@@ -29,9 +29,9 @@
 After reviewing this DAST analysis report, you should be able to:
 
 1. Understand how dynamic testing identifies runtime vulnerabilities
-2. Learn to analyze web application security through external testing
-3. Recognize common web vulnerabilities like XSS and SQL injection
-4. Apply defense-in-depth strategies for web application security
+2. Learn to analyse web application security through external testing
+3. Recognise common web vulnerabilities like XSS and SQL injection
+4. Apply defence-in-depth strategies for web application security
 
 ## 🔍 Detailed Findings
 
@@ -41,7 +41,7 @@ The following 6 security issues were identified:
 
 #### ![MEDIUM](https://img.shields.io/badge/MEDIUM-yellow?style=flat) Missing Security Header: X-Frame-Options
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The response is missing the 'X-Frame-Options' security header. This header provides Clickjacking protection.
 
@@ -57,7 +57,7 @@ The following 6 security issues were identified:
 
 #### ![MEDIUM](https://img.shields.io/badge/MEDIUM-yellow?style=flat) Missing Security Header: X-Content-Type-Options
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The response is missing the 'X-Content-Type-Options' security header. This header provides MIME type sniffing protection.
 
@@ -73,7 +73,7 @@ The following 6 security issues were identified:
 
 #### ![MEDIUM](https://img.shields.io/badge/MEDIUM-yellow?style=flat) Missing Security Header: X-XSS-Protection
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The response is missing the 'X-XSS-Protection' security header. This header provides XSS filtering.
 
@@ -89,7 +89,7 @@ The following 6 security issues were identified:
 
 #### ![MEDIUM](https://img.shields.io/badge/MEDIUM-yellow?style=flat) Missing Security Header: Strict-Transport-Security
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The response is missing the 'Strict-Transport-Security' security header. This header provides HTTPS enforcement.
 
@@ -105,7 +105,7 @@ The following 6 security issues were identified:
 
 #### ![MEDIUM](https://img.shields.io/badge/MEDIUM-yellow?style=flat) Missing Security Header: Content-Security-Policy
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The response is missing the 'Content-Security-Policy' security header. This header provides Content security policy.
 
@@ -121,7 +121,7 @@ The following 6 security issues were identified:
 
 #### ![LOW](https://img.shields.io/badge/LOW-green?style=flat) Server Information Disclosure
 
-![header_analyzer](https://img.shields.io/badge/Tool-header_analyzer-blue?style=flat)
+![header_analyser](https://img.shields.io/badge/Tool-header_analyser-blue?style=flat)
 
 **Description:** The server header reveals detailed version information: 'Werkzeug/3.1.3 Python/3.9.23'. This information can help attackers identify specific vulnerabilities.
 

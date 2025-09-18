@@ -4,7 +4,7 @@
 
 This maintenance guide provides comprehensive instructions for maintaining,
 updating, and extending the Secure Architecture Sandbox Testing Environment project. It covers folder
-organization, content style guides, Docker requirements, and repository
+organisation, content style guides, Docker requirements, and repository
 management standards.
 
 ## 📁 Repository Management
@@ -35,7 +35,7 @@ management standards.
 - **Feature branches**: Use descriptive names (feature/new-exercise)
 - **Release branches**: For major version releases
 - **Hotfix branches**: For critical security fixest Structure & Folder
-  Organization
+  Organisation
 
 ### Root Directory Structure
 
@@ -94,14 +94,14 @@ Secure_Architecture_Sandbox_Testing_Environment/
   ├── quick-reference-guides/    # Tool quick references
   │   └── [tool]-quick-reference.md # Tool command references
   ├── lesson-plans/              # Structured lesson plans (future)
-  ├── lesson-structure.md        # Course organization and progression
+  ├── lesson-structure.md        # Course organisation and progression
   └── maintenance-guide.md       # This document
   ```
 
 #### `reports/`
 
 - **Purpose**: Auto-generated security analysis reports
-- **Organization**: Timestamped files (YYYYMMDD_HHMMSS format)
+- **Organisation**: Timestamped files (YYYYMMDD_HHMMSS format)
 - **Types**: SAST, DAST, Network Analysis reports in JSON/text format
 - **Maintenance**: Implement rotation policy for large repositories
 
@@ -126,13 +126,13 @@ Secure_Architecture_Sandbox_Testing_Environment/
 - **Structure**:
   ```
   src/
-  ├── analyzer/                  # Security analysis modules
-  │   ├── analyze_cli.py         # SAST command-line interface
+  ├── analyser/                  # Security analysis modules
+  │   ├── analyse_cli.py         # SAST command-line interface
   │   ├── dast_cli.py           # DAST command-line interface
   │   ├── network_cli.py        # Network analysis CLI
-  │   ├── static_analyzer.py    # SAST implementation
-  │   ├── dynamic_analyzer.py   # DAST implementation
-  │   ├── network_analyzer.py   # Network analysis implementation
+  │   ├── static_analyser.py    # SAST implementation
+  │   ├── dynamic_analyser.py   # DAST implementation
+  │   ├── network_analyser.py   # Network analysis implementation
   │   └── vulnerability_database.py # Vulnerability explanations
   └── reporter/                  # Report generation (future)
       ├── report_cli.py         # Report generation CLI
@@ -285,20 +285,20 @@ All exercise files should follow this structure:
 - **Type hints**: Use where beneficial for clarity
 - **Error handling**: Comprehensive exception handling with educational messages
 - **Comments**: Explain security concepts and educational points
-- **Educational focus**: Prioritize clarity over performance optimization
+- **Educational focus**: Prioritise clarity over performance optimization
 
 Example:
 
 ```python
-def analyze_sql_injection(code_content: str) -> List[Finding]:
+def analyse_sql_injection(code_content: str) -> List[Finding]:
     """
-    Analyze code for SQL injection vulnerabilities.
+    Analyse code for SQL injection vulnerabilities.
 
     This function demonstrates how SAST tools detect SQL injection
     by looking for common anti-patterns in database queries.
 
     Args:
-        code_content: The source code to analyze
+        code_content: The source code to analyse
 
     Returns:
         List of security findings with educational explanations
@@ -312,7 +312,7 @@ def analyze_sql_injection(code_content: str) -> List[Finding]:
 #### Shell Script Standards
 
 - **Shebang**: Always include `#!/bin/bash` or `#!/bin/zsh`
-- **Error handling**: Use `set -e` for fail-fast behavior
+- **Error handling**: Use `set -e` for fail-fast behaviour
 - **Comments**: Explain each major section
 - **Variables**: Use descriptive names and quote appropriately
 
@@ -323,7 +323,7 @@ def analyze_sql_injection(code_content: str) -> List[Finding]:
 - **Educational clarity**: Vulnerabilities should be obvious and well-commented
 - **Real-world relevance**: Based on actual security issues
 - **Appropriate scope**: Suitable for high school education level
-- **Safety**: No actual malicious behavior in Codespaces environment
+- **Safety**: No actual malicious behaviour in Codespaces environment
 
 #### Application Structure
 
@@ -395,8 +395,8 @@ environment:
 
 - **Memory limits**: Keep containers under 1GB RAM usage
 - **CPU limits**: Limit CPU usage to 0.8 cores
-- **Image size**: Minimize container image sizes
-- **Startup time**: Optimize for fast container startup
+- **Image size**: Minimise container image sizes
+- **Startup time**: Optimise for fast container startup
 
 #### Development Experience
 
@@ -497,7 +497,7 @@ should use the pre-converted DOCX files provided in the repository.
 - [ ] Verify Git LFS tracking and clean up old files
 - [ ] **Run complete test suite (76 tests across 5 modules) to ensure
       functionality**
-- [ ] **Check for missing Python imports in analyzer modules (tempfile, etc.)**
+- [ ] **Check for missing Python imports in analyser modules (tempfile, etc.)**
 - [ ] **Validate educational mode implementations across all CLI tools**
 
 ### Content Reviews (Per Semester)
@@ -527,7 +527,7 @@ should use the pre-converted DOCX files provided in the repository.
 ### Import Dependencies
 
 **Issue**: Missing Python imports causing runtime failures **Example**:
-`tempfile` import missing in `dynamic_analyzer.py` causing Gobuster to fail
+`tempfile` import missing in `dynamic_analyser.py` causing Gobuster to fail
 **Detection**: Run complete test suite regularly to catch import errors
 **Solution**:
 
@@ -593,14 +593,14 @@ major changes **Command**: `python -m pytest tests/test_*.py -v`
 1. **Diagnosis**: Check logs and resource usage
 2. **Recovery**: Restart services or rebuild containers
 3. **Prevention**: Identify and fix root causes
-4. **Monitoring**: Implement better health checks
+4. **Monitoring**: Implement better health cheques
 
 ## 📞 Support and Contact
 
 ### Maintainer Responsibilities
 
 - **Code reviews**: Review all pull requests for educational value
-- **Issue triage**: Prioritize issues based on educational impact
+- **Issue triage**: Prioritise issues based on educational impact
 - **Documentation**: Keep all guides current and accurate
 - **Community**: Respond to user questions and feedback
 

@@ -3,7 +3,7 @@
 Backdoor Communication Simulator
 Educational tool for demonstrating backdoor/malware communication patterns.
 
-This script simulates the network behavior of backdoors and malware to help
+This script simulates the network behaviour of backdoors and malware to help
 students understand and identify these threats in network traffic.
 
 Author: Secure Architecture Sandbox Testing Environment
@@ -52,7 +52,7 @@ class BackdoorSimulator:
             'KEYLOGGER_UPLOAD': 'Keyloggers upload captured keystrokes to remote servers',
             'BACKDOOR_INSTALLATION': 'Installation phase creates network connections for setup'
         }
-        return notes.get(activity_type, 'Analyze this backdoor behavior pattern')
+        return notes.get(activity_type, 'Analyse this backdoor behaviour pattern')
 
     def simulate_reverse_shell(self, duration=60):
         """Simulate reverse shell connection attempts."""
@@ -252,7 +252,7 @@ class BackdoorSimulator:
 
     def simulate_persistence_checks(self, duration=60):
         """Simulate backdoor persistence verification."""
-        print(f"\n🔄 Simulating persistence checks for {duration} seconds...")
+        print(f"\n🔄 Simulating persistence cheques for {duration} seconds...")
 
         start_time = time.time()
         check_count = 0
@@ -296,7 +296,7 @@ class BackdoorSimulator:
                 sock.close()
                 check_count += 1
 
-                # Regular persistence checks
+                # Regular persistence cheques
                 time.sleep(random.uniform(45, 120))
 
             except Exception as e:
@@ -306,7 +306,7 @@ class BackdoorSimulator:
                     'LOW'
                 )
 
-        print(f"🔄 Performed {check_count} persistence checks")
+        print(f"🔄 Performed {check_count} persistence cheques")
 
     def run_scenario(self, duration=300):
         """Run the complete backdoor simulation scenario."""
@@ -316,7 +316,7 @@ class BackdoorSimulator:
         print(f"Duration: {duration} seconds")
         print(f"Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print()
-        print("⚠️  WARNING: Simulating malware network behavior for education")
+        print("⚠️  WARNING: Simulating malware network behaviour for education")
         print("   Use only in controlled environments for learning purposes")
         print()
 
@@ -361,7 +361,7 @@ class BackdoorSimulator:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             filename = f"backdoor_simulation_{timestamp}.json"
 
-        # Categorize activities by type
+        # Categorise activities by type
         activity_summary = {}
         for activity in self.activity_log:
             activity_type = activity['type']
@@ -382,12 +382,12 @@ class BackdoorSimulator:
                 'Regular beacon traffic to external servers',
                 'Data exfiltration to suspicious destinations',
                 'Encoded/encrypted communication patterns',
-                'Persistence mechanism checks'
+                'Persistence mechanism cheques'
             ],
             'detection_methods': [
                 'Monitor connections to unusual ports',
                 'Look for regular, periodic network traffic',
-                'Analyze traffic for encoded/encrypted data',
+                'Analyse traffic for encoded/encrypted data',
                 'Check for reverse shell patterns',
                 'Monitor data volume to external destinations'
             ]
@@ -420,9 +420,9 @@ def main():
     print("  • Command & Control beacons")
     print("  • Data exfiltration attempts")
     print("  • Keylogger data uploads")
-    print("  • Persistence verification checks")
+    print("  • Persistence verification cheques")
     print()
-    print("⚠️  Educational Use Only - Simulated Malware Behavior")
+    print("⚠️  Educational Use Only - Simulated Malware Behaviour")
     print()
 
     input("Press Enter to start backdoor simulation...")

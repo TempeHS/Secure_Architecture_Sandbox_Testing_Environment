@@ -15,7 +15,7 @@
     "OWASP"
   ],
   "author": "Cybersecurity Education Project",
-  "license": "MIT",
+  "licence": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "body-parser": "^1.20.2",

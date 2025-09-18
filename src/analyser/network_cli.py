@@ -8,17 +8,17 @@ including connection monitoring, service scanning, and threat detection.
 Operates independently from SAST and DAST tools for educational clarity.
 
 Usage:
-    python src/analyzer/network_cli.py --monitor-connections
-    python src/analyzer/network_cli.py --scan-services localhost
-    python src/analyzer/network_cli.py --capture-traffic --duration 60
-    python src/analyzer/network_cli.py --dns-analysis --duration 30
+    python src/analyser/network_cli.py --monitor-connections
+    python src/analyser/network_cli.py --scan-services localhost
+    python src/analyser/network_cli.py --capture-traffic --duration 60
+    python src/analyser/network_cli.py --dns-analysis --duration 30
 
 Author: Cybersecurity Education Platform
-License: Educational Use Only
+Licence: Educational Use Only
 """
 
-from analyzer.vulnerability_database import VulnerabilityDatabase
-from analyzer.network_analyzer import NetworkAnalyzer
+from analyser.vulnerability_database import VulnerabilityDatabase
+from analyser.network_analyser import NetworkAnalyser
 import argparse
 import sys
 import os
@@ -90,25 +90,25 @@ class NetworkCLI:
             epilog="""
 Examples:
   # Monitor active network connections
-  python src/analyzer/network_cli.py --monitor-connections
+  python src/analyser/network_cli.py --monitor-connections
 
   # Scan services on localhost
-  python src/analyzer/network_cli.py --scan-services localhost
+  python src/analyser/network_cli.py --scan-services localhost
 
-  # Capture and analyze network traffic
-  python src/analyzer/network_cli.py --capture-traffic --duration 60
+  # Capture and analyse network traffic
+  python src/analyser/network_cli.py --capture-traffic --duration 60
 
-  # Analyze DNS traffic patterns
-  python src/analyzer/network_cli.py --dns-analysis --duration 30
+  # Analyse DNS traffic patterns
+  python src/analyser/network_cli.py --dns-analysis --duration 30
 
   # Run demo with educational explanations
-  python src/analyzer/network_cli.py --demo-network --educational
+  python src/analyser/network_cli.py --demo-network --educational
 
 Analysis Types:
   --monitor-connections    Monitor active network connections
   --scan-services TARGET   Scan network services on target
-  --capture-traffic        Capture and analyze network traffic
-  --dns-analysis          Analyze DNS traffic patterns
+  --capture-traffic        Capture and analyse network traffic
+  --dns-analysis          Analyse DNS traffic patterns
   --demo-network          Run network analysis demonstration
 
 Output Options:
@@ -135,12 +135,12 @@ Output Options:
         analysis_group.add_argument(
             '--capture-traffic',
             action='store_true',
-            help='Capture and analyze network traffic patterns'
+            help='Capture and analyse network traffic patterns'
         )
         analysis_group.add_argument(
             '--dns-analysis',
             action='store_true',
-            help='Analyze DNS traffic for suspicious patterns'
+            help='Analyse DNS traffic for suspicious patterns'
         )
         analysis_group.add_argument(
             '--demo-network',
@@ -202,13 +202,13 @@ Output Options:
             print("🌐 NETWORK CONNECTION MONITORING")
             print("=" * 60)
 
-        analyzer = NetworkAnalyzer(
+        analyser = NetworkAnalyser(
             interface=args.interface,
             educational_mode=args.educational
         )
 
         # Monitor active connections
-        results = analyzer.monitor_active_connections()
+        results = analyser.monitor_active_connections()
 
         # Generate and save report
         report_path = self._generate_report(
@@ -231,13 +231,13 @@ Output Options:
             print("=" * 60)
             print(f"Target: {target}")
 
-        analyzer = NetworkAnalyzer(
+        analyser = NetworkAnalyser(
             interface=args.interface,
             educational_mode=args.educational
         )
 
         # Scan network services
-        results = analyzer.scan_network_services(target)
+        results = analyser.scan_network_services(target)
 
         # Generate and save report
         report_path = self._generate_report(results, args, "service_scan")
@@ -259,13 +259,13 @@ Output Options:
             if args.filter:
                 print(f"Filter: {args.filter}")
 
-        analyzer = NetworkAnalyzer(
+        analyser = NetworkAnalyser(
             interface=args.interface,
             educational_mode=args.educational
         )
 
-        # Capture and analyze traffic
-        results = analyzer.start_packet_capture(args.duration, args.filter)
+        # Capture and analyse traffic
+        results = analyser.start_packet_capture(args.duration, args.filter)
 
         # Generate and save report
         report_path = self._generate_report(results, args, "traffic_capture")
@@ -285,13 +285,13 @@ Output Options:
             print("=" * 60)
             print(f"Duration: {args.duration} seconds")
 
-        analyzer = NetworkAnalyzer(
+        analyser = NetworkAnalyser(
             interface=args.interface,
             educational_mode=args.educational
         )
 
-        # Analyze DNS traffic
-        results = analyzer.analyze_dns_traffic(args.duration)
+        # Analyse DNS traffic
+        results = analyser.analyse_dns_traffic(args.duration)
 
         # Generate and save report
         report_path = self._generate_report(results, args, "dns_analysis")
@@ -326,15 +326,15 @@ Output Options:
 
     def _run_demo_analysis(self, args) -> Dict[str, Any]:
         """Run demonstration analysis with sample data"""
-        analyzer = NetworkAnalyzer(educational_mode=True)
+        analyser = NetworkAnalyser(educational_mode=True)
 
         # Simulate network analysis results
         demo_results = {
             'timestamp': datetime.now().isoformat(),
             'analysis_type': 'network_demonstration',
-            'connection_monitoring': analyzer.monitor_active_connections(),
-            'service_scanning': analyzer.scan_network_services('localhost'),
-            'educational_insights': analyzer.generate_educational_insights(),
+            'connection_monitoring': analyser.monitor_active_connections(),
+            'service_scanning': analyser.scan_network_services('localhost'),
+            'educational_insights': analyser.generate_educational_insights(),
             'demo_mode': True
         }
 
@@ -418,7 +418,7 @@ Output Options:
         print("-" * 40)
         print(
             f"Analysis Duration: {results.get('analysis_duration', 0):.1f} seconds")
-        print(f"Packets Analyzed: {results.get('packet_count', 0)}")
+        print(f"Packets Analysed: {results.get('packet_count', 0)}")
         print(f"Unique IP Addresses: {results.get('unique_ips', 0)}")
         print(f"Security Findings: {summary.get('total_findings', 0)}")
 
@@ -693,7 +693,7 @@ Output Options:
         lines.extend([
             "📊 TRAFFIC ANALYSIS SUMMARY",
             f"Analysis Duration: {results.get('analysis_duration', 0):.1f} seconds",
-            f"Packets Analyzed: {results.get('packet_count', 0)}",
+            f"Packets Analysed: {results.get('packet_count', 0)}",
             f"Unique IP Addresses: {results.get('unique_ips', 0)}",
             f"Security Findings: {summary.get('total_findings', 0)}",
             ""

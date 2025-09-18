@@ -21,14 +21,14 @@ logger = logging.getLogger(__name__)
 
 
 class DASTCommandValidationTest(unittest.TestCase):
-    """Test suite to validate DAST analyzer commands."""
+    """Test suite to validate DAST analyser commands."""
 
     @classmethod
     def setUpClass(cls):
         """Set up test environment once for all tests."""
         cls.project_root = Path(__file__).parent.parent
         os.chdir(cls.project_root)
-        cls.dast_cli = "src/analyzer/dast_cli.py"
+        cls.dast_cli = "src/analyser/dast_cli.py"
         cls.timeout = 120  # seconds - DAST takes longer
         cls.reports_dir = cls.project_root / "reports"
         cls.reports_dir.mkdir(exist_ok=True)
@@ -58,7 +58,7 @@ class DASTCommandValidationTest(unittest.TestCase):
                 logger.warning(f"⚠️ {url} may not be available")
 
     def test_01_dast_help_command(self):
-        """Test DAST analyzer help command."""
+        """Test DAST analyser help command."""
         logger.info("Testing DAST help command...")
 
         try:

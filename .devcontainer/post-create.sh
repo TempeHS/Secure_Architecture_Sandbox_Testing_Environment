@@ -46,8 +46,8 @@ echo "📥 Installing Git LFS..."
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 sudo apt-get install -y git-lfs
 
-# Initialize Git LFS for the user
-echo "🔧 Initializing Git LFS..."
+# Initialise Git LFS for the user
+echo "🔧 Initialising Git LFS..."
 git lfs install
 
 # Create necessary directories with proper permissions
@@ -258,7 +258,7 @@ This environment is ready for sandbox testing for secure architecture!
 
 - **Python 3.11+**: Main development language
 - **Flask**: Web framework for sample apps
-- **Docker**: Containerization
+- **Docker**: Containerisation
 - **VS Code**: Fully configured IDE
 
 ## Ports for Testing

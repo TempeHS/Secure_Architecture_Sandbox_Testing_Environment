@@ -134,7 +134,7 @@ Students will learn to:
 
 1. Identify Python-specific security issues
 2. Understand template injection vulnerabilities
-3. Recognize insecure deserialization risks
+3. Recognise insecure deserialization risks
 4. Use Python security tools effectively
 5. Implement secure coding practices in Flask
 

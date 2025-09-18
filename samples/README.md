@@ -101,7 +101,7 @@ python main.py
 
 1. **Beginner Level:** Start with the Flask app - clearer Python code structure
 2. **Intermediate Level:** Progress to Node.js app - different language patterns
-3. **Advanced Level:** Analyze the Unsecure PWA - real-world complexity
+3. **Advanced Level:** Analyse the Unsecure PWA - real-world complexity
 
 ### **For Security Testing:**
 
@@ -182,12 +182,12 @@ nikto -h localhost:5001 -C all    # Comprehensive web testing
 
 ## 🎓 **Learning Objectives**
 
-After analyzing these applications, students should understand:
+After analysing these applications, students should understand:
 
 1. **Common Vulnerability Patterns:** How security flaws manifest in code
 2. **Attack Vectors:** How vulnerabilities can be exploited
 3. **Detection Methods:** How security tools identify issues
-4. **Risk Assessment:** How to categorize and prioritize findings
+4. **Risk Assessment:** How to categorise and prioritise findings
 5. **Remediation Strategies:** How to fix identified vulnerabilities
 
 ---
@@ -196,7 +196,7 @@ After analyzing these applications, students should understand:
 
 1. **Isolated Environment:** Only run these applications in the provided sandbox
 2. **No Production Use:** Never deploy these applications in real environments
-3. **Educational Purpose:** Use only for learning and authorized testing
+3. **Educational Purpose:** Use only for learning and authorised testing
 4. **Responsible Disclosure:** Apply learned concepts ethically in real
    scenarios
 

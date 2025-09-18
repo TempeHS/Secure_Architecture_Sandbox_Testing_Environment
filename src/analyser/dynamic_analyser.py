@@ -16,7 +16,7 @@ Supported Analysis Types:
 - Educational Vulnerability Demonstrations
 
 Author: Secure Architecture Sandbox Testing Environment
-License: MIT (Educational Use)
+Licence: MIT (Educational Use)
 """
 
 import os
@@ -273,7 +273,7 @@ class VulnerabilityTester:
         return findings
 
 
-class DynamicAnalyzer:
+class DynamicAnalyser:
     """Main class for dynamic application security testing"""
 
     def __init__(self):
@@ -307,7 +307,7 @@ class DynamicAnalyzer:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def analyze_application(self, target_url: str,
+    def analyse_application(self, target_url: str,
                             tools: Optional[List[str]] = None,
                             deep_scan: bool = False) -> DynamicAnalysisReport:
         """Perform comprehensive dynamic analysis of a web application"""
@@ -407,7 +407,7 @@ class DynamicAnalyzer:
             for header, description in security_headers.items():
                 if header not in response.headers:
                     finding = DynamicFinding(
-                        tool="header_analyzer",
+                        tool="header_analyser",
                         severity="medium",
                         title=f"Missing Security Header: {header}",
                         description=f"The response is missing the '{header}' security header. "
@@ -425,7 +425,7 @@ class DynamicAnalyzer:
             server_header = response.headers.get('Server', '')
             if server_header and not any(x in server_header.lower() for x in ['nginx', 'apache']):
                 finding = DynamicFinding(
-                    tool="header_analyzer",
+                    tool="header_analyser",
                     severity="low",
                     title="Server Information Disclosure",
                     description=f"The server header reveals detailed version information: '{server_header}'. "
@@ -452,7 +452,7 @@ class DynamicAnalyzer:
             for pattern in debug_patterns:
                 if re.search(pattern, response.text, re.IGNORECASE):
                     finding = DynamicFinding(
-                        tool="content_analyzer",
+                        tool="content_analyser",
                         severity="medium",
                         title="Debug Information Exposure",
                         description="The application appears to be running in debug mode or exposing "
@@ -621,8 +621,8 @@ class DynamicAnalyzer:
         return (total_score / max_possible * 100) if max_possible > 0 else 0
 
 
-def analyze_demo_applications_dynamic(educational: bool = True) -> Dict[str, DynamicAnalysisReport]:
-    """Analyze all demo applications with dynamic testing"""
+def analyse_demo_applications_dynamic(educational: bool = True) -> Dict[str, DynamicAnalysisReport]:
+    """Analyse all demo applications with dynamic testing"""
 
     # Application endpoints (assuming they're running)
     demo_apps = {
@@ -630,17 +630,17 @@ def analyze_demo_applications_dynamic(educational: bool = True) -> Dict[str, Dyn
         'unsecure-pwa': 'http://localhost:9090'
     }
 
-    analyzer = DynamicAnalyzer()
+    analyser = DynamicAnalyser()
     results = {}
 
     for app_name, url in demo_apps.items():
         try:
-            logger.info(f"Analyzing {app_name} at {url}")
+            logger.info(f"Analysing {app_name} at {url}")
 
             # Check if application is accessible
             response = requests.get(url, timeout=5)
             if response.status_code == 200:
-                report = analyzer.analyze_application(url, deep_scan=True)
+                report = analyser.analyse_application(url, deep_scan=True)
                 results[app_name] = report
             else:
                 logger.warning(f"{app_name} not accessible at {url}")

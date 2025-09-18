@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Initialize insecure behaviors
+    // Initialize insecure behaviours
     displayUserInput();
     storeSensitiveData();
     debugMode();

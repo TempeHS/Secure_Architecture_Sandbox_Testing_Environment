@@ -34,12 +34,12 @@ class ComprehensiveSecurityReporter:
         self.session_id = str(uuid.uuid4())[:8]
         self.timestamp = datetime.now()
 
-        # Paths to analyzer CLIs
-        self.analyzer_dir = Path(__file__).parent
-        self.sast_cli = self.analyzer_dir / "analyze_cli.py"
-        self.dast_cli = self.analyzer_dir / "dast_cli.py"
-        self.network_cli = self.analyzer_dir / "network_cli.py"
-        self.pentest_cli = self.analyzer_dir / "pentest_cli.py"
+        # Paths to analyser CLIs
+        self.analyser_dir = Path(__file__).parent
+        self.sast_cli = self.analyser_dir / "analyse_cli.py"
+        self.dast_cli = self.analyser_dir / "dast_cli.py"
+        self.network_cli = self.analyser_dir / "network_cli.py"
+        self.pentest_cli = self.analyser_dir / "pentest_cli.py"
 
         # Results storage
         self.individual_reports: Dict[str, Dict[str, Any]] = {}
@@ -315,23 +315,23 @@ class ComprehensiveSecurityReporter:
             print(f"   ❌ Penetration testing error: {str(e)}")
             self.execution_log.append(f"Penetration testing error: {str(e)}")
 
-    def _load_report(self, analyzer_type: str, report_path: Path) -> None:
-        """Load individual analyzer report"""
+    def _load_report(self, analyser_type: str, report_path: Path) -> None:
+        """Load individual analyser report"""
         try:
             if report_path.exists():
                 with open(report_path, 'r') as f:
                     report_data = json.load(f)
-                self.individual_reports[analyzer_type] = report_data
+                self.individual_reports[analyser_type] = report_data
                 findings_count = self._count_findings(report_data)
-                print(f"   📊 Loaded {analyzer_type.upper()} report "
+                print(f"   📊 Loaded {analyser_type.upper()} report "
                       f"with {findings_count} findings")
             else:
                 print(f"   ⚠️  Report file not found: {report_path}")
 
         except Exception as e:
-            print(f"   ❌ Failed to load {analyzer_type} report: {str(e)}")
+            print(f"   ❌ Failed to load {analyser_type} report: {str(e)}")
             self.execution_log.append(
-                f"Failed to load {analyzer_type} report: {str(e)}"
+                f"Failed to load {analyser_type} report: {str(e)}"
             )
 
     def _count_findings(self, report_data: Dict[str, Any]) -> int:
@@ -377,7 +377,7 @@ class ComprehensiveSecurityReporter:
         return str(markdown_report_path)
 
     def _create_comprehensive_json(self) -> Dict[str, Any]:
-        """Create comprehensive JSON report combining all analyzer results"""
+        """Create comprehensive JSON report combining all analyser results"""
         total_findings = 0
         all_findings = []
         all_tools = set()
@@ -386,8 +386,8 @@ class ComprehensiveSecurityReporter:
         }
 
         # Aggregate data from all reports
-        for analyzer_type, report_data in self.individual_reports.items():
-            findings = self._extract_findings(report_data, analyzer_type)
+        for analyser_type, report_data in self.individual_reports.items():
+            findings = self._extract_findings(report_data, analyser_type)
             all_findings.extend(findings)
             total_findings += len(findings)
 
@@ -409,8 +409,8 @@ class ComprehensiveSecurityReporter:
                 'timestamp': self.timestamp.isoformat(),
                 'assessment_type': 'comprehensive_security_assessment',
                 'educational_mode': self.educational_mode,
-                'analyzers_used': list(self.individual_reports.keys()),
-                'total_analyzers': len(self.individual_reports),
+                'analysers_used': list(self.individual_reports.keys()),
+                'total_analysers': len(self.individual_reports),
                 'execution_log': self.execution_log
             },
             'executive_summary': {
@@ -418,14 +418,14 @@ class ComprehensiveSecurityReporter:
                 'overall_risk_score': risk_score,
                 'overall_risk_level': risk_level,
                 'severity_distribution': severity_distribution,
-                'analyzers_completed': len(self.individual_reports),
+                'analysers_completed': len(self.individual_reports),
                 'key_recommendations': self._generate_key_recommendations()
             },
             'detailed_results': {
                 'all_findings': all_findings,
-                'findings_by_analyzer': {
-                    analyzer: self._extract_findings(report, analyzer)
-                    for analyzer, report in self.individual_reports.items()
+                'findings_by_analyser': {
+                    analyser: self._extract_findings(report, analyser)
+                    for analyser, report in self.individual_reports.items()
                 },
                 'tools_used': list(all_tools)
             },
@@ -446,7 +446,7 @@ class ComprehensiveSecurityReporter:
     def _extract_findings(
         self,
         report_data: Dict[str, Any],
-        analyzer_type: str
+        analyser_type: str
     ) -> List[Dict[str, Any]]:
         """Extract findings from a report and normalize format"""
         findings = []
@@ -469,11 +469,11 @@ class ComprehensiveSecurityReporter:
             for finding in raw_findings:
                 if isinstance(finding, dict):
                     normalized_finding = {
-                        'analyzer': analyzer_type,
+                        'analyser': analyser_type,
                         'severity': finding.get('severity', 'unknown'),
                         'title': finding.get('title', 'Unknown Issue'),
                         'description': finding.get('description', ''),
-                        'tool': finding.get('tool', analyzer_type),
+                        'tool': finding.get('tool', analyser_type),
                         'target': finding.get(
                             'target',
                             finding.get('file_path', 'Unknown')
@@ -666,15 +666,15 @@ class ComprehensiveSecurityReporter:
         return recommendations
 
     def _get_risk_color(self, risk_level):
-        """Get emoji/color representation for risk level"""
-        colors = {
+        """Get emoji/colour representation for risk level"""
+        colours = {
             'Critical': '🔴',
             'High': '🟠',
             'Medium': '🟡',
             'Low': '🟢',
             'Info': '🔵'
         }
-        return colors.get(risk_level, '⚪')
+        return colours.get(risk_level, '⚪')
 
     def _generate_business_impact_summary(self, executive, comprehensive_data):
         """Generate business impact summary based on findings"""
@@ -697,10 +697,10 @@ class ComprehensiveSecurityReporter:
                     "to maintain best practices and prevent future "
                     "vulnerabilities.")
 
-    def _create_analyzer_summary(self, analyzer_type, report_data):
-        """Create summary for specific analyzer"""
-        # Map analyzer types to readable names and tools
-        analyzer_info = {
+    def _create_analyser_summary(self, analyser_type, report_data):
+        """Create summary for specific analyser"""
+        # Map analyser types to readable names and tools
+        analyser_info = {
             'sast': {
                 'name': 'Static Application Security Testing (SAST)',
                 'tools': 'Bandit, Safety, Semgrep',
@@ -723,8 +723,8 @@ class ComprehensiveSecurityReporter:
             }
         }
 
-        info = analyzer_info.get(analyzer_type, {
-            'name': analyzer_type.upper(),
+        info = analyser_info.get(analyser_type, {
+            'name': analyser_type.upper(),
             'tools': 'Various security tools',
             'scope': 'Security analysis'
         })
@@ -757,19 +757,19 @@ class ComprehensiveSecurityReporter:
         }
 
     def _extract_top_critical_issues(self, comprehensive_data):
-        """Extract top critical issues across all analyzers"""
+        """Extract top critical issues across all analysers"""
         all_issues = []
 
-        # Combine findings from all analyzers
-        for analyzer_type, report in self.individual_reports.items():
+        # Combine findings from all analysers
+        for analyser_type, report in self.individual_reports.items():
             findings = report.get('findings', [])
             for finding in findings:
-                # Add analyzer context to each finding
+                # Add analyser context to each finding
                 issue = {
                     'title': finding.get('title', finding.get('rule_id',
                                                               'Security Issue')),
                     'severity': finding.get('severity', 'info'),
-                    'analyzer': analyzer_type,
+                    'analyser': analyser_type,
                     'description': finding.get('description',
                                                'Security vulnerability detected'),
                     'cwe_id': finding.get('cwe_id', 'N/A'),
@@ -841,15 +841,15 @@ class ComprehensiveSecurityReporter:
         """Determine the scope of the assessment"""
         scope_items = []
 
-        if metadata.get('analyzers_used'):
-            analyzers = metadata['analyzers_used']
-            if 'sast' in analyzers:
+        if metadata.get('analysers_used'):
+            analysers = metadata['analysers_used']
+            if 'sast' in analysers:
                 scope_items.append("Static Code Analysis")
-            if 'dast' in analyzers:
+            if 'dast' in analysers:
                 scope_items.append("Dynamic Application Testing")
-            if 'network' in analyzers:
+            if 'network' in analysers:
                 scope_items.append("Network Security Analysis")
-            if 'pentest' in analyzers:
+            if 'pentest' in analysers:
                 scope_items.append("Penetration Testing")
 
         if metadata.get('demo_mode'):
@@ -867,7 +867,7 @@ class ComprehensiveSecurityReporter:
                 'SAST': {
                     'description': (
                         'Static Application Security Testing - '
-                        'analyzes source code without executing it'
+                        'analyses source code without executing it'
                     ),
                     'benefits': [
                         'Early detection of vulnerabilities',
@@ -886,7 +886,7 @@ class ComprehensiveSecurityReporter:
                         'tests running applications'
                     ),
                     'benefits': [
-                        'Tests real runtime behavior',
+                        'Tests real runtime behaviour',
                         'Low false positives',
                         'Tests actual attack scenarios'
                     ],
@@ -919,7 +919,7 @@ class ComprehensiveSecurityReporter:
                     ),
                     'benefits': [
                         'Proves real exploitability',
-                        'Tests defense mechanisms',
+                        'Tests defence mechanisms',
                         'Comprehensive assessment'
                     ],
                     'limitations': [
@@ -1040,10 +1040,10 @@ class ComprehensiveSecurityReporter:
             ""
         ])
 
-        for i, analyzer_type in enumerate(metadata['analyzers_used'], 1):
-            if analyzer_type in self.individual_reports:
-                summary = self._create_analyzer_summary(
-                    analyzer_type, self.individual_reports[analyzer_type])
+        for i, analyser_type in enumerate(metadata['analysers_used'], 1):
+            if analyser_type in self.individual_reports:
+                summary = self._create_analyser_summary(
+                    analyser_type, self.individual_reports[analyser_type])
                 lines.extend([
                     f"### {i}. {summary['name']}",
                     f"**Tool:** {summary['tools']}",
@@ -1069,7 +1069,7 @@ class ComprehensiveSecurityReporter:
             for i, issue in enumerate(top_issues[:10], 1):
                 lines.extend([
                     f"### {i}. {issue['title']} ({issue['severity'].upper()})",
-                    f"**Source:** {issue['analyzer'].upper()} Analysis",
+                    f"**Source:** {issue['analyser'].upper()} Analysis",
                     f"**CWE:** {issue.get('cwe_id', 'N/A')}",
                     f"**Risk Score:** {issue.get('risk_score', 'N/A')}/10",
                     "",
@@ -1086,9 +1086,9 @@ class ComprehensiveSecurityReporter:
             ""
         ])
 
-        for analyzer_type, report_data in self.individual_reports.items():
-            lines.extend(self._create_analyzer_section(
-                analyzer_type, report_data))
+        for analyser_type, report_data in self.individual_reports.items():
+            lines.extend(self._create_analyser_section(
+                analyser_type, report_data))
 
         # Risk Assessment
         lines.extend([
@@ -1140,10 +1140,10 @@ class ComprehensiveSecurityReporter:
             "## ⚠️ Important Notes",
             "",
             ("- This report is generated for educational purposes and "
-             "authorized security testing only"),
+             "authorised security testing only"),
             ("- Results should be verified manually and assessed within "
              "proper business context"),
-            ("- Remediation should be prioritized based on business impact "
+            ("- Remediation should be prioritised based on business impact "
              "and exploitability"),
             ("- Regular security assessments should be conducted to "
              "maintain security posture"),
@@ -1154,31 +1154,31 @@ class ComprehensiveSecurityReporter:
 
         return "\n".join(lines)
 
-    def _create_analyzer_section(
+    def _create_analyser_section(
         self,
-        analyzer_type: str,
+        analyser_type: str,
         report_data: Dict[str, Any]
     ) -> List[str]:
-        """Create markdown section for individual analyzer results"""
+        """Create markdown section for individual analyser results"""
         lines = []
 
         # Section header
-        analyzer_names = {
+        analyser_names = {
             'sast': 'Static Application Security Testing (SAST)',
             'dast': 'Dynamic Application Security Testing (DAST)',
             'network': 'Network Traffic Analysis',
             'pentest': 'Penetration Testing'
         }
 
-        analyzer_name = analyzer_names.get(
-            analyzer_type, analyzer_type.upper())
+        analyser_name = analyser_names.get(
+            analyser_type, analyser_type.upper())
         lines.extend([
-            f"### {analyzer_name}",
+            f"### {analyser_name}",
             ""
         ])
 
         # Extract findings and summary
-        findings = self._extract_findings(report_data, analyzer_type)
+        findings = self._extract_findings(report_data, analyser_type)
         severity_dist = self._extract_severity_distribution(report_data)
         tools = self._extract_tools(report_data)
 
@@ -1216,7 +1216,7 @@ class ComprehensiveSecurityReporter:
                         lines.append(f"   - Description: {desc}...")
                     lines.append("")
         else:
-            lines.extend(["✅ No security issues found by this analyzer.", ""])
+            lines.extend(["✅ No security issues found by this analyser.", ""])
 
         return lines
 

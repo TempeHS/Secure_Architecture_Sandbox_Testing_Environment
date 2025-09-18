@@ -8,7 +8,7 @@ This document describes the comprehensive unit testing framework for the Docker 
 
 ### Test Structure
 
-The testing framework consists of 6 specialized test modules plus 1 comprehensive system runner:
+The testing framework consists of 6 specialised test modules plus 1 comprehensive system runner:
 
 ```
 tests/
@@ -18,7 +18,7 @@ tests/
 ├── test_network_commands.py               # Network Analysis tests (20 tests)
 ├── test_sandbox_commands.py               # Sandbox Security tests (15 tests)
 ├── test_penetration_testing_commands.py   # Integrated Pentest tests (14 tests)
-├── test_penetration_analyzer_unit.py      # Penetration Analyzer Unit tests (35 tests)
+├── test_penetration_analyser_unit.py      # Penetration Analyser Unit tests (35 tests)
 └── test_docker_environment.py             # Docker/Infrastructure tests (optional)
 ```
 
@@ -31,7 +31,7 @@ Tests are executed in logical dependency order with **111 total tests**:
 3. **Network Commands** (20 tests) - Tests network monitoring capabilities
 4. **Sandbox Commands** (15 tests) - Tests container-based security analysis
 5. **Penetration Testing** (14 tests) - Tests integrated workflows
-6. **Penetration Analyzer Unit Tests** (35 tests) - Tests individual modules and components
+6. **Penetration Analyser Unit Tests** (35 tests) - Tests individual modules and components
 7. **Docker Environment** (optional) - Validates infrastructure is ready
 
 ## Quick Start
@@ -72,7 +72,7 @@ python tests/run_all_tests.py
 # [3/6] Running Network Analysis Validation...
 # [4/6] Running Sandbox Command Validation...
 # [5/6] Running Penetration Testing Validation...
-# [6/6] Running Penetration Analyzer Unit Tests...
+# [6/6] Running Penetration Analyser Unit Tests...
 # 🎉 SYSTEM STATUS: ALL TESTS PASSED!
 ```
 
@@ -94,8 +94,8 @@ python -m pytest tests/test_sandbox_commands.py -v
 # Test Penetration testing workflows only (14 tests)
 python -m pytest tests/test_penetration_testing_commands.py -v
 
-# Test Penetration analyzer unit tests only (35 tests)
-python -m pytest tests/test_penetration_analyzer_unit.py -v
+# Test Penetration analyser unit tests only (35 tests)
+python -m pytest tests/test_penetration_analyser_unit.py -v
 
 # Optional: Test Docker environment
 python -m pytest tests/test_docker_environment.py -v
@@ -122,7 +122,7 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 - Container status and accessibility
 - Port connectivity (5000, 9090, etc.)
 - Application endpoint availability
-- Service health checks
+- Service health cheques
 - Reports directory structure
 
 **Example**:
@@ -156,13 +156,13 @@ the other test modules verify application availability as part of their setup.
 
 ```bash
 # What it tests:
-python src/analyzer/analyze_cli.py --help
-python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
-python src/analyzer/analyze_cli.py samples/ --output report.json --format json
+python src/analyser/analyse_cli.py --help
+python src/analyser/analyse_cli.py samples/unsecure-pwa --educational
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational
+python src/analyser/analyse_cli.py samples/ --output report.json --format json
 ```
 
-**Dependencies**: analyze_cli.py, sample applications, JSON validation
+**Dependencies**: analyse_cli.py, sample applications, JSON validation
 
 ### 3. DAST Command Tests (`test_dast_commands.py`) - 15 tests
 
@@ -181,17 +181,17 @@ python src/analyzer/analyze_cli.py samples/ --output report.json --format json
 
 ```bash
 # What it tests:
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
-python src/analyzer/dast_cli.py http://localhost:9090 --quick --educational
-python src/analyzer/dast_cli.py --demo-apps --tools nikto gobuster
-python src/analyzer/dast_cli.py http://localhost:5000 --output scan.json --format json
+python src/analyser/dast_cli.py http://localhost:5000 --quick --educational
+python src/analyser/dast_cli.py http://localhost:9090 --quick --educational
+python src/analyser/dast_cli.py --demo-apps --tools nikto gobuster
+python src/analyser/dast_cli.py http://localhost:5000 --output scan.json --format json
 ```
 
 **Dependencies**: dast_cli.py, running web applications, HTTP client
 
 **Known Issues Fixed**:
 
-- Fixed missing `tempfile` import in dynamic_analyzer.py that was causing
+- Fixed missing `tempfile` import in dynamic_analyser.py that was causing
   Gobuster directory enumeration to fail
 
 ### 4. Network Analysis Tests (`test_network_commands.py`) - 20 tests
@@ -211,9 +211,9 @@ python src/analyzer/dast_cli.py http://localhost:5000 --output scan.json --forma
 
 ```bash
 # What it tests:
-python src/analyzer/network_cli.py --monitor-connections --educational
-python src/analyzer/network_cli.py --scan-services localhost
-python src/analyzer/network_cli.py --capture-traffic --duration 30
+python src/analyser/network_cli.py --monitor-connections --educational
+python src/analyser/network_cli.py --scan-services localhost
+python src/analyser/network_cli.py --capture-traffic --duration 30
 ```
 
 **Dependencies**: network_cli.py, network utilities, system permissions
@@ -274,29 +274,29 @@ docker exec -it cybersec_sandbox grep "openat" trace.log
 ```bash
 # What it tests:
 # Phase 1: Reconnaissance
-python src/analyzer/network_cli.py --scan-services localhost --educational
-python src/analyzer/dast_cli.py http://localhost:5000 --quick --educational
+python src/analyser/network_cli.py --scan-services localhost --educational
+python src/analyser/dast_cli.py http://localhost:5000 --quick --educational
 
 # Phase 2: Vulnerability Assessment
-python src/analyzer/analyze_cli.py samples/unsecure-pwa --educational
-python src/analyzer/analyze_cli.py samples/vulnerable-flask-app --educational
-python src/analyzer/dast_cli.py http://localhost:5000 --deep-scan --educational
+python src/analyser/analyse_cli.py samples/unsecure-pwa --educational
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational
 
 # Phase 3: Controlled Exploitation
 curl -X POST "http://localhost:5000/login" -d "username=admin' OR '1'='1&password=test"
 
 # Phase 4: Post-Exploitation Analysis
-python src/analyzer/network_cli.py --monitor-connections --duration 60 --educational
+python src/analyser/network_cli.py --monitor-connections --duration 60 --educational
 ```
 
-**Dependencies**: All analyzer modules, web applications, HTTP client
+**Dependencies**: All analyser modules, web applications, HTTP client
 
 **Test Validation**: All 14 tests pass consistently, validating complete
 penetration testing workflow integration
 
-### 6. Penetration Analyzer Unit Tests (`test_penetration_analyzer_unit.py`) - 35 tests
+### 6. Penetration Analyser Unit Tests (`test_penetration_analyser_unit.py`) - 35 tests
 
-**Purpose**: Comprehensive unit testing of penetration analyzer internal components
+**Purpose**: Comprehensive unit testing of penetration analyser internal components
 
 **Key Test Classes**:
 
@@ -328,8 +328,8 @@ penetration testing workflow integration
 - Risk assessment calculation algorithms
 - Finding statistics and categorization
 
-#### TestPenetrationAnalyzerIntegration (4 tests)
-- Complete analyzer initialization
+#### TestPenetrationAnalyserIntegration (4 tests)
+- Complete analyser initialization
 - Full penetration test workflow execution
 - Configuration parameter validation
 - Error handling and graceful failure modes
@@ -344,13 +344,13 @@ penetration testing workflow integration
 ```bash
 # What it tests:
 # Unit tests with mocking - no external dependencies
-python -m pytest tests/test_penetration_analyzer_unit.py::TestVulnerabilityScanner::test_01_debug_console_detection -v
+python -m pytest tests/test_penetration_analyser_unit.py::TestVulnerabilityScanner::test_01_debug_console_detection -v
 
 # Integration tests with real components
-python -m pytest tests/test_penetration_analyzer_unit.py::TestPenetrationAnalyzerIntegration -v
+python -m pytest tests/test_penetration_analyser_unit.py::TestPenetrationAnalyserIntegration -v
 
 # CLI interface testing
-python -m pytest tests/test_penetration_analyzer_unit.py::TestPenetrationCLIIntegration -v
+python -m pytest tests/test_penetration_analyser_unit.py::TestPenetrationCLIIntegration -v
 ```
 
 **Dependencies**: unittest.mock for component isolation, tempfile for report testing
@@ -362,7 +362,7 @@ python -m pytest tests/test_penetration_analyzer_unit.py::TestPenetrationCLIInte
 - **Coverage Areas**: Error handling, edge cases, configuration validation
 
 **Recent Enhancements**:
-- Comprehensive test coverage for all penetration analyzer components
+- Comprehensive test coverage for all penetration analyser components
 - Mock-based testing for reliable, fast execution
 - Integration tests validating component interactions
 - CLI testing ensuring command-line interface functionality
@@ -477,7 +477,7 @@ unsecure-pwa              # Test application (port 5000)
 ### Environment Variables
 
 ```bash
-# Optional: Customize test timeouts
+# Optional: Customise test timeouts
 export TEST_TIMEOUT=120          # Default timeout in seconds
 export TEST_VERBOSE=1            # Enable verbose output
 export TEST_REPORTS_DIR=reports  # Custom reports directory
@@ -552,7 +552,7 @@ Permission denied for network operations
 sudo python tests/run_all_tests.py
 
 # Or use educational mode (some tests)
-python src/analyzer/network_cli.py --demo-network --educational
+python src/analyser/network_cli.py --demo-network --educational
 ```
 
 #### 4. Module Import Errors
@@ -606,9 +606,9 @@ python tests/run_all_tests.py 2>&1 | tee test_debug.log
 python -m pytest tests/test_sast_commands.py -v -s --tb=long
 
 # Check specific tool functionality
-python src/analyzer/analyze_cli.py --help
-python src/analyzer/dast_cli.py --help
-python src/analyzer/network_cli.py --help
+python src/analyser/analyse_cli.py --help
+python src/analyser/dast_cli.py --help
+python src/analyser/network_cli.py --help
 ```
 
 ## Continuous Integration
@@ -633,7 +633,7 @@ jobs:
         run: |
           python tests/run_all_tests.py
       - name: Archive test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artefact@v2
         with:
           name: test-results
           path: reports/
@@ -672,7 +672,7 @@ pre-commit install
 | Network Analysis               | 90-180s          | 20 tests     | Network monitoring, traffic capture    |
 | Sandbox Commands               | 60-120s          | 15 tests     | Container operations, tool execution   |
 | Penetration Testing            | 180-360s         | 14 tests     | Integrated workflows, manual testing   |
-| Penetration Analyzer Unit      | 30-60s           | 35 tests     | Unit tests, mocked components          |
+| Penetration Analyser Unit      | 30-60s           | 35 tests     | Unit tests, mocked components          |
 | **Total**                      | **9-21 minutes** | **111 tests** | **Full system validation**            |
 
 ### Resource Usage
@@ -718,7 +718,7 @@ def test_99_new_feature_validation(self):
 
     try:
         result = subprocess.run(
-            ["python", "src/analyzer/new_tool.py", "--new-option"],
+            ["python", "src/analyser/new_tool.py", "--new-option"],
             cwd=self.project_root,
             capture_output=True,
             text=True,
@@ -748,7 +748,7 @@ def test_99_new_feature_validation(self):
 - **Never test against production systems**
 - **Always use the provided sandbox environment**
 - **Validate that containers are properly isolated**
-- **Clean up test artifacts after execution**
+- **Clean up test artefacts after execution**
 
 ### Data Privacy
 

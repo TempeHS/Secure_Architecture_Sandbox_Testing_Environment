@@ -1,6 +1,6 @@
 # 🔍 Static Application Security Testing (SAST) Report
 
-> Analyzes source code for security vulnerabilities without executing the program
+> Analyses source code for security vulnerabilities without executing the programme
 
 ## 📋 Report Information
 
@@ -8,7 +8,7 @@
 |-------|-------|
 | **Generated** | September 18, 2025 at 04:27 AM UTC |
 | **Target Path** | `/workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples/unsecure-pwa` |
-| **Files Analyzed** | 5 |
+| **Files Analysed** | 5 |
 | **Tools Used** | bandit, semgrep |
 
 ## 📊 Executive Summary
@@ -30,8 +30,8 @@
 After reviewing this SAST analysis report, you should be able to:
 
 1. Understand how static code analysis identifies security vulnerabilities
-2. Learn to interpret SAST tool outputs and prioritize findings
-3. Recognize common code patterns that lead to security issues
+2. Learn to interpret SAST tool outputs and prioritise findings
+3. Recognise common code patterns that lead to security issues
 4. Apply secure coding practices to prevent vulnerabilities
 
 ## 🔍 Detailed Findings

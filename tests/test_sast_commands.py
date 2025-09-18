@@ -19,20 +19,20 @@ logger = logging.getLogger(__name__)
 
 
 class SASTCommandValidationTest(unittest.TestCase):
-    """Test suite to validate SAST analyzer commands."""
+    """Test suite to validate SAST analyser commands."""
 
     @classmethod
     def setUpClass(cls):
         """Set up test environment once for all tests."""
         cls.project_root = Path(__file__).parent.parent
         os.chdir(cls.project_root)
-        cls.sast_cli = "src/analyzer/analyze_cli.py"
+        cls.sast_cli = "src/analyser/analyse_cli.py"
         cls.timeout = 60  # seconds
         cls.reports_dir = cls.project_root / "reports"
         cls.reports_dir.mkdir(exist_ok=True)
 
     def test_01_sast_help_command(self):
-        """Test SAST analyzer help command."""
+        """Test SAST analyser help command."""
         logger.info("Testing SAST help command...")
 
         try:
@@ -318,7 +318,7 @@ class SASTCommandValidationTest(unittest.TestCase):
             self.assertEqual(
                 result.returncode, 0, f"SAST safety analysis failed: {result.stderr}"
             )
-            # Safety checks dependencies, so output might be different
+            # Safety cheques dependencies, so output might be different
             # Just ensure it runs without error
 
             logger.info("✅ SAST safety-only analysis works")

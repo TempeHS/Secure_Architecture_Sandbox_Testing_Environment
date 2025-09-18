@@ -32,7 +32,7 @@ This comprehensive security assessment identified **28 total security issues** a
 
 ### 1. Static Application Security Testing (SAST)
 **Tool:** Bandit, Semgrep, Safety  
-**Files Analyzed:** 3 Python files  
+**Files Analysed:** 3 Python files  
 **Total Findings:** 19  
 
 **Critical Issues:**

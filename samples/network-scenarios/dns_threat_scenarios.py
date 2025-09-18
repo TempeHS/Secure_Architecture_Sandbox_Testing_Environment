@@ -49,7 +49,7 @@ class DNSThreatSimulator:
             'DNS_CACHE_POISON': 'DNS cache poisoning attempts to redirect legitimate domains',
             'TYPOSQUATTING': 'Typosquatting domains mimic legitimate sites for phishing'
         }
-        return notes.get(activity_type, 'Analyze this DNS threat pattern')
+        return notes.get(activity_type, 'Analyse this DNS threat pattern')
 
     def generate_dga_domains(self, seed_date=None):
         """Generate DGA-style domains using a simple algorithm."""
@@ -364,7 +364,7 @@ class DNSThreatSimulator:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             filename = f"dns_threats_{timestamp}.json"
 
-        # Categorize activities by type and risk
+        # Categorise activities by type and risk
         activity_summary = {}
         risk_summary = {'CRITICAL': 0, 'HIGH': 0, 'MEDIUM': 0, 'LOW': 0}
 
@@ -395,11 +395,11 @@ class DNSThreatSimulator:
             ],
             'detection_strategies': [
                 'Monitor DNS query frequency and patterns',
-                'Analyze subdomain length and entropy',
+                'Analyse subdomain length and entropy',
                 'Check against known DGA algorithms',
                 'Monitor queries to suspicious TLDs',
                 'Implement DNS filtering and blacklists',
-                'Analyze DNS response patterns and timing'
+                'Analyse DNS response patterns and timing'
             ]
         }
 

@@ -154,8 +154,8 @@ def get_docker_network_info():
         return None
 
 
-def analyze_sandbox_isolation(docker_info):
-    """Analyze and document sandbox isolation characteristics."""
+def analyse_sandbox_isolation(docker_info):
+    """Analyse and document sandbox isolation characteristics."""
     analysis = {
         'network_isolation': [],
         'container_security': [],
@@ -167,7 +167,7 @@ def analyze_sandbox_isolation(docker_info):
     if not docker_info:
         return analysis
 
-    # Analyze network isolation
+    # Analyse network isolation
     for net_name, net_details in docker_info['network_details'].items():
         if 'sandbox' in net_name.lower():
             isolation_info = {
@@ -180,7 +180,7 @@ def analyze_sandbox_isolation(docker_info):
             }
             analysis['network_isolation'].append(isolation_info)
 
-    # Analyze container security from docker-compose configuration
+    # Analyse container security from docker-compose configuration
     compose_file = '/workspaces/Secure_Architecture_Sandbox_Testing_Environment/docker/docker-compose.yml'
     if os.path.exists(compose_file):
         try:
@@ -262,7 +262,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        labelloc=t;',
         '        labeljust=l;',
         '        style="dashed,filled";',
-        '        color=purple;',
+        '        colour=purple;',
         '        fillcolor="#f8f0ff";',
         '        fontcolor=purple;',
         '        margin=20;',
@@ -272,7 +272,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '            labelloc=t;',
         '            labeljust=l;',
         '            style="solid,filled";',
-        '            color="#228B22";',
+        '            colour="#228B22";',
         '            fillcolor="#f0fff0";',
         '            fontcolor="#228B22";',
         '            margin=20;',
@@ -290,7 +290,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '                labelloc=t;',
         '                labeljust=l;',
         '                style="dashed,filled";',
-        '                color=blue;',
+        '                colour=blue;',
         '                fillcolor="#f0f8ff";',
         '                fontcolor=blue;',
         '                margin=20;',
@@ -298,7 +298,7 @@ def generate_custom_dot_graph(docker_info, analysis):
     ]
 
     # Add containers to the graph with cybersec_sandbox on top, others below
-    colors = {
+    colours = {
         'sandbox': '#e8f5e8',
         'unsecure-pwa': '#ffe8e8',
         'vulnerable-flask': '#fff3e8',
@@ -340,8 +340,8 @@ def generate_custom_dot_graph(docker_info, analysis):
         hostname = container_info['hostname']
         ports = container_info['ports']
 
-        # Determine security level color
-        color = colors.get(service, '#f0f0f0')
+        # Determine security level colour
+        colour = colours.get(service, '#f0f0f0')
 
         # Create node label with security details
         security_details = []
@@ -375,7 +375,7 @@ def generate_custom_dot_graph(docker_info, analysis):
 
         dot_lines.append(f'                "{container_name}" [')
         dot_lines.append(f'                    label="{label}";')
-        dot_lines.append(f'                    fillcolor="{color}";')
+        dot_lines.append(f'                    fillcolor="{colour}";')
         dot_lines.append('                    style=filled;')
         dot_lines.append('                ];')
         dot_lines.append('')
@@ -432,7 +432,7 @@ def generate_custom_dot_graph(docker_info, analysis):
     dot_lines.append('                labeldistance=1.5;')
     dot_lines.append('                labelangle=0;')
     dot_lines.append('                style=bold;')
-    dot_lines.append('                color="#228B22";')
+    dot_lines.append('                colour="#228B22";')
     dot_lines.append('                ltail=cluster_codespaces;')
     dot_lines.append('                lhead=cluster_sandbox;')
     dot_lines.append('            ];')
@@ -464,7 +464,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        labeldistance=2.0;',
         '        labelangle=10;',
         '        style=bold;',
-        '        color=purple;',
+        '        colour=purple;',
         '    ];',
         '    '
     ])
@@ -474,7 +474,7 @@ def generate_custom_dot_graph(docker_info, analysis):
     dot_lines.extend([
         '    ',
         '    // External host connections to apps (direct from host to top row)',
-        '    edge [style=bold, color="#228B22"];',
+        '    edge [style=bold, colour="#228B22"];',
         '    "Host System" -> "vulnerable_nodejs" [',
         '        label="3000:3000\\n(Vulnerable Node.js)";',
         '        labeldistance=1.5;',
@@ -497,7 +497,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '    ];',
         '    ',
         '    // Internal sandbox connections (cybersec tools → apps)',
-        '    edge [style=dashed, color=blue, penwidth=2];',
+        '    edge [style=dashed, colour=blue, penwidth=2];',
         '    "cybersec_sandbox" -> "vulnerable_nodejs" [',
         '        label="Internal\\nNetwork\\nAccess";',
         '    ];',
@@ -593,9 +593,9 @@ def main():
         print("Make sure Docker is running and you have permission to access it")
         return 1
 
-    # Analyze sandbox isolation
-    print("🔒 Analyzing sandbox isolation...")
-    analysis = analyze_sandbox_isolation(docker_info)
+    # Analyse sandbox isolation
+    print("🔒 Analysing sandbox isolation...")
+    analysis = analyse_sandbox_isolation(docker_info)
 
     # Ensure output directory exists
     output_dir = '/workspaces/Secure_Architecture_Sandbox_Testing_Environment/reports'

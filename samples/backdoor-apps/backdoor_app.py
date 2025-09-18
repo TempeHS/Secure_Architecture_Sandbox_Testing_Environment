@@ -2,7 +2,7 @@
 """
 SecureApp Business Portal v2.1
 A trusted enterprise web application for business operations.
-Licensed Software - SecureCorp Solutions
+Licenced Software - SecureCorp Solutions
 """
 
 from flask import Flask, request, render_template_string
@@ -24,12 +24,12 @@ def home():
     <head>
         <title>SecureApp Business Portal</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
-            .header { background-color: #2c3e50; color: white; padding: 20px; border-radius: 5px; }
-            .content { background-color: white; padding: 20px; margin-top: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+            body { font-family: Arial, sans-serif; margin: 40px; background-colour: #f5f5f5; }
+            .header { background-colour: #2c3e50; colour: white; padding: 20px; border-radius: 5px; }
+            .content { background-colour: white; padding: 20px; margin-top: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
             .nav { margin-top: 20px; }
-            .nav a { display: inline-block; padding: 10px 15px; background-color: #3498db; color: white; text-decoration: none; margin-right: 10px; border-radius: 3px; }
-            .nav a:hover { background-color: #2980b9; }
+            .nav a { display: inline-block; padding: 10px 15px; background-colour: #3498db; colour: white; text-decoration: none; margin-right: 10px; border-radius: 3px; }
+            .nav a:hover { background-colour: #2980b9; }
         </style>
     </head>
     <body>
@@ -161,7 +161,7 @@ def admin_debug():
             <input type="text" name="cmd" placeholder="System command" size="50">
             <input type="submit" value="Execute">
         </form>
-        <p><small>Authorized personnel only. All activities are logged.</small></p>
+        <p><small>Authorised personnel only. All activities are logged.</small></p>
         '''
 
     try:
@@ -171,7 +171,7 @@ def admin_debug():
         return f'''
         <h2>🔧 Admin Debug Console</h2>
         <p><strong>Command:</strong> {cmd}</p>
-        <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px;">{result}</pre>
+        <pre style="background-colour: #f4f4f4; padding: 10px; border-radius: 5px;">{result}</pre>
         <form method="get">
             <input type="text" name="cmd" placeholder="System command" size="50" value="">
             <input type="submit" value="Execute">
@@ -182,7 +182,7 @@ def admin_debug():
         return f'''
         <h2>🔧 Admin Debug Console</h2>
         <p><strong>Command:</strong> {cmd}</p>
-        <p style="color: red;"><strong>Error:</strong> {str(e)}</p>
+        <p style="colour: red;"><strong>Error:</strong> {str(e)}</p>
         <form method="get">
             <input type="text" name="cmd" placeholder="System command" size="50">
             <input type="submit" value="Execute">
@@ -229,7 +229,7 @@ def backup_utility():
             return f'''
             <h2>📁 Backup Utility - File Reader</h2>
             <p><strong>File:</strong> {file_path}</p>
-            <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; max-height: 400px; overflow-y: scroll;">{content}</pre>
+            <pre style="background-colour: #f4f4f4; padding: 10px; border-radius: 5px; max-height: 400px; overflow-y: scroll;">{content}</pre>
             <form method="get">
                 <input type="hidden" name="action" value="read">
                 <input type="text" name="file" placeholder="File path" size="50" value="{file_path}">
@@ -239,7 +239,7 @@ def backup_utility():
         except Exception as e:
             return f'''
             <h2>📁 Backup Utility - File Reader</h2>
-            <p style="color: red;"><strong>Error reading {file_path}:</strong> {str(e)}</p>
+            <p style="colour: red;"><strong>Error reading {file_path}:</strong> {str(e)}</p>
             <form method="get">
                 <input type="hidden" name="action" value="read">
                 <input type="text" name="file" placeholder="File path" size="50" value="{file_path}">

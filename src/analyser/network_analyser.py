@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
 Network Traffic Analysis Module
-Educational cybersecurity tool for analyzing network traffic and detecting security threats.
+Educational cybersecurity tool for analysing network traffic and detecting security threats.
 
 This module provides network traffic monitoring, packet analysis, and threat detection
 capabilities for educational purposes. It operates independently from SAST and DAST
 modules to teach students about network-level security analysis.
 
 Author: Cybersecurity Education Platform
-License: Educational Use Only
+Licence: Educational Use Only
 """
 
 import socket
@@ -26,7 +26,7 @@ import ipaddress
 from .vulnerability_database import VulnerabilityDatabase
 
 
-class NetworkAnalyzer:
+class NetworkAnalyser:
     """
     Network Traffic Analysis Engine
 
@@ -36,7 +36,7 @@ class NetworkAnalyzer:
 
     def __init__(self, interface: str = "any", educational_mode: bool = False):
         """
-        Initialize the network analyzer
+        Initialize the network analyser
 
         Args:
             interface: Network interface to monitor (default: "any")
@@ -110,8 +110,8 @@ class NetworkAnalyzer:
                 # Parse captured traffic
                 self._parse_captured_traffic(result.stdout)
 
-                # Analyze traffic for threats
-                self._analyze_traffic_patterns()
+                # Analyse traffic for threats
+                self._analyse_traffic_patterns()
 
                 # Generate analysis results
                 return self._generate_analysis_results()
@@ -141,10 +141,10 @@ class NetworkAnalyzer:
         Returns:
             Dictionary containing active connections and analysis
         """
-        print("🔍 Analyzing active network connections...")
+        print("🔍 Analysing active network connections...")
 
         connections = self._get_active_connections()
-        suspicious_connections = self._analyze_connections(connections)
+        suspicious_connections = self._analyse_connections(connections)
 
         results = {
             'timestamp': datetime.now().isoformat(),
@@ -160,9 +160,9 @@ class NetworkAnalyzer:
 
         return results
 
-    def analyze_dns_traffic(self, duration: int = 30) -> Dict[str, Any]:
+    def analyse_dns_traffic(self, duration: int = 30) -> Dict[str, Any]:
         """
-        Analyze DNS traffic for suspicious queries
+        Analyse DNS traffic for suspicious queries
 
         Args:
             duration: Monitoring duration in seconds
@@ -170,21 +170,21 @@ class NetworkAnalyzer:
         Returns:
             Dictionary containing DNS analysis results
         """
-        print("🔍 Analyzing DNS traffic patterns...")
+        print("🔍 Analysing DNS traffic patterns...")
 
         # Capture DNS traffic specifically
         dns_filter = "port 53"
         result = self.start_packet_capture(duration, dns_filter)
 
         if result.get('success', True):
-            dns_analysis = self._analyze_dns_patterns()
+            dns_analysis = self._analyse_dns_patterns()
             result.update(dns_analysis)
 
         return result
 
     def scan_network_services(self, target: str = "localhost") -> Dict[str, Any]:
         """
-        Scan for network services and analyze security posture
+        Scan for network services and analyse security posture
 
         Args:
             target: Target to scan (IP address or hostname)
@@ -195,7 +195,7 @@ class NetworkAnalyzer:
         print(f"🔍 Scanning network services on {target}...")
 
         services = self._scan_services(target)
-        security_analysis = self._analyze_service_security(services)
+        security_analysis = self._analyse_service_security(services)
 
         return {
             'timestamp': datetime.now().isoformat(),
@@ -312,16 +312,16 @@ class NetworkAnalyzer:
             pass
         return None
 
-    def _analyze_traffic_patterns(self) -> None:
-        """Analyze captured traffic for suspicious patterns"""
-        # Analyze connection patterns
+    def _analyse_traffic_patterns(self) -> None:
+        """Analyse captured traffic for suspicious patterns"""
+        # Analyse connection patterns
         for ip, connections in self.connection_map.items():
             self._check_port_scanning(ip, connections)
             self._check_suspicious_ports(ip, connections)
             self._check_malicious_indicators(ip)
 
     def _check_port_scanning(self, ip: str, connections: List[Dict]) -> None:
-        """Check for port scanning behavior"""
+        """Check for port scanning behaviour"""
         unique_ports = set()
         for conn in connections:
             if conn.get('direction') == 'outbound':
@@ -372,8 +372,8 @@ class NetworkAnalyzer:
         except ValueError:
             pass
 
-    def _analyze_connections(self, connections: List[Dict]) -> List[Dict]:
-        """Analyze connections for suspicious activity"""
+    def _analyse_connections(self, connections: List[Dict]) -> List[Dict]:
+        """Analyse connections for suspicious activity"""
         suspicious = []
 
         for conn in connections:
@@ -397,8 +397,8 @@ class NetworkAnalyzer:
 
         return suspicious
 
-    def _analyze_dns_patterns(self) -> Dict[str, Any]:
-        """Analyze DNS traffic for suspicious patterns"""
+    def _analyse_dns_patterns(self) -> Dict[str, Any]:
+        """Analyse DNS traffic for suspicious patterns"""
         # In educational environment, simulate DNS analysis
         suspicious_queries = []
 
@@ -475,8 +475,8 @@ class NetworkAnalyzer:
             'security_concern': 'Unidentified service requires investigation'
         })
 
-    def _analyze_service_security(self, services: List[Dict]) -> Dict[str, Any]:
-        """Analyze discovered services for security issues"""
+    def _analyse_service_security(self, services: List[Dict]) -> Dict[str, Any]:
+        """Analyse discovered services for security issues"""
         high_risk_services = []
         encryption_issues = []
 
@@ -543,7 +543,7 @@ class NetworkAnalyzer:
             ],
             'monitoring_best_practices': [
                 "Monitor both inbound and outbound network connections",
-                "Establish baseline network behavior for comparison",
+                "Establish baseline network behaviour for comparison",
                 "Use network segmentation to limit attack spread",
                 "Implement intrusion detection systems (IDS) for real-time monitoring"
             ],

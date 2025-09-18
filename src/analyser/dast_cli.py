@@ -26,9 +26,11 @@ Usage Examples:
     python dast_cli.py http://localhost:5000 --quick
 """
 
-from analyzer.vulnerability_database import vulnerability_db
-from analyzer.dynamic_analyzer import (
-    DynamicAnalyzer, DynamicAnalysisReport, analyze_demo_applications_dynamic, logger
+from analyser.vulnerability_database import vulnerability_db
+import os
+import sys
+from analyser.dynamic_analyser import (
+    DynamicAnalyser, DynamicAnalysisReport, analyse_demo_applications_dynamic, logger
 )
 import sys
 import argparse
@@ -54,13 +56,13 @@ class DASTCLI:
     """Command-line interface for dynamic application security testing"""
 
     def __init__(self):
-        self.analyzer = DynamicAnalyzer()
+        self.analyser = DynamicAnalyser()
 
     def run_analysis(self, args) -> None:
         """Execute dynamic analysis based on command-line arguments"""
 
         if args.demo_apps:
-            self._analyze_demo_applications(args)
+            self._analyse_demo_applications(args)
             return
 
         if not args.target_url:
@@ -83,13 +85,13 @@ class DASTCLI:
             if deep_scan:
                 print("🔍 Deep scan mode enabled - this may take several minutes")
             elif args.quick:
-                print("⚡ Quick scan mode - basic vulnerability checks only")
+                print("⚡ Quick scan mode - basic vulnerability cheques only")
 
             if tools:
                 print(f"🛠️  Using tools: {', '.join(tools)}")
 
             # Run dynamic analysis
-            report = self.analyzer.analyze_application(
+            report = self.analyser.analyse_application(
                 args.target_url,
                 tools=tools,
                 deep_scan=deep_scan
@@ -117,14 +119,14 @@ class DASTCLI:
                 traceback.print_exc()
             sys.exit(1)
 
-    def _analyze_demo_applications(self, args) -> None:
-        """Analyze all demo applications (must be running)"""
+    def _analyse_demo_applications(self, args) -> None:
+        """Analyse all demo applications (must be running)"""
         print("🎯 Scanning all demo applications...")
         print("📝 Note: Applications must be running for dynamic analysis")
         print("   Start with: cd docker && docker-compose up -d")
 
         try:
-            results = analyze_demo_applications_dynamic(args.educational)
+            results = analyse_demo_applications_dynamic(args.educational)
 
             if not results:
                 print("❌ No demo applications were accessible for scanning")
@@ -357,7 +359,7 @@ class DASTCLI:
                         markdown_path = output_path.replace('.json', '.md')
                         generator.generate_markdown_report(
                             json_data=report.to_dict(),
-                            analyzer_type='dast',
+                            analyser_type='dast',
                             output_file=os.path.basename(markdown_path)
                         )
                         logger.info(
@@ -446,10 +448,10 @@ Examples:
     )
 
     parser.add_argument('target_url', nargs='?',
-                        help='Target URL to analyze (e.g., http://localhost:5000)')
+                        help='Target URL to analyse (e.g., http://localhost:5000)')
 
     parser.add_argument('--demo-apps', action='store_true',
-                        help='Analyze all demo applications (must be running)')
+                        help='Analyse all demo applications (must be running)')
 
     parser.add_argument('--tools', nargs='+',
                         choices=['nikto', 'gobuster', 'basic_tests', 'all'],
@@ -459,7 +461,7 @@ Examples:
                         help='Enable deep scanning with crawling and comprehensive testing')
 
     parser.add_argument('--quick', action='store_true',
-                        help='Quick scan mode - basic vulnerability checks only')
+                        help='Quick scan mode - basic vulnerability cheques only')
 
     parser.add_argument('--output', '-o', help='Output file path for report')
 

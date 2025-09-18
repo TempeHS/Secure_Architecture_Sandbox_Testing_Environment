@@ -16,7 +16,7 @@ The Educational Penetration Testing Tool is a comprehensive security assessment 
 ### Core Components
 
 ```
-penetration_analyzer.py
+penetration_analyser.py
 ├── ReconnaissanceEngine     # Information gathering and service discovery
 ├── VulnerabilityScanner     # Active vulnerability detection and testing
 ├── ExploitEngine           # Proof-of-concept exploitation framework
@@ -119,7 +119,7 @@ pentest_cli.py              # Command-line interface with educational features
 
 | Vulnerability Class | Educational Tool | Metasploit | Burp Suite Pro | OWASP ZAP | Industry Standard |
 |--------------------|------------------|------------|-----------------|-----------|------------------|
-| **Web Applications** | 8 core vulnerabilities | 200+ web exploits | 150+ vulnerability checks | 100+ passive/active rules | 50-200 checks |
+| **Web Applications** | 8 core vulnerabilities | 200+ web exploits | 150+ vulnerability cheques | 100+ passive/active rules | 50-200 cheques |
 | **Network Services** | Basic port/service enum | 1500+ network exploits | Limited network testing | Basic network scanning | Comprehensive coverage |
 | **Operating Systems** | None | 800+ OS exploits | None | None | Full OS vulnerability assessment |
 | **Database Security** | Basic SQL injection | 50+ database exploits | Advanced SQL testing | Basic SQL detection | Complete database assessment |
@@ -261,7 +261,7 @@ THREAD_POOL_SIZE = 5       # Concurrent testing threads
 - **Rate Limiting**: Built-in delays prevent aggressive testing
 - **Limited Payload Sets**: Reduced attack vectors for safety
 - **No Destructive Testing**: Avoids tests that could damage target systems
-- **Ethical Boundaries**: Designed for authorized educational testing only
+- **Ethical Boundaries**: Designed for authorised educational testing only
 
 ### Professional Tool Advantages
 
@@ -274,8 +274,8 @@ THREAD_POOL_SIZE = 5       # Concurrent testing threads
 
 #### **Industry Requirements**
 - **Compliance Standards**: PCI DSS, SOX, HIPAA testing requirements
-- **Professional Certification**: Industry-recognized testing methodologies
-- **Legal Protection**: Professional liability and authorized testing frameworks
+- **Professional Certification**: Industry-recognised testing methodologies
+- **Legal Protection**: Professional liability and authorised testing frameworks
 - **Performance Scale**: Enterprise-grade testing of thousands of endpoints
 - **Support Structure**: Professional training, certification, and technical support
 
@@ -291,7 +291,7 @@ THREAD_POOL_SIZE = 5       # Concurrent testing threads
 - **Professional Preparation**: Bridge between academic learning and industry practice
 
 ### Learning Outcomes
-- **Vulnerability Identification**: Recognize common security weaknesses
+- **Vulnerability Identification**: Recognise common security weaknesses
 - **Testing Methodology**: Understand systematic security assessment approaches
 - **Risk Communication**: Translate technical findings to business impact
 - **Ethical Considerations**: Appreciate legal and ethical boundaries in security testing
@@ -366,9 +366,9 @@ The Educational Penetration Testing Tool provides a valuable bridge between theo
 - **Practical Skills**: Hands-on experience with actual security testing tools and methodologies
 - **Professional Preparation**: Foundation knowledge for advanced cybersecurity careers
 
-The tool's limitations are intentional design choices that prioritize educational safety, ethical considerations, and learning effectiveness over comprehensive professional capabilities. For educational institutions seeking to provide practical cybersecurity training, this tool offers an ideal starting point that can later transition students to professional-grade tools and methodologies.
+The tool's limitations are intentional design choices that prioritise educational safety, ethical considerations, and learning effectiveness over comprehensive professional capabilities. For educational institutions seeking to provide practical cybersecurity training, this tool offers an ideal starting point that can later transition students to professional-grade tools and methodologies.
 
-**Recommended Usage**: Structured cybersecurity curriculum, supervised laboratory exercises, ethical hacking introductions, and security awareness training programs.
+**Recommended Usage**: Structured cybersecurity curriculum, supervised laboratory exercises, ethical hacking introductions, and security awareness training programmes.
 
 **Not Recommended For**: Production security assessments, unsupervised testing, compliance audits, or professional penetration testing engagements.
 
@@ -377,4 +377,4 @@ The tool's limitations are intentional design choices that prioritize educationa
 *Document Version: 1.0*  
 *Last Updated: September 18, 2025*  
 *Created by: Secure Architecture Sandbox Testing Environment Project*  
-*License: MIT (Educational Use)*
+*Licence: MIT (Educational Use)*

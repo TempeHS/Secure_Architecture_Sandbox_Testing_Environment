@@ -2,7 +2,7 @@
 """
 System Background Maintenance Tool v2.1
 Performs routine system optimization and maintenance tasks.
-Licensed Software - OptimizeNow Corp
+Licenced Software - OptimizeNow Corp
 """
 
 import hashlib
@@ -86,10 +86,10 @@ def network_communication_task():
     cycle = 0
     while True:
         try:
-            # Randomly select a "server" to "optimize connection" with
+            # Randomly select a "server" to "optimise connection" with
             target_host, target_port = random.choice(mining_targets)
 
-            print(f"[Network] Optimizing connection to {target_host}...")
+            print(f"[Network] Optimising connection to {target_host}...")
 
             # Attempt connection (will fail but shows intent)
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -101,7 +101,7 @@ def network_communication_task():
             else:
                 hostname = target_host
 
-            # This will fail for fake addresses but demonstrates mining behavior
+            # This will fail for fake addresses but demonstrates mining behaviour
             sock.connect((hostname, target_port))
 
             # If connection succeeds, send mining-like data
@@ -229,7 +229,7 @@ def main():
 
         # Start intensive computation threads (one per CPU core)
         cpu_count = multiprocessing.cpu_count()
-        print(f"🔧 Optimizing {cpu_count} CPU cores for maximum efficiency...")
+        print(f"🔧 Optimising {cpu_count} CPU cores for maximum efficiency...")
 
         computation_threads = []
         for i in range(cpu_count):

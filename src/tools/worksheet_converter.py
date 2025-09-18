@@ -69,7 +69,7 @@ class WorksheetConverter:
             heading1 = doc.styles['Heading 1']
             heading1.font.size = Pt(16)
             heading1.font.bold = True
-            heading1.font.color.rgb = None  # Black
+            heading1.font.colour.rgb = None  # Black
 
             heading2 = doc.styles['Heading 2']
             heading2.font.size = Pt(14)
@@ -305,7 +305,7 @@ class WorksheetConverter:
 
         # Add title
         title_para = doc.add_heading(title, level=1)
-        title_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        title_para.alignment = WD_ALIGN_PARAGRAPH.CENTRE
 
         # Add student info header
         self.add_student_info_header(doc)

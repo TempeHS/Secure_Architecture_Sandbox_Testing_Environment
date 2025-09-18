@@ -83,7 +83,7 @@ principles:
 
 **2. Testing Phase** (Container Execution)
 
-- **Behavioral analysis and threat detection** in isolation
+- **Behavioural analysis and threat detection** in isolation
 - **Resource limitation and monitoring** during analysis
 - **Controlled application testing** without host system risk
 
@@ -91,7 +91,7 @@ principles:
 
 - **Evidence collection** from isolated environment
 - **Security findings documentation** with contained logs
-- **Risk assessment** based on observed behaviors
+- **Risk assessment** based on observed behaviours
 
 **4. Cleanup Phase** (Container Disposal)
 
@@ -158,7 +158,7 @@ These commands demonstrate **systematic vulnerability assessment** and
 
 ```bash
 # Demonstrates defensive programming analysis
-python3 src/analyzer/analyze_cli.py uploads/ --educational
+python3 src/analyser/analyse_cli.py uploads/ --educational
 ```
 
 **Syllabus Connection**: **Input validation**, **sanitization**, and **error
@@ -168,7 +168,7 @@ handling** detection
 
 ```bash
 # Tests running applications for security vulnerabilities
-python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
+python3 src/analyser/dast_cli.py http://localhost:8000 --educational
 ```
 
 **Syllabus Connection**: **Cross-site scripting (XSS)**, **authentication**, and
@@ -177,8 +177,8 @@ python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
 ### Network Analysis - **Systematic Security Evaluation**
 
 ```bash
-# Monitors network behavior and connections in isolation
-python3 src/analyzer/network_cli.py --monitor-connections --educational
+# Monitors network behaviour and connections in isolation
+python3 src/analyser/network_cli.py --monitor-connections --educational
 ```
 
 **Syllabus Connection**: **Secure communication protocols** and **threat
@@ -188,7 +188,7 @@ detection** analysis
 
 ```bash
 # Comprehensive security assessment using controlled environment
-python3 src/analyzer/pentest_cli.py http://localhost:8000 --educational
+python3 src/analyser/pentest_cli.py http://localhost:8000 --educational
 ```
 
 **Syllabus Connection**: **Security testing and evaluation** with **incident

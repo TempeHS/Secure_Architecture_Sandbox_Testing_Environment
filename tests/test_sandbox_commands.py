@@ -380,11 +380,11 @@ print("Suspicious activity complete")"""
         self.assertEqual(exit_code_check, 0,
                          "Suspicious trace log not created")
 
-        # Analyze the trace
+        # Analyse the trace
         exit_code_analysis, trace_output = self._exec_in_container(
             "head -10 suspicious_trace.log"
         )
-        self.assertEqual(exit_code_analysis, 0, "Cannot analyze trace")
+        self.assertEqual(exit_code_analysis, 0, "Cannot analyse trace")
         self.assertGreater(len(trace_output), 20,
                            "Suspicious trace seems too short")
 

@@ -23,17 +23,17 @@ python samples/network-scenarios/backdoor_simulation.py
 
 ```bash
 # Monitor while running scenarios
-python src/analyzer/network_cli.py --monitor-connections --educational
+python src/analyser/network_cli.py --monitor-connections --educational
 
 # Capture traffic during scenarios
-python src/analyzer/network_cli.py --capture-traffic --duration 60 --educational
+python src/analyser/network_cli.py --capture-traffic --duration 60 --educational
 ```
 
 ## 📂 Scenario Categories
 
 ### 1. Basic Network Activity
 
-- **Purpose**: Establish baseline network behavior for comparison
+- **Purpose**: Establish baseline network behaviour for comparison
 - **File**: `basic_network_activity.py`
 - **Activities**: Normal web requests, DNS queries, legitimate service
   connections
@@ -68,7 +68,7 @@ python src/analyzer/network_cli.py --capture-traffic --duration 60 --educational
 
 Students will learn to:
 
-1. **Recognize normal vs. suspicious network patterns**
+1. **Recognise normal vs. suspicious network patterns**
 2. **Identify common attack signatures in network traffic**
 3. **Use network analysis tools effectively**
 4. **Document security findings professionally**
@@ -87,7 +87,7 @@ Students will learn to:
 ### Responsible Disclosure
 
 - If you discover real vulnerabilities during exercises, report them responsibly
-- Follow your organization's security policies and procedures
+- Follow your organisation's security policies and procedures
 - Never exploit vulnerabilities for personal gain
 
 ## 🔧 Technical Requirements
@@ -149,7 +149,7 @@ After completing these exercises, students should be able to:
 ### Sandbox Integration
 
 - Monitor network activity of suspicious applications in the sandbox
-- Correlate behavioral analysis with network communication patterns
+- Correlate behavioural analysis with network communication patterns
 
 ## 🎓 Assessment Criteria
 
@@ -165,4 +165,4 @@ Students will be assessed on:
 
 **Note**: These scenarios are designed to work in a Codespaces/Docker
 environment with limited network access. They focus on localhost traffic and
-simulated patterns that students can observe and analyze safely.
+simulated patterns that students can observe and analyse safely.

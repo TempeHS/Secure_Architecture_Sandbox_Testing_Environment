@@ -93,25 +93,25 @@ curl http://localhost:8000
 ### Static Analysis (SAST)
 
 ```bash
-python3 src/analyzer/analyze_cli.py uploads/ --educational
+python3 src/analyser/analyse_cli.py uploads/ --educational
 ```
 
 ### Dynamic Analysis (DAST)
 
 ```bash
-python3 src/analyzer/dast_cli.py http://localhost:8000 --educational
+python3 src/analyser/dast_cli.py http://localhost:8000 --educational
 ```
 
 ### Network Analysis
 
 ```bash
-python3 src/analyzer/network_cli.py --monitor-connections --educational
+python3 src/analyser/network_cli.py --monitor-connections --educational
 ```
 
 ### Penetration Testing
 
 ```bash
-python3 src/analyzer/pentest_cli.py http://localhost:8000 --educational
+python3 src/analyser/pentest_cli.py http://localhost:8000 --educational
 ```
 
 ## � Quick Troubleshooting
