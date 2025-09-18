@@ -669,7 +669,7 @@ class ComprehensiveSecurityReporter:
         """Get emoji/color representation for risk level"""
         colors = {
             'Critical': '🔴',
-            'High': '🟠', 
+            'High': '🟠',
             'Medium': '🟡',
             'Low': '🟢',
             'Info': '🔵'
@@ -680,22 +680,22 @@ class ComprehensiveSecurityReporter:
         """Generate business impact summary based on findings"""
         total_findings = executive['total_findings']
         risk_level = executive['overall_risk_level']
-        
+
         if risk_level in ['Critical', 'High']:
             return ("The identified vulnerabilities present **significant "
-                   "business risk** including potential data breaches, "
-                   "service disruption, and regulatory compliance issues. "
-                   "Immediate remediation is strongly recommended.")
+                    "business risk** including potential data breaches, "
+                    "service disruption, and regulatory compliance issues. "
+                    "Immediate remediation is strongly recommended.")
         elif risk_level == 'Medium':
             return ("The application shows **moderate security concerns** "
-                   "that could impact business operations if exploited. "
-                   "A structured remediation plan should be implemented "
-                   "within 2-4 weeks.")
+                    "that could impact business operations if exploited. "
+                    "A structured remediation plan should be implemented "
+                    "within 2-4 weeks.")
         else:
             return ("The application demonstrates **acceptable security "
-                   "posture** with minor issues that should be addressed "
-                   "to maintain best practices and prevent future "
-                   "vulnerabilities.")
+                    "posture** with minor issues that should be addressed "
+                    "to maintain best practices and prevent future "
+                    "vulnerabilities.")
 
     def _create_analyzer_summary(self, analyzer_type, report_data):
         """Create summary for specific analyzer"""
@@ -707,7 +707,7 @@ class ComprehensiveSecurityReporter:
                 'scope': 'Source code analysis for security vulnerabilities'
             },
             'dast': {
-                'name': 'Dynamic Application Security Testing (DAST)', 
+                'name': 'Dynamic Application Security Testing (DAST)',
                 'tools': 'Custom scanners, XSS/SQLi detection',
                 'scope': 'Runtime application security testing'
             },
@@ -722,32 +722,32 @@ class ComprehensiveSecurityReporter:
                 'scope': 'Comprehensive security assessment and exploitation'
             }
         }
-        
+
         info = analyzer_info.get(analyzer_type, {
             'name': analyzer_type.upper(),
             'tools': 'Various security tools',
             'scope': 'Security analysis'
         })
-        
+
         # Extract findings count and key issues
         findings = report_data.get('findings', [])
         findings_count = len(findings)
-        
+
         # Get top 3 most severe issues as key issues
         key_issues = []
-        sorted_findings = sorted(findings, 
-                               key=lambda x: self._get_severity_weight(
-                                   x.get('severity', 'info')), reverse=True)
-        
+        sorted_findings = sorted(findings,
+                                 key=lambda x: self._get_severity_weight(
+                                     x.get('severity', 'info')), reverse=True)
+
         for finding in sorted_findings[:3]:
-            title = finding.get('title', finding.get('rule_id', 
-                                                   'Security Issue'))
+            title = finding.get('title', finding.get('rule_id',
+                                                     'Security Issue'))
             severity = finding.get('severity', 'unknown')
             key_issues.append(f"{title} ({severity.upper()})")
-        
+
         if not key_issues:
             key_issues = ["No significant issues identified"]
-        
+
         return {
             'name': info['name'],
             'tools': info['tools'],
@@ -759,32 +759,32 @@ class ComprehensiveSecurityReporter:
     def _extract_top_critical_issues(self, comprehensive_data):
         """Extract top critical issues across all analyzers"""
         all_issues = []
-        
+
         # Combine findings from all analyzers
         for analyzer_type, report in self.individual_reports.items():
             findings = report.get('findings', [])
             for finding in findings:
                 # Add analyzer context to each finding
                 issue = {
-                    'title': finding.get('title', finding.get('rule_id', 
-                                                            'Security Issue')),
+                    'title': finding.get('title', finding.get('rule_id',
+                                                              'Security Issue')),
                     'severity': finding.get('severity', 'info'),
                     'analyzer': analyzer_type,
-                    'description': finding.get('description', 
-                                             'Security vulnerability detected'),
+                    'description': finding.get('description',
+                                               'Security vulnerability detected'),
                     'cwe_id': finding.get('cwe_id', 'N/A'),
                     'evidence': finding.get('evidence', ''),
-                    'impact': finding.get('impact', 
-                                        'Potential security vulnerability'),
+                    'impact': finding.get('impact',
+                                          'Potential security vulnerability'),
                     'risk_score': self._get_severity_weight(
                         finding.get('severity', 'info'))
                 }
                 all_issues.append(issue)
-        
+
         # Sort by severity weight (highest first)
-        sorted_issues = sorted(all_issues, 
-                             key=lambda x: x['risk_score'], reverse=True)
-        
+        sorted_issues = sorted(all_issues,
+                               key=lambda x: x['risk_score'], reverse=True)
+
         return sorted_issues
 
     def _get_severity_weight(self, severity):
@@ -801,11 +801,11 @@ class ComprehensiveSecurityReporter:
     def _extract_target_info(self, comprehensive_data):
         """Extract target information for report header"""
         metadata = comprehensive_data.get('metadata', {})
-        
+
         # Try to extract application name from target path or URL
         app_name = "Unknown Application"
         target = "Unknown Target"
-        
+
         if metadata.get('target_url'):
             target = metadata['target_url']
             # Try to extract app name from URL
@@ -829,7 +829,7 @@ class ComprehensiveSecurityReporter:
         elif metadata.get('demo_mode'):
             app_name = "Security Testing Demo Applications"
             target = "Multiple demo applications and scenarios"
-        
+
         return {
             'application_name': app_name,
             'target': target,
@@ -840,7 +840,7 @@ class ComprehensiveSecurityReporter:
     def _determine_assessment_scope(self, metadata):
         """Determine the scope of the assessment"""
         scope_items = []
-        
+
         if metadata.get('analyzers_used'):
             analyzers = metadata['analyzers_used']
             if 'sast' in analyzers:
@@ -851,13 +851,13 @@ class ComprehensiveSecurityReporter:
                 scope_items.append("Network Security Analysis")
             if 'pentest' in analyzers:
                 scope_items.append("Penetration Testing")
-        
+
         if metadata.get('demo_mode'):
             scope_items.append("Educational Demo Environment")
-        
+
         if metadata.get('quick_scan'):
             scope_items.append("Quick Assessment Mode")
-        
+
         return ", ".join(scope_items) if scope_items else "General Security Assessment"
 
     def _generate_educational_insights(self) -> Dict[str, Any]:
@@ -972,13 +972,13 @@ class ComprehensiveSecurityReporter:
     ) -> str:
         """Create comprehensive markdown report with professional structure"""
         lines = []
-        
+
         executive = comprehensive_data['executive_summary']
         metadata = comprehensive_data['metadata']
-        
+
         # Determine application name from target data
         target_info = self._extract_target_info(comprehensive_data)
-        
+
         # Professional Header
         lines.extend([
             "# Comprehensive Security Assessment Report",
@@ -996,7 +996,7 @@ class ComprehensiveSecurityReporter:
         # Executive Summary with Professional Business Language
         risk_level = executive['overall_risk_level']
         risk_color = self._get_risk_color(risk_level)
-        
+
         lines.extend([
             "## Executive Summary",
             "",
@@ -1006,23 +1006,29 @@ class ComprehensiveSecurityReporter:
             "",
             "### Key Risk Indicators"
         ])
-        
+
         # Professional severity breakdown
         severity_dist = executive['severity_distribution']
         if severity_dist.get('critical', 0) > 0:
-            lines.append(f"- **Critical Vulnerabilities:** {severity_dist['critical']} (Immediate action required)")
+            lines.append(
+                f"- **Critical Vulnerabilities:** {severity_dist['critical']} (Immediate action required)")
         if severity_dist.get('high', 0) > 0:
-            lines.append(f"- **High Severity Issues:** {severity_dist['high']} (Address within 24-48 hours)")
+            lines.append(
+                f"- **High Severity Issues:** {severity_dist['high']} (Address within 24-48 hours)")
         if severity_dist.get('medium', 0) > 0:
-            lines.append(f"- **Medium Severity Issues:** {severity_dist['medium']} (Address within 1-2 weeks)")
+            lines.append(
+                f"- **Medium Severity Issues:** {severity_dist['medium']} (Address within 1-2 weeks)")
         if severity_dist.get('low', 0) > 0 or severity_dist.get('info', 0) > 0:
-            low_info_total = severity_dist.get('low', 0) + severity_dist.get('info', 0)
-            lines.append(f"- **Low/Info Severity Issues:** {low_info_total} (Monitor and improve)")
-        
+            low_info_total = severity_dist.get(
+                'low', 0) + severity_dist.get('info', 0)
+            lines.append(
+                f"- **Low/Info Severity Issues:** {low_info_total} (Monitor and improve)")
+
         lines.extend([
             "",
             "### Business Impact",
-            self._generate_business_impact_summary(executive, comprehensive_data),
+            self._generate_business_impact_summary(
+                executive, comprehensive_data),
             "",
             "---",
             ""
@@ -1033,10 +1039,11 @@ class ComprehensiveSecurityReporter:
             "## Analysis Summary by Type",
             ""
         ])
-        
+
         for i, analyzer_type in enumerate(metadata['analyzers_used'], 1):
             if analyzer_type in self.individual_reports:
-                summary = self._create_analyzer_summary(analyzer_type, self.individual_reports[analyzer_type])
+                summary = self._create_analyzer_summary(
+                    analyzer_type, self.individual_reports[analyzer_type])
                 lines.extend([
                     f"### {i}. {summary['name']}",
                     f"**Tool:** {summary['tools']}",
@@ -1058,7 +1065,7 @@ class ComprehensiveSecurityReporter:
                 f"## Top {min(10, len(top_issues))} Critical Security Issues",
                 ""
             ])
-            
+
             for i, issue in enumerate(top_issues[:10], 1):
                 lines.extend([
                     f"### {i}. {issue['title']} ({issue['severity'].upper()})",
