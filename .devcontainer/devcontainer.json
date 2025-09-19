@@ -86,7 +86,6 @@
         },
         "chat.agent.enabled": false
       }
-      }
     }
   },
   "forwardPorts": [
