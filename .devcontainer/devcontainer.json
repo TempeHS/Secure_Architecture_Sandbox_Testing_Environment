@@ -47,7 +47,7 @@
         "python.linting.flake8Enabled": true,
         "python.formatting.provider": "black",
         "python.terminal.activateEnvironment": false,
-        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.defaultProfile.linux": "bash",
         "files.associations": {
           "*.dockerfile": "dockerfile",
           "*.yml": "yaml",
@@ -77,7 +77,15 @@
         "security.workspace.trust.startupPrompt": "never",
         // Disable the dev container rebuild notifications
         "remote.containers.showRebuildNotification": false,
-        "dev.containers.showRebuildNotification": false
+        "dev.containers.showRebuildNotification": false,
+                "github.copilot.enable": {
+          "python": false,
+          "html": false,
+          "css": false,
+          "SQL": false
+        },
+        "chat.agent.enabled": false
+      }
       }
     }
   },
