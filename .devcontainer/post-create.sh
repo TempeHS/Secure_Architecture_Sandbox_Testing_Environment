@@ -15,6 +15,7 @@ echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation
 echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
 echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"
+echo "🔧 If git clone issues occur, run 'bash .devcontainer/debug-git-clone.sh' for diagnostics"
 
 # Make sure WELCOME.md is prominently visible by echoing its location
 echo ""
@@ -91,16 +92,76 @@ cd /opt/security-tools
 # Clone the Unsecure PWA repository
 echo "📥 Cloning Unsecure PWA repository..."
 cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples
+
+# Function to attempt clone with better error handling
+clone_unsecure_pwa() {
+    local repo_url="$1"
+    local branch="$2"
+    local target_dir="$3"
+    
+    echo "🔍 Attempting to clone from: $repo_url (branch: $branch)"
+    
+    # Add verbose output for debugging
+    if git clone -v -b "$branch" "$repo_url" "$target_dir" 2>&1; then
+        echo "✅ Unsecure PWA cloned successfully from $branch branch"
+        return 0
+    else
+        local exit_code=$?
+        echo "❌ Clone failed with exit code: $exit_code"
+        return $exit_code
+    fi
+}
+
 if [ ! -d "unsecure-pwa/.git" ]; then
     if [ -d "unsecure-pwa" ] && [ "$(ls -A unsecure-pwa)" ]; then
         echo "⚠️  Unsecure PWA directory exists but is not empty, backing up..."
         mv unsecure-pwa unsecure-pwa.backup.$(date +%s)
     fi
     
-    if git clone -b sandbox_version https://github.com/TempeHS/The_Unsecure_PWA.git unsecure-pwa; then
-        echo "✅ Unsecure PWA cloned successfully from sandbox_version branch"
+    # Try multiple approaches for cloning
+    echo "🔐 Checking GitHub authentication status..."
+    git config --global --get user.name >/dev/null 2>&1 || git config --global user.name "Codespace User"
+    git config --global --get user.email >/dev/null 2>&1 || git config --global user.email "user@codespace.local"
+    
+    # Primary attempt: Clone the specific branch
+    if clone_unsecure_pwa "https://github.com/TempeHS/The_Unsecure_PWA.git" "sandbox_version" "unsecure-pwa"; then
+        echo "✅ Primary clone successful"
     else
-        echo "❌ Failed to clone Unsecure PWA repository"
+        echo "⚠️  Primary clone failed, trying fallback methods..."
+        
+        # Fallback 1: Try cloning main branch instead
+        echo "🔄 Fallback 1: Trying main branch..."
+        if clone_unsecure_pwa "https://github.com/TempeHS/The_Unsecure_PWA.git" "main" "unsecure-pwa"; then
+            echo "✅ Fallback 1 successful (main branch)"
+        else
+            echo "⚠️  Fallback 1 failed, trying shallow clone..."
+            
+            # Fallback 2: Try shallow clone
+            echo "🔄 Fallback 2: Trying shallow clone..."
+            if git clone --depth 1 -b sandbox_version https://github.com/TempeHS/The_Unsecure_PWA.git unsecure-pwa 2>&1; then
+                echo "✅ Fallback 2 successful (shallow clone)"
+            else
+                # Fallback 3: Clone without specific branch
+                echo "🔄 Fallback 3: Cloning default branch..."
+                if git clone --depth 1 https://github.com/TempeHS/The_Unsecure_PWA.git unsecure-pwa 2>&1; then
+                    echo "✅ Fallback 3 successful (default branch)"
+                else
+                    echo "❌ All clone attempts failed. This may indicate:"
+                    echo "   - Repository is private and user lacks access"
+                    echo "   - Network connectivity issues"
+                    echo "   - Repository or branch does not exist"
+                    echo "   - GitHub authentication problems"
+                    echo ""
+                    echo "🔧 Manual steps to resolve:"
+                    echo "   1. Verify repository exists: https://github.com/TempeHS/The_Unsecure_PWA"
+                    echo "   2. Check if you're a member of the TempeHS organization"
+                    echo "   3. Ensure the 'sandbox_version' branch exists"
+                    echo "   4. Try running: git clone https://github.com/TempeHS/The_Unsecure_PWA.git unsecure-pwa"
+                    echo ""
+                    echo "⚠️  Continuing setup without Unsecure PWA repository..."
+                fi
+            fi
+        fi
     fi
 else
     echo "✅ Unsecure PWA repository already exists"
@@ -213,6 +274,9 @@ EOF
 
 chmod +x /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py
 
+# Make debug scripts executable
+chmod +x /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/debug-git-clone.sh
+
 # Set up git if not already configured
 if [ ! -f ~/.gitconfig ]; then
     git config --global user.name "Cybersec Student"
@@ -318,9 +382,10 @@ EOF
 echo "✅ Environment setup complete!"
 echo "📚 Check /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
-echo "� Run 'python3 .devcontainer/verify_environment.py' for quick verification"
+echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
 echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
-echo "�🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"
+echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"
+echo "🔧 If git clone issues occur, run 'bash .devcontainer/debug-git-clone.sh' for diagnostics"
 
 # Run a quick verification test
 echo ""
