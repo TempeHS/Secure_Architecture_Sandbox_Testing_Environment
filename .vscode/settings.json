@@ -34,5 +34,7 @@
         "security.workspace.trust.startupPrompt": "never",
         // Disable the dev container rebuild notifications
         "remote.containers.showRebuildNotification": false,
-        "dev.containers.showRebuildNotification": false
+        "dev.containers.showRebuildNotification": false,
+        "python-envs.defaultEnvManager": "ms-python.python:system",
+        "python-envs.pythonProjects": []
       }
