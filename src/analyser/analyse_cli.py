@@ -59,6 +59,15 @@ except ImportError:
     PDF_AVAILABLE = False
     logger.warning("PDF conversion not available")
 
+# Import health check integration
+try:
+    from analyser.health_check_integration import (
+        ensure_apps_running, get_health_check_args)
+    HEALTH_CHECK_AVAILABLE = True
+except ImportError:
+    HEALTH_CHECK_AVAILABLE = False
+    logger.warning("Health check integration not available")
+
 
 class AnalysisCLI:
     """Command-line interface for static security analysis"""
@@ -68,6 +77,18 @@ class AnalysisCLI:
 
     def run_analysis(self, args) -> None:
         """Execute analysis based on command-line arguments"""
+
+        # Run health check if available and not skipped
+        if (HEALTH_CHECK_AVAILABLE and
+                not getattr(args, 'skip_health_check', False)):
+            # For static analysis, we typically check demo apps
+            demo_apps = args.demo_apps if hasattr(args, 'demo_apps') else False
+            verbose = getattr(args, 'health_check_verbose', False)
+            ensure_apps_running(
+                target=getattr(args, 'target', None),
+                demo_apps=demo_apps,
+                verbose=verbose
+            )
 
         if args.demo_apps:
             self._analyse_demo_applications(args)
@@ -556,6 +577,10 @@ Examples:
 
     parser.add_argument('--quiet', '-q', action='store_true',
                         help='Quiet mode - minimal output')
+
+    # Add health check arguments if available
+    if HEALTH_CHECK_AVAILABLE:
+        get_health_check_args(parser)
 
     args = parser.parse_args()
 

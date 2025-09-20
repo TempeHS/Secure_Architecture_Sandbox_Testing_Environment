@@ -15,6 +15,15 @@ from pathlib import Path
 # Add the src directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
+# Import health check integration
+try:
+    from analyser.health_check_integration import (
+        ensure_apps_running, get_health_check_args)
+    HEALTH_CHECK_AVAILABLE = True
+except ImportError:
+    HEALTH_CHECK_AVAILABLE = False
+    print("Warning: Health check integration not available")
+
 
 def main():
     """Main CLI entry point."""
@@ -63,7 +72,22 @@ Examples:
         help='Convert all JSON files in the specified directory'
     )
 
+    # Add health check arguments if available
+    if HEALTH_CHECK_AVAILABLE:
+        get_health_check_args(parser)
+
     args = parser.parse_args()
+
+    # Run health check if available and not skipped
+    if (HEALTH_CHECK_AVAILABLE and
+            not getattr(args, 'skip_health_check', False)):
+        # For report generation, run demo apps health check
+        verbose = getattr(args, 'health_check_verbose', False)
+        ensure_apps_running(
+            target=None,
+            demo_apps=True,  # Check demo apps for report generation
+            verbose=verbose
+        )
 
     # Check required arguments
     if not args.input and not args.convert_all:

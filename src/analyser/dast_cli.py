@@ -59,6 +59,15 @@ except ImportError:
     PDF_AVAILABLE = False
     logger.warning("PDF conversion not available")
 
+# Import health check integration
+try:
+    from analyser.health_check_integration import (
+        ensure_apps_running, get_health_check_args)
+    HEALTH_CHECK_AVAILABLE = True
+except ImportError:
+    HEALTH_CHECK_AVAILABLE = False
+    logger.warning("Health check integration not available")
+
 
 class DASTCLI:
     """Command-line interface for dynamic application security testing"""
@@ -68,6 +77,16 @@ class DASTCLI:
 
     def run_analysis(self, args) -> None:
         """Execute dynamic analysis based on command-line arguments"""
+
+        # Health check integration - ensure apps are running before testing
+        if HEALTH_CHECK_AVAILABLE and not args.skip_health_check:
+            health_verbose = getattr(args, 'health_check_verbose', False)
+            ensure_apps_running(
+                target=args.target_url if not args.demo_apps else None,
+                demo_apps=args.demo_apps,
+                force_check=True,
+                verbose=health_verbose
+            )
 
         if args.demo_apps:
             self._analyse_demo_applications(args)
@@ -80,7 +99,9 @@ class DASTCLI:
 
         # Validate URL format
         if not args.target_url.startswith(('http://', 'https://')):
-            print("Error: Target must be a valid URL starting with http:// or https://")
+            error_msg = ("Error: Target must be a valid URL starting with "
+                         "http:// or https://")
+            print(error_msg)
             sys.exit(1)
 
         try:
@@ -545,6 +566,10 @@ Examples:
 
     parser.add_argument('--quiet', '-q', action='store_true',
                         help='Quiet mode - minimal output')
+
+    # Add health check arguments
+    if HEALTH_CHECK_AVAILABLE:
+        get_health_check_args(parser)
 
     args = parser.parse_args()
 

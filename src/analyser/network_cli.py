@@ -46,6 +46,15 @@ except ImportError:
     PDF_AVAILABLE = False
     print("Warning: PDF conversion not available")
 
+# Import health check integration
+try:
+    from analyser.health_check_integration import (
+        ensure_apps_running, get_health_check_args)
+    HEALTH_CHECK_AVAILABLE = True
+except ImportError:
+    HEALTH_CHECK_AVAILABLE = False
+    print("Warning: Health check integration not available")
+
 
 class NetworkCLI:
     """
@@ -63,6 +72,18 @@ class NetworkCLI:
         """Main CLI execution method"""
         parser = self._create_argument_parser()
         args = parser.parse_args()
+
+        # Run health check if available and not skipped
+        if (HEALTH_CHECK_AVAILABLE and
+                not getattr(args, 'skip_health_check', False)):
+            # For network analysis, check demo apps if in demo mode
+            demo_apps = getattr(args, 'demo_network', False)
+            verbose = getattr(args, 'health_check_verbose', False)
+            ensure_apps_running(
+                target=None,
+                demo_apps=demo_apps,
+                verbose=verbose
+            )
 
         try:
             # Handle different analysis modes
@@ -202,6 +223,10 @@ Output Options:
             action='store_true',
             help='Enable verbose output for debugging'
         )
+
+        # Add health check arguments if available
+        if HEALTH_CHECK_AVAILABLE:
+            get_health_check_args(parser)
 
         return parser
 
