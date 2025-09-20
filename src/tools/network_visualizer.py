@@ -212,13 +212,14 @@ def analyse_sandbox_isolation(docker_info):
     return analysis
 
 
-def create_enhanced_network_graph(docker_info, analysis, output_path):
+def create_enhanced_network_graph(docker_info, analysis, output_path, include_ssh=False):
     """Create an enhanced network visualization with security details."""
     try:
         # Create a temporary DOT file for custom graph generation
         with tempfile.NamedTemporaryFile(mode='w', suffix='.dot',
                                          delete=False) as f:
-            dot_content = generate_custom_dot_graph(docker_info, analysis)
+            dot_content = generate_custom_dot_graph(
+                docker_info, analysis, include_ssh)
             f.write(dot_content)
             dot_file = f.name
 
@@ -241,11 +242,16 @@ def create_enhanced_network_graph(docker_info, analysis, output_path):
     return True
 
 
-def generate_custom_dot_graph(docker_info, analysis):
+def generate_custom_dot_graph(docker_info, analysis, include_ssh=False):
     """Generate a custom DOT graph with detailed security information."""
     dot_lines = [
         'digraph "Docker Network Topology" {',
         '    rankdir=TB;',
+        '    compound=true;',
+        '    overlap=false;',
+        '    splines=true;',
+        '    layers="main:text";',
+        '    layer="main";',
         '    node [shape=box, style=rounded, fontname="Roboto"];',
         '    edge [style=solid, fontname="Roboto"];',
         '    ',
@@ -265,7 +271,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        colour=purple;',
         '        fillcolor="#f8f0ff";',
         '        fontcolor=purple;',
-        '        margin=20;',
+        '        margin=30;',
         '        ',
         '        subgraph cluster_codespaces {',
         '            label="Codespaces Cloud Environment\\n(Isolated from Student Network)";',
@@ -275,10 +281,10 @@ def generate_custom_dot_graph(docker_info, analysis):
         '            colour="#228B22";',
         '            fillcolor="#f0fff0";',
         '            fontcolor="#228B22";',
-        '            margin=20;',
+        '            margin=30;',
         '            ',
         '            "Host System" [',
-        '                label="Codespaces Host\\nDocker Runtime\\nPorts: 3000, 5000, 8000, 8080, 9090";',
+        '                label="Codespaces Host\\nDocker Runtime\\nPorts: 22, 3000, 5000, 8000, 8080, 9090";',
         '                fillcolor="#d4edda";',
         '                style=filled;',
         '                shape=ellipse;',
@@ -293,7 +299,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '                colour=blue;',
         '                fillcolor="#f0f8ff";',
         '                fontcolor=blue;',
-        '                margin=20;',
+        '                margin=30;',
         '                ',
     ]
 
@@ -371,6 +377,8 @@ def generate_custom_dot_graph(docker_info, analysis):
         ]
         label_parts.extend(security_details)
 
+        # SSH label is now on the connection line, not in the box
+
         label = '\\n'.join(label_parts)
 
         dot_lines.append(f'                "{container_name}" [')
@@ -381,7 +389,8 @@ def generate_custom_dot_graph(docker_info, analysis):
         dot_lines.append('')
 
     # New layout: apps on top, whitespace, cybersec_sandbox at bottom
-    dot_lines.append('                // Row 1: Vulnerable apps at top')
+    dot_lines.append(
+        '                // Row 1: Vulnerable apps at top')
     apps_rank = ('                { rank=min; "vulnerable_nodejs"; "unsecure_pwa"; '
                  '"student_uploads"; "vulnerable_flask"; }')
     dot_lines.append(apps_rank)
@@ -426,17 +435,24 @@ def generate_custom_dot_graph(docker_info, analysis):
     dot_lines.append('            }')  # Close sandbox cluster
     dot_lines.append('            ')
     dot_lines.append(
-        '            // Host to cybersec_sandbox connection with cluster constraints')
+        '            // Host to cybersec_sandbox connection within codespaces')
     dot_lines.append('            "Host System" -> "cybersec_sandbox" [')
-    dot_lines.append('                label="8080:8080\\n(sandbox_tools)";')
+    if include_ssh:
+        dot_lines.append(
+            '                label="Codespaces Connection\\n8080:8080\\n\\n22:22 SSH";')
+    else:
+        dot_lines.append(
+            '                label="Codespaces Connection\\n8080:8080";')
     dot_lines.append('                labeldistance=1.5;')
     dot_lines.append('                labelangle=0;')
     dot_lines.append('                style=bold;')
     dot_lines.append('                colour="#228B22";')
-    dot_lines.append('                ltail=cluster_codespaces;')
-    dot_lines.append('                lhead=cluster_sandbox;')
+    dot_lines.append('                dir=both;')
+    dot_lines.append('                tailport=w;')
+    dot_lines.append('                headport=w;')
     dot_lines.append('            ];')
     dot_lines.append('            ')
+
     dot_lines.append('        }')     # Close codespaces cluster
     dot_lines.append('    }')         # Close browser cluster
     dot_lines.append('    ')
@@ -465,6 +481,7 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        labelangle=10;',
         '        style=bold;',
         '        colour=purple;',
+        '        dir=both;',
         '    ];',
         '    '
     ])
@@ -474,7 +491,7 @@ def generate_custom_dot_graph(docker_info, analysis):
     dot_lines.extend([
         '    ',
         '    // External host connections to apps (direct from host to top row)',
-        '    edge [style=bold, colour="#228B22"];',
+        '    edge [style=bold, colour="#228B22", dir=both];',
         '    "Host System" -> "vulnerable_nodejs" [',
         '        label="3000:3000\\n(Vulnerable Node.js)";',
         '        labeldistance=1.5;',
@@ -496,8 +513,24 @@ def generate_custom_dot_graph(docker_info, analysis):
         '        labelangle=0;',
         '    ];',
         '    ',
+    ])
+
+    # 3. Third: 22:22 SSH connection (rightmost, from cybersec up to host)
+    dot_lines.extend([
+        '    // SSH Terminal Access (upward from cybersec to host on right)',
+        '    "cybersec_sandbox" -> "Host System" [',
+        '        label="";',
+        '        style=bold;',
+        '        colour="#FF6B35";',
+        '        constraint=false;',
+        '        splines=ortho;',
+        '        dir=both;',
+        '        tailport=e;',
+        '        headport=e;',
+        '    ];',
+        '    ',
         '    // Internal sandbox connections (cybersec tools → apps)',
-        '    edge [style=dashed, colour=blue, penwidth=2];',
+        '    edge [style=dashed, colour=blue, penwidth=2, dir=both];',
         '    "cybersec_sandbox" -> "vulnerable_nodejs" [',
         '        label="Internal\\nNetwork\\nAccess";',
         '    ];',
@@ -601,17 +634,27 @@ def main():
     output_dir = '/workspaces/Secure_Architecture_Sandbox_Testing_Environment/reports'
     os.makedirs(output_dir, exist_ok=True)
 
-    # Generate network visualization
+    # Generate network visualizations (both versions)
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_path = os.path.join(
-        output_dir, f'docker_network_topology_{timestamp}.png')
 
     print("🎨 Generating network visualization...")
+
+    # First version without SSH
+    output_path = os.path.join(
+        output_dir, f'docker_network_topology_{timestamp}.png')
     if create_enhanced_network_graph(docker_info, analysis, output_path):
-        print(f"✅ Network visualization completed successfully!")
-        print(f"📁 Output saved to: {output_path}")
+        print(f"✓ Network visualization saved to: {output_path}")
     else:
         print("❌ Failed to generate network visualization")
+        return 1
+
+    # Second version with SSH
+    output_path_ssh = os.path.join(
+        output_dir, f'docker_network_topology_with_ssh_{timestamp}.png')
+    if create_enhanced_network_graph(docker_info, analysis, output_path_ssh, include_ssh=True):
+        print(f"✓ Network visualization with SSH saved to: {output_path_ssh}")
+    else:
+        print("❌ Failed to generate SSH network visualization")
         return 1
 
     # Generate detailed report

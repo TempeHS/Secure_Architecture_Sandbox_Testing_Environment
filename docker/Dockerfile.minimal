@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     net-tools \
     dnsutils \
     tcpdump \
+    iputils-ping \
     # Directory enumeration
     dirb \
     # Analysis tools
