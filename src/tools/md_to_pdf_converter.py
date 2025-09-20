@@ -105,119 +105,136 @@ class MarkdownToPdfConverter:
 
     def get_github_css(self) -> str:
         """Return CSS styles that mimic GitHub's markdown rendering for A4 pages."""
-        return """
-        @page {
+        # Adjust spacing for continuous mode
+        compact = self.page_break_mode == "continuous"
+
+        margin = "1.5cm" if compact else "2cm"
+        font_size = "10pt" if compact else "11pt"
+        line_height = "1.4" if compact else "1.6"
+        heading_margin_top = "16px" if compact else "24px"
+        heading_margin_bottom = "12px" if compact else "16px"
+        h1_size = "18pt" if compact else "20pt"
+        h2_size = "14pt" if compact else "16pt"
+        paragraph_margin = "12px" if compact else "16px"
+
+        return f"""
+        @page {{
             size: A4;
-            margin: 2cm;
-            @bottom-center {
+            margin: {margin};
+            @bottom-center {{
                 content: "Page " counter(page) " of " counter(pages);
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+                font-family: Roboto, Arial, sans-serif;
                 font-size: 10pt;
                 colour: #666;
-            }
-        }
+            }}
+            }}
+        }}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.6;
+        body {{
+            font-family: Roboto, Arial, sans-serif;
+            font-size: {font_size};
+            line-height: {line_height};
             colour: #24292e;
             max-width: none;
             margin: 0;
             padding: 0;
             background-colour: #fff;
-        }
+        }}
 
         /* Headings */
-        h1, h2, h3, h4, h5, h6 {
+        h1, h2, h3, h4, h5, h6 {{
+            font-family: Roboto, Arial, sans-serif;
             font-weight: 600;
             line-height: 1.25;
-            margin-top: 24px;
-            margin-bottom: 16px;
+            margin-top: {heading_margin_top};
+            margin-bottom: {heading_margin_bottom};
             colour: #24292e;
-        }
+        }}
 
-        h1 {
-            font-size: 20pt;
-            border-bottom: 1px solid #eaecef;
-            padding-bottom: 10px;
-            page-break-after: avoid;
-        }
-
-        h2 {
-            font-size: 16pt;
+        h1 {{
+            font-size: {h1_size};
             border-bottom: 1px solid #eaecef;
             padding-bottom: 8px;
             page-break-after: avoid;
-        }
+        }}
 
-        h3 {
-            font-size: 14pt;
+        h2 {{
+            font-size: {h2_size};
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 6px;
             page-break-after: avoid;
-        }
+        }}
 
-        h4 {
+        h3 {{
             font-size: 12pt;
             page-break-after: avoid;
-        }
+        }}
 
-        h5, h6 {
+        h4 {{
             font-size: 11pt;
             page-break-after: avoid;
-        }
+        }}
+
+        h5, h6 {{
+            font-size: 10pt;
+            page-break-after: avoid;
+        }}
 
         /* Paragraphs and text */
-        p {
+        p {{
+            font-family: Roboto, Arial, sans-serif;
             margin-top: 0;
-            margin-bottom: 16px;
+            margin-bottom: {paragraph_margin};
             orphans: 2;
             widows: 2;
-        }
+        }}
 
         /* Links */
-        a {
+        a {{
+            font-family: Roboto, Arial, sans-serif;
             colour: #0366d6;
             text-decoration: none;
-        }
+        }}
 
-        a:hover {
+        a:hover {{
             text-decoration: underline;
-        }
+        }}
 
         /* Lists */
-        ul, ol {
+        ul, ol {{
             margin-top: 0;
-            margin-bottom: 16px;
+            margin-bottom: {paragraph_margin};
             padding-left: 30px;
-        }
+        }}
 
-        li {
-            margin-bottom: 4px;
-        }
+        li {{
+            font-family: Roboto, Arial, sans-serif;
+            margin-bottom: 2px;
+        }}
 
         /* Code blocks */
-        pre {
+        pre {{
+            font-family: 'SFMono-Regular', Consolas, monospace;
             background-colour: #f6f8fa;
             border-radius: 6px;
             font-size: 9pt;
             line-height: 1.45;
             overflow: auto;
-            padding: 16px;
-            margin-bottom: 16px;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            padding: 12px;
+            margin-bottom: {paragraph_margin};
             page-break-inside: avoid;
-        }
+        }}
 
-        code {
+        code {{
+            font-family: 'SFMono-Regular', Consolas, monospace;
             background-colour: rgba(27,31,35,0.05);
             border-radius: 3px;
             font-size: 9pt;
             margin: 0;
             padding: 2px 4px;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-        }
+        }}
 
-        pre code {
+        pre code {{
             background-colour: transparent;
             border: 0;
             display: inline;
@@ -227,124 +244,128 @@ class MarkdownToPdfConverter:
             overflow: visible;
             padding: 0;
             word-wrap: normal;
-        }
+        }}
 
         /* Tables */
-        table {
+        table {{
+            font-family: Roboto, Arial, sans-serif;
             border-collapse: collapse;
             border-spacing: 0;
             margin-top: 0;
-            margin-bottom: 16px;
+            margin-bottom: {paragraph_margin};
             width: 100%;
             overflow: auto;
-            font-size: 10pt;
-        }
+            font-size: 9pt;
+        }}
 
-        table th {
+        table th {{
+            font-family: Roboto, Arial, sans-serif;
             font-weight: 600;
             background-colour: #f6f8fa;
             border: 1px solid #d0d7de;
-            padding: 6px 13px;
-        }
+            padding: 4px 8px;
+        }}
 
-        table td {
+        table td {{
+            font-family: Roboto, Arial, sans-serif;
             border: 1px solid #d0d7de;
-            padding: 6px 13px;
-        }
+            padding: 4px 8px;
+        }}
 
-        table tr {
+        table tr {{
             background-colour: #fff;
             border-top: 1px solid #c6cbd1;
-        }
+        }}
 
-        table tr:nth-child(2n) {
+        table tr:nth-child(2n) {{
             background-colour: #f6f8fa;
-        }
+        }}
 
         /* Blockquotes */
-        blockquote {
+        blockquote {{
+            font-family: Roboto, Arial, sans-serif;
             border-left: 4px solid #dfe2e5;
             colour: #6a737d;
-            margin: 0 0 16px 0;
+            margin: 0 0 {paragraph_margin} 0;
             padding: 0 16px;
-        }
+        }}
 
         /* Horizontal rules */
-        hr {
+        hr {{
             background-colour: #e1e4e8;
             border: 0;
             height: 2px;
-            margin: 24px 0;
+            margin: 16px 0;
             padding: 0;
-        }
+        }}
 
         /* Images */
-        img {
+        img {{
             max-width: 100%;
             height: auto;
             border-style: none;
-        }
+        }}
 
         /* Task lists */
-        .task-list-item {
+        .task-list-item {{
             list-style-type: none;
-        }
+        }}
 
-        .task-list-item-checkbox {
+        .task-list-item-checkbox {{
             margin: 0 6px 0 -20px;
             vertical-align: middle;
-        }
+        }}
 
         /* Syntax highlighting */
-        .codehilite {
+        .codehilite {{
             background-colour: #f6f8fa;
             border-radius: 6px;
-            margin-bottom: 16px;
+            margin-bottom: {paragraph_margin};
             page-break-inside: avoid;
-        }
+        }}
 
-        .codehilite pre {
+        .codehilite pre {{
             background-colour: transparent;
             margin: 0;
-        }
+        }}
 
         /* Page breaks */
-        .page-break {
+        .page-break {{
             page-break-before: always;
-        }
+        }}
 
         /* Educational content styling */
-        .exercise-header {
+        .exercise-header {{
             background-colour: #f1f8ff;
             border: 1px solid #c8e1ff;
             border-radius: 6px;
-            padding: 16px;
-            margin-bottom: 24px;
-        }
+            padding: 12px;
+            margin-bottom: 16px;
+        }}
 
-        .warning {
+        .warning {{
             background-colour: #fff5b4;
             border: 1px solid #d4ac0d;
             border-radius: 6px;
-            padding: 12px;
-            margin: 16px 0;
-        }
+            padding: 8px;
+            margin: 12px 0;
+        }}
 
-        .info {
+        .info {{
             background-colour: #f1f8ff;
             border: 1px solid #c8e1ff;
             border-radius: 6px;
-            padding: 12px;
-            margin: 16px 0;
-        }
+            padding: 8px;
+            margin: 12px 0;
+        }}
 
-        .success {
+        .success {{
             background-colour: #f0fff4;
             border: 1px solid #22c55e;
             border-radius: 6px;
-            padding: 12px;
-            margin: 16px 0;
-        }
+            padding: 8px;
+            margin: 12px 0;
+        }}
         """
 
     def setup_markdown_parser(self) -> markdown.Markdown:

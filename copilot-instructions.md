@@ -122,65 +122,368 @@ sleep 30
 
 ## Command Examples and Explanations
 
-### **SAST (Static Analysis)**
-```bash
-# Basic vulnerability scan
-python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational
+### **SAST (Static Analysis) - Static Application Security Testing**
 
-# Advanced options from documentation
-python src/analyser/analyse_cli.py samples/vulnerable-flask-app --severity high,critical
-python src/analyser/analyse_cli.py samples/vulnerable-flask-app --check-dependencies
+#### **Basic Commands**
+```bash
+# Basic vulnerability scan with educational explanations
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output detailed_sast_vulnerable_flask.pdf --format pdf --verbose
+
+# Analyse specific directory or file  
+python src/analyser/analyse_cli.py samples/vulnerable-nodejs-app --tools all --educational --output detailed_sast_vulnerable_nodejs.pdf --format pdf --verbose
+
+# Quick scan of all demo applications
+python src/analyser/analyse_cli.py --demo-apps --tools all --educational --output detailed_sast_demo_apps.pdf --format pdf --verbose
 ```
 
-### **DAST (Dynamic Analysis)**
+#### **Advanced SAST Options**
 ```bash
-# Web application testing
-python src/analyser/dast_cli.py http://localhost:5000 --educational
-python src/analyser/dast_cli.py http://localhost:5000 --test-xss --test-sqli --educational
-python src/analyser/dast_cli.py http://localhost:5000 --check-headers --educational
+# Use specific tools only
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools bandit safety --educational --output targeted_sast_report.pdf --format pdf --verbose
+
+# Generate comprehensive report with all tools (RECOMMENDED)
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output comprehensive_sast_report.pdf --format pdf --verbose
+
+# Output to specific file with different formats
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output sast_report.json --format json --verbose
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output sast_report.md --format md --verbose
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output sast_report.pdf --format pdf --verbose
+
+# Verbose output for debugging (included in all recommended commands)
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --verbose
+
+# Quiet mode for automated scripts
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --quiet --output report.json
 ```
 
-### **Network Analysis**
+#### **Available SAST Tools**
+- `bandit` - Python security linter
+- `safety` - Python dependency vulnerability scanner  
+- `semgrep` - Multi-language static analysis
+- `npm` - Node.js security analysis
+- `all` - Run all applicable tools
+
+### **DAST (Dynamic Analysis) - Dynamic Application Security Testing**
+
+#### **Basic DAST Commands**
 ```bash
-# Service discovery and monitoring
-python src/analyser/network_cli.py --scan-services localhost --educational
-python src/analyser/network_cli.py --monitor-connections --educational --duration 60
-python src/analyser/network_cli.py --dns-analysis --educational --duration 60
+# Basic web application testing with educational explanations (RECOMMENDED)
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output detailed_dast_unsecure_pwa.pdf --format pdf --verbose
+
+# Quick vulnerability scan (basic tests only)
+python src/analyser/dast_cli.py http://localhost:5000 --quick --educational --output quick_dast_report.pdf --format pdf --verbose
+
+# Deep scan with comprehensive testing (takes longer) - RECOMMENDED
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output comprehensive_dast_report.pdf --format pdf --verbose
+
+# Test all running demo applications
+python src/analyser/dast_cli.py --demo-apps --deep-scan --educational --output demo_apps_dast_report.pdf --format pdf --verbose
+```
+
+#### **Advanced DAST Options**
+```bash
+# Use specific tools only
+python src/analyser/dast_cli.py http://localhost:5000 --tools nikto gobuster --deep-scan --educational --output targeted_dast_report.pdf --format pdf --verbose
+
+# Generate comprehensive report with all tools (RECOMMENDED)
+python src/analyser/dast_cli.py http://localhost:5000 --tools all --deep-scan --educational --output comprehensive_dast_all_tools.pdf --format pdf --verbose
+
+# Output to specific file with different formats
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output dast_report.json --format json --verbose
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output dast_report.md --format md --verbose
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output dast_report.pdf --format pdf --verbose
+
+# Verbose output for debugging (included in all recommended commands)
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --verbose
+
+# Quiet mode for automated scripts
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --quiet --output report.json
+```
+
+#### **Available DAST Tools**
+- `nikto` - Web server vulnerability scanner
+- `gobuster` - Directory/file enumeration tool
+- `basic_tests` - Core web application security tests
+- `all` - Run all available tools
+
+### **Network Analysis - Network Traffic Analysis and Monitoring**
+
+#### **Basic Network Commands**
+```bash
+# Monitor active network connections with educational explanations (RECOMMENDED)
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_monitoring.pdf --format pdf --verbose
+
+# Scan services on localhost with educational explanations
+python src/analyser/network_cli.py --scan-services localhost --educational --output detailed_service_scan.pdf --format pdf --verbose
+
+# Capture network traffic for analysis
+python src/analyser/network_cli.py --capture-traffic --educational --duration 60 --output detailed_traffic_capture.pdf --format pdf --verbose
+
+# Perform DNS analysis
+python src/analyser/network_cli.py --dns-analysis --educational --duration 30 --output detailed_dns_analysis.pdf --format pdf --verbose
+
+# Run network demonstration with sample data
+python src/analyser/network_cli.py --demo-network --educational --output demo_network_report.pdf --format pdf --verbose
+```
+
+#### **Advanced Network Options**
+```bash
+# Monitor specific network interface
+python src/analyser/network_cli.py --monitor-connections --interface eth0 --educational --duration 300 --output interface_monitoring.pdf --format pdf --verbose
+
+# Extended monitoring duration (RECOMMENDED)
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output extended_network_monitoring.pdf --format pdf --verbose
+
+# Apply packet capture filter
+python src/analyser/network_cli.py --capture-traffic --filter "port 80" --educational --duration 60 --output filtered_traffic_capture.pdf --format pdf --verbose
+
+# Output to specific file with different formats
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output network_report.json --format json --verbose
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output network_report.md --format md --verbose
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output network_report.pdf --format pdf --verbose
+
+# Quiet mode for automated monitoring
+python src/analyser/network_cli.py --monitor-connections --quiet --duration 300 --output connections.json
+
+# Verbose debugging output (included in all recommended commands)
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --verbose
 ```
 
 ### **Penetration Testing (ADVANCED - Instructor Supervision Required)**
+
+#### **Basic Penetration Testing Commands**
 ```bash
-# Automated comprehensive testing
-python src/analyser/penetration_analyser.py localhost:5000
-python src/analyser/penetration_analyser.py localhost:9090
+# Basic penetration test of web application (RECOMMENDED)
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep --exploit --output comprehensive_security_report_port5000.pdf
+
+# Penetration test with different targets
+python src/analyser/penetration_analyser.py http://localhost:9090 --deep --output detailed_pentest_port9090.pdf
+python src/analyser/penetration_analyser.py http://localhost:3000 --deep --output detailed_pentest_port3000.pdf
+python src/analyser/penetration_analyser.py http://localhost:8000 --deep --output detailed_pentest_port8000.pdf
+```
+
+#### **Advanced Penetration Testing Options**
+```bash
+# Deep penetration testing (comprehensive, takes longer) - RECOMMENDED
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep --output detailed_pentest_deep_scan.pdf
+
+# Active exploitation mode (attempts actual exploits) - ADVANCED
+python src/analyser/penetration_analyser.py http://localhost:5000 --exploit --output exploitation_report.pdf
+
+# Combined deep testing with exploitation (COMPREHENSIVE - RECOMMENDED)
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep --exploit --output comprehensive_pentest_report.pdf
+```
+
+#### **⚠️ Penetration Testing Ethics and Prerequisites**
+- **ONLY use on designated sandbox applications**
+- **NEVER test against external websites or applications you don't own**
+- **Instructor supervision required for all penetration testing activities**
+- **Complete foundation exercises first: Manual Review → Sandbox → SAST → DAST → Network**
+
+## Common Student Questions and Command Patterns
+
+### **Report Generation Commands by Type**
+
+#### **"I need a JSON report for my assignment"**
+```bash
+# SAST JSON report
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output my_sast_report.json --format json --verbose
+
+# DAST JSON report
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output my_dast_report.json --format json --verbose
+
+# Network JSON report
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output my_network_report.json --format json --verbose
+```
+
+#### **"I need a PDF report to submit" (RECOMMENDED)**
+```bash
+# SAST PDF report (includes JSON + Markdown + PDF)
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output my_sast_report.pdf --format pdf --verbose
+
+# DAST PDF report
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output my_dast_report.pdf --format pdf --verbose
+
+# Network PDF report
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output my_network_report.pdf --format pdf --verbose
+```
+
+#### **"I want to test all the demo applications"**
+```bash
+# Test all demo apps with SAST
+python src/analyser/analyse_cli.py --demo-apps --tools all --educational --output demo_sast_analysis.pdf --format pdf --verbose
+
+# Test all demo apps with DAST (make sure Docker is running first)
+python src/analyser/dast_cli.py --demo-apps --deep-scan --educational --output demo_dast_analysis.pdf --format pdf --verbose
+```
+
+#### **"I need a comprehensive security assessment"**
+```bash
+# Step 1: SAST analysis
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output comprehensive_sast.json
+
+# Step 2: DAST analysis  
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output comprehensive_dast.json
+
+# Step 3: Network analysis
+python src/analyser/network_cli.py --monitor-connections --educational --duration 120 --output comprehensive_network.json
+
+# Step 4: (ADVANCED) Penetration test with instructor supervision
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep
+```
+
+### **Troubleshooting Common Command Issues**
+
+#### **"The command isn't working"**
+1. **Check you're in the right directory**: `pwd` should show `/workspaces/Secure_Architecture_Sandbox_Testing_Environment`
+2. **For DAST commands**: Ensure Docker applications are running with `curl -I http://localhost:5000`
+3. **For Network commands**: Use `--demo-network` flag if you don't have admin privileges
+4. **Always use `--educational` flag** for learning mode with detailed explanations
+
+#### **"I'm getting 'Connection refused' errors"**
+```bash
+# Restart Docker services
+cd docker && docker-compose down && docker-compose up -d
+cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+# Wait 30 seconds for services to start
+sleep 30
+
+# Test that services are running
+curl -I http://localhost:5000  # Flask app
+curl -I http://localhost:9090  # PWA app
+curl -I http://localhost:3000  # Node.js app
+curl -I http://localhost:8000  # Upload app
+```
+
+#### **"I want to see what vulnerabilities were found"**
+```bash
+# For detailed verbose output during scanning
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational --verbose
+
+# For quiet mode with just the results file
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --quiet --output results.json
+```
+
+### **Exercise-Specific Command Guidance**
+
+#### **Exercise 3: Static Application Security Testing (SAST)**
+```bash
+# Phase 1: Basic analysis
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational
+
+# Phase 2: Comprehensive analysis
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output exercise3_report.json
+
+# Phase 3: Compare different applications
+python src/analyser/analyse_cli.py samples/vulnerable-nodejs-app --educational --output nodejs_analysis.json
+```
+
+#### **Exercise 4: Dynamic Application Security Testing (DAST)**
+```bash
+# Phase 1: Basic web application testing
+python src/analyser/dast_cli.py http://localhost:5000 --quick --educational
+
+# Phase 2: Comprehensive testing
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output exercise4_report.json
+
+# Phase 3: Test multiple applications
+python src/analyser/dast_cli.py --demo-apps --educational
+```
+
+#### **Exercise 5: Network Traffic Analysis**
+```bash
+# Phase 1: Monitor connections
+python src/analyser/network_cli.py --monitor-connections --educational --duration 60
+
+# Phase 2: Service discovery
+python src/analyser/network_cli.py --scan-services localhost --educational
+
+# Phase 3: Traffic analysis
+python src/analyser/network_cli.py --capture-traffic --educational --duration 120 --output exercise5_network.json
+```
+
+#### **Exercise 6: Penetration Testing (INSTRUCTOR REQUIRED)**
+```bash
+# ONLY with instructor supervision and after completing foundations
+python src/analyser/penetration_analyser.py http://localhost:5000
+
+# Advanced testing (INSTRUCTOR SUPERVISION REQUIRED)
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep --exploit
 ```
 
 ## Common User Scenarios and Responses
 
 ### **Scenario 1: "I'm stuck on Exercise 3 SAST"**
-1. Verify environment setup
-2. Ask: "Which specific phase or step are you having trouble with?"
-3. Direct to: "`docs/exercises/3.static-application-security-testing-exercise.md` - find the relevant phase section"
-4. Explain: "SAST helps you find vulnerabilities in source code before deployment, which supports the syllabus outcome of 'determining vulnerabilities' through systematic security evaluation"
+1. **Verify Environment First**: Check they're in `/workspaces/Secure_Architecture_Sandbox_Testing_Environment`
+2. **Ask**: "Which specific phase or step are you having trouble with?"
+3. **Common Solutions**:
+   - **Basic scan**: `python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational`
+   - **Comprehensive report**: `python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output exercise3_report.pdf --format pdf`
+   - **Multiple tools**: `python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools bandit safety --educational`
+4. **Direct to**: "`docs/exercises/3.static-application-security-testing-exercise.md` - find the relevant phase section"
+5. **Explain**: "SAST helps you find vulnerabilities in source code before deployment, supporting the syllabus outcome of 'determining vulnerabilities' through systematic security evaluation"
 
 ### **Scenario 2: "My DAST scan isn't working"**
-1. Check Docker apps are responding: `curl -I http://localhost:5000`
-2. If not: Restart Docker services
-3. Verify correct command syntax
-4. Direct to: "`docs/quick-reference-guides/4.dast-quick-reference.md`" for command examples
-5. Explain: "DAST tests running applications to find runtime vulnerabilities, which helps with the syllabus outcome of 'Dynamic Application Security Testing'"
+1. **Check Docker Services**: 
+   ```bash
+   curl -I http://localhost:5000
+   curl -I http://localhost:9090
+   ```
+2. **If services not responding**:
+   ```bash
+   cd docker && docker-compose down && docker-compose up -d
+   cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+   sleep 30
+   ```
+3. **Verify Command Syntax**:
+   - **Correct**: `python src/analyser/dast_cli.py http://localhost:5000 --educational`
+   - **Quick scan**: `python src/analyser/dast_cli.py http://localhost:5000 --quick --educational`
+   - **Deep scan**: `python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational`
+4. **Direct to**: "`docs/quick-reference-guides/4.dast-quick-reference.md`" for command examples
+5. **Explain**: "DAST tests running applications to find runtime vulnerabilities, supporting the syllabus outcome of 'Dynamic Application Security Testing'"
 
-### **Scenario 3: "I want to try penetration testing"**
+### **Scenario 3: "I need help with network analysis"**
+1. **Check Permissions**: If permission errors, use `--demo-network` flag
+2. **Basic Commands**:
+   - **Monitor connections**: `python src/analyser/network_cli.py --monitor-connections --educational`
+   - **Scan services**: `python src/analyser/network_cli.py --scan-services localhost --educational`
+   - **Capture traffic**: `python src/analyser/network_cli.py --capture-traffic --educational --duration 60`
+3. **Advanced Options**:
+   - **Custom duration**: `python src/analyser/network_cli.py --monitor-connections --educational --duration 300`
+   - **Filter traffic**: `python src/analyser/network_cli.py --capture-traffic --filter "port 80" --educational`
+4. **Direct to**: "`docs/exercises/5.network-traffic-analysis-exercise.md`"
+5. **Explain**: "Network analysis helps identify communication patterns and potential threats, supporting network security monitoring skills"
+
+### **Scenario 4: "I want to try penetration testing"**
 1. **STOP**: Verify they've completed foundation exercises (Manual Review, Sandbox, SAST, DAST, Network)
-2. **Ethical Check**: Ensure instructor supervision available
-3. **Direct to**: "`docs/exercises/6.penetration-testing-exercise.md` - Section 'Ethical Guidelines'"
-4. **Emphasise**: "Penetration testing integrates all your previous learning and represents real-world security assessment practices, but requires strong ethical foundations"
+2. **Ethical Check**: Ensure instructor supervision is available
+3. **Basic Command**: `python src/analyser/penetration_analyser.py http://localhost:5000`
+4. **Advanced Options**: `python src/analyser/penetration_analyser.py http://localhost:5000 --deep --exploit` (INSTRUCTOR REQUIRED)
+5. **Direct to**: "`docs/exercises/6.penetration-testing-exercise.md` - Section 'Ethical Guidelines'"
+6. **Emphasise**: "Penetration testing integrates all your previous learning and represents real-world security assessment practices, but requires strong ethical foundations and instructor supervision"
 
-### **Scenario 4: "Which exercise should I do first?"**
+### **Scenario 5: "I need to generate a report for my assignment"**
+1. **Identify Report Type Needed**:
+   - **JSON**: `--output report.json --format json`
+   - **PDF**: `--output report.pdf --format pdf`
+   - **Markdown**: `--output report.md --format md`
+2. **Complete Commands**:
+   - **SAST PDF**: `python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational --output my_assignment.pdf --format pdf`
+   - **DAST PDF**: `python src/analyser/dast_cli.py http://localhost:5000 --educational --output my_assignment.pdf --format pdf`
+3. **Comprehensive Analysis**: Use `--tools all` for SAST and `--deep-scan` for DAST
+4. **Always use**: `--educational` flag for detailed explanations in reports
+
+### **Scenario 6: "Which exercise should I do first?"**
 Direct to: "`docs/lesson-structure.md`" and explain the progression:
-1. "Start with Manual Code Review to develop security thinking"
-2. "The learning progression is designed to build foundational skills before advancing to automated testing"
-3. "Each exercise supports specific syllabus learning outcomes for comprehensive cybersecurity education"
+1. **Manual Code Review** (Foundation) - Develops security thinking
+2. **Sandbox Analysis** (Foundation) - Behavioural analysis skills  
+3. **SAST** (Core) - Static code security testing
+4. **DAST** (Core) - Dynamic application testing
+5. **Network Analysis** (Core) - Network security monitoring
+6. **Penetration Testing** (Advanced) - Integrated security assessment
+7. **Organisational Assessment** (Strategic) - Business security evaluation
+
+Each exercise builds on previous knowledge and supports specific syllabus learning outcomes.
 
 ## Troubleshooting Quick Reference
 
@@ -198,6 +501,24 @@ Direct to: "`docs/lesson-structure.md`" and explain the progression:
 - **Penetration Testing**: Comprehensive vulnerability assessment reports
 
 ## Response Template
+
+When helping users, structure responses like this:
+
+```
+🔍 **Environment Check**: [Verify path and Docker status]
+
+📚 **Learning Context**: [Which exercise and learning objective]
+
+📖 **Documentation Reference**: See `[specific file path]` - Section `[section name]`
+
+💡 **Educational Value**: This activity helps you learn [syllabus outcome] which is important for [real-world application]
+
+⚠️ **Ethical Note**: [If applicable, especially for penetration testing]
+
+🚀 **Next Steps**: [Specific commands or actions to take]
+```
+
+Remember: Your goal is to **facilitate learning**, not just solve problems. Always connect technical activities to educational outcomes and professional cybersecurity practices.
 
 When helping users, structure responses like this:
 
@@ -401,3 +722,21 @@ When developing educational materials, exercises, and assessments:
 5. **Real-world Application**: Connect theoretical concepts to practical industry scenarios and tools
 
 This syllabus serves as the foundation for all educational content development and ensures graduates are prepared for cybersecurity careers with comprehensive knowledge of secure software development principles and practices.
+
+## Quick Command Verification
+
+**Test that CLI tools are working:**
+```bash
+# Verify tools are accessible and show help
+python src/analyser/analyse_cli.py --help
+python src/analyser/dast_cli.py --help
+python src/analyser/network_cli.py --help
+
+# Verify Docker services (for DAST testing)
+curl -I http://localhost:5000  # Flask app
+curl -I http://localhost:9090  # PWA app
+curl -I http://localhost:3000  # Node.js app
+curl -I http://localhost:8000  # Upload app
+```
+
+**All commands documented above have been verified to match the actual CLI implementations as of September 2025.**

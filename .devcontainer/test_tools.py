@@ -28,6 +28,7 @@ def main():
         ("Safety", ["safety", "--version"]),
         ("Curl", ["curl", "--version"]),
         ("Docker", ["docker", "--version"]),
+        ("wkhtmltopdf", ["wkhtmltopdf", "--version"]),
     ]
     
     available = 0
@@ -37,8 +38,27 @@ def main():
     
     print(f"\n📊 {available}/{len(tools)} tools are available")
     
-    if available >= len(tools) - 1:  # Allow for one tool to be missing
-        print("🎉 Security tools are ready for educational use!")
+    # Test PDF generation capabilities
+    print("\n🔍 Testing PDF generation capabilities...")
+    try:
+        import weasyprint
+        print("✅ WeasyPrint: Available")
+        pdf_available = True
+    except ImportError as e:
+        print(f"❌ WeasyPrint: Not available ({e})")
+        pdf_available = False
+    
+    try:
+        import reportlab
+        print("✅ ReportLab: Available")
+    except ImportError:
+        print("❌ ReportLab: Not available")
+    
+    if available >= len(tools) - 1 and pdf_available:  # Allow for one tool to be missing
+        print("🎉 Security tools and PDF generation are ready for educational use!")
+        return 0
+    elif available >= len(tools) - 1:
+        print("🎉 Security tools are ready! PDF generation may need troubleshooting.")
         return 0
     else:
         print("⚠️  Some tools may need additional setup")

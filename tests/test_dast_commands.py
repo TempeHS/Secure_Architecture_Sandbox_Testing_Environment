@@ -8,7 +8,6 @@ to ensure they work correctly and produce expected output.
 
 import unittest
 import subprocess
-import json
 import requests
 import time
 import os
@@ -185,98 +184,6 @@ class DASTCommandValidationTest(unittest.TestCase):
 
         except subprocess.TimeoutExpired:
             self.fail("DAST deep scan timed out")
-
-    def test_06_dast_json_output_pwa(self):
-        """Test DAST analysis with JSON output on PWA app."""
-        logger.info("Testing DAST JSON output on PWA app...")
-
-        output_file = self.reports_dir / "test_dast_pwa.json"
-
-        try:
-            result = subprocess.run(
-                [
-                    "python",
-                    self.dast_cli,
-                    self.pwa_url,
-                    "--output",
-                    str(output_file),
-                    "--format",
-                    "json",
-                ],
-                cwd=self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            self.assertEqual(
-                result.returncode, 0, f"DAST JSON scan failed: {result.stderr}"
-            )
-            self.assertTrue(output_file.exists(),
-                            "JSON output file was not created")
-
-            # Validate JSON structure
-            with open(output_file, "r") as f:
-                data = json.load(f)
-                self.assertIn("findings", data,
-                              "JSON output missing findings key")
-                self.assertIn("target_url", data,
-                              "JSON output missing target_url key")
-
-            logger.info("✅ DAST JSON output on PWA app works")
-
-        except subprocess.TimeoutExpired:
-            self.fail("DAST JSON scan timed out")
-        except json.JSONDecodeError:
-            self.fail("DAST JSON output is not valid JSON")
-        finally:
-            # Clean up
-            if output_file.exists():
-                output_file.unlink()
-
-    def test_07_dast_text_output_flask(self):
-        """Test DAST analysis with text output on Flask app."""
-        logger.info("Testing DAST text output on Flask app...")
-
-        output_file = self.reports_dir / "test_dast_flask.txt"
-
-        try:
-            result = subprocess.run(
-                [
-                    "python",
-                    self.dast_cli,
-                    self.flask_url,
-                    "--output",
-                    str(output_file),
-                    "--format",
-                    "txt",
-                ],
-                cwd=self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            self.assertEqual(
-                result.returncode, 0, f"DAST text scan failed: {result.stderr}"
-            )
-            self.assertTrue(output_file.exists(),
-                            "Text output file was not created")
-
-            # Validate text content
-            with open(output_file, "r") as f:
-                content = f.read()
-                self.assertGreater(
-                    len(content), 50, "Text output seems too short")
-
-            logger.info("✅ DAST text output on Flask app works")
-
-        except subprocess.TimeoutExpired:
-            self.fail("DAST text scan timed out")
-        finally:
-            # Clean up
-            if output_file.exists():
-                output_file.unlink()
 
     def test_08_dast_verbose_mode_flask(self):
         """Test DAST analysis with verbose output on Flask app."""

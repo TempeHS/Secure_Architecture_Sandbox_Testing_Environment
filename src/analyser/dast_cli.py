@@ -51,6 +51,14 @@ except ImportError:
     MARKDOWN_AVAILABLE = False
     logger.warning("Markdown report generation not available")
 
+# Import the MD to PDF converter
+try:
+    from tools.md_to_pdf_converter import MarkdownToPdfConverter
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+    logger.warning("PDF conversion not available")
+
 
 class DASTCLI:
     """Command-line interface for dynamic application security testing"""
@@ -346,29 +354,86 @@ class DASTCLI:
         return os.path.join(reports_dir, filename)
 
     def _save_report(self, report: DynamicAnalysisReport, output_path: str, format_type: str) -> None:
-        """Save analysis report to file"""
+        """Save analysis report to file with support for multiple formats"""
         try:
-            if format_type == 'json':
-                with open(output_path, 'w') as f:
-                    json.dump(report.to_dict(), f, indent=2)
+            # Get report data as dict (needed for all formats)
+            report_dict = report.to_dict()
 
-                # Auto-generate markdown report alongside JSON
+            if format_type == 'json':
+                # JSON only
+                with open(output_path, 'w') as f:
+                    json.dump(report_dict, f, indent=2)
+
+            elif format_type == 'md':
+                # JSON + Markdown
+                # Save JSON file
+                json_path = output_path.replace('.md', '.json')
+                with open(json_path, 'w') as f:
+                    json.dump(report_dict, f, indent=2)
+                print(f"📄 JSON report saved to: {json_path}")
+
+                # Generate markdown report
                 if MARKDOWN_AVAILABLE:
                     try:
                         generator = MarkdownReportGenerator()
-                        markdown_path = output_path.replace('.json', '.md')
                         generator.generate_markdown_report(
-                            json_data=report.to_dict(),
+                            json_data=report_dict,
+                            analyser_type='dast',
+                            output_file=os.path.basename(output_path)
+                        )
+                        print(f"📄 Markdown report saved to: {output_path}")
+                    except Exception as e:
+                        logger.error(
+                            f"Failed to generate markdown report: {e}")
+                        print(f"❌ Markdown generation failed: {e}")
+                else:
+                    print("❌ Markdown generation not available")
+
+            elif format_type == 'pdf':
+                # JSON + Markdown + PDF
+                # Save JSON file
+                json_path = output_path.replace('.pdf', '.json')
+                with open(json_path, 'w') as f:
+                    json.dump(report_dict, f, indent=2)
+                print(f"📄 JSON report saved to: {json_path}")
+
+                # Generate markdown report
+                if MARKDOWN_AVAILABLE:
+                    try:
+                        markdown_path = output_path.replace('.pdf', '.md')
+                        generator = MarkdownReportGenerator()
+                        generator.generate_markdown_report(
+                            json_data=report_dict,
                             analyser_type='dast',
                             output_file=os.path.basename(markdown_path)
                         )
-                        logger.info(
-                            f"Generated markdown report: {markdown_path}")
-                    except Exception as e:
-                        logger.warning(
-                            f"Failed to generate markdown report: {e}")
+                        print(f"📄 Markdown report saved to: {markdown_path}")
 
-            else:  # txt format
+                        # Convert to PDF
+                        if PDF_AVAILABLE:
+                            try:
+                                converter = MarkdownToPdfConverter(
+                                    page_break_mode="continuous"
+                                )
+                                converter.convert_file_to_pdf(
+                                    input_file=Path(markdown_path),
+                                    output_file=Path(output_path)
+                                )
+                                print(f"📄 PDF report saved to: {output_path}")
+                            except Exception as e:
+                                logger.error(f"Failed to convert to PDF: {e}")
+                                print(f"❌ PDF conversion failed: {e}")
+                        else:
+                            print("❌ PDF conversion not available")
+
+                    except Exception as e:
+                        logger.error(
+                            f"Failed to generate markdown report: {e}")
+                        print(f"❌ Markdown generation failed: {e}")
+                else:
+                    print("❌ Markdown generation not available")
+
+            else:  # txt format (legacy)
                 with open(output_path, 'w') as f:
                     # Capture display output
                     import io
@@ -465,8 +530,12 @@ Examples:
 
     parser.add_argument('--output', '-o', help='Output file path for report')
 
-    parser.add_argument('--format', choices=['json', 'txt'], default='json',
-                        help='Output format (default: json)')
+    parser.add_argument('--format',
+                        choices=['json', 'txt', 'md', 'pdf'],
+                        default='json',
+                        help='Output format: json (JSON only), '
+                             'md (JSON + Markdown), '
+                             'pdf (JSON + Markdown + PDF), txt (text format)')
 
     parser.add_argument('--educational', action='store_true',
                         help='Enable educational mode with detailed explanations')

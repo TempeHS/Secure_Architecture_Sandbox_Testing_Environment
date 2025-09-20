@@ -25,8 +25,8 @@ This sandbox uses a **multi-layer isolation and containerized architecture** usi
 ```bash
 cd uploads/
 # Deploy and test your app (see uploads/README.md)
-python3 src/analyser/analyse_cli.py uploads/ --educational
-python3 src/analyser/dast_cli.py http://localhost:8000 --educational
+python3 src/analyser/analyse_cli.py uploads/ --tools all --educational --output detailed_sast_upload.pdf --format pdf --verbose
+python3 src/analyser/dast_cli.py http://localhost:8000 --deep-scan --educational --output detailed_dast_upload.pdf --format pdf --verbose
 ```
 
 ## 🤖 AI Learning Assistant
@@ -42,10 +42,10 @@ Built-in knowledge of the NESA Software Engineering Syllabus and safety features
 **Automated Report Generation:**
 ```bash
 # All tools support --educational mode with timestamped reports
-python src/analyser/analyse_cli.py <target> --educational          # SAST
-python src/analyser/dast_cli.py <url> --educational               # DAST  
-python src/analyser/network_cli.py --monitor-connections --educational  # Network
-python src/analyser/penetration_analyser.py localhost:5000       # Penetration Testing
+python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose          # SAST
+python src/analyser/dast_cli.py <url> --deep-scan --educational --output detailed_dast_report.pdf --format pdf --verbose               # DAST  
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_report.pdf --format pdf --verbose  # Network
+python src/analyser/penetration_analyser.py localhost:5000 --deep --exploit --output comprehensive_security_report.pdf       # Penetration Testing
 ```
 
 Reports auto-save to `reports/` with timestamps. Manual output: `--output reports/my_report.json`
@@ -84,16 +84,16 @@ See [uploads/README.md](uploads/README.md) for deployment instructions.
 **Quick Commands:**
 ```bash
 # Static Analysis
-python src/analyser/analyse_cli.py <target> --educational
+python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose
 
 # Dynamic Analysis  
-python src/analyser/dast_cli.py <url> --educational
+python src/analyser/dast_cli.py <url> --deep-scan --educational --output detailed_dast_report.pdf --format pdf --verbose
 
 # Network Analysis
-python src/analyser/network_cli.py --monitor-connections --educational
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_report.pdf --format pdf --verbose
 
 # Penetration Testing
-python src/analyser/penetration_analyser.py <host:port>
+python src/analyser/penetration_analyser.py <host:port> --deep --exploit --output detailed_pentest_report.pdf
 ```
 
 ## 🎓 Learning Features

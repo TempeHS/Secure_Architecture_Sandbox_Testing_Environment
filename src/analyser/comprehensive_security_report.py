@@ -24,7 +24,13 @@ from typing import Dict, List, Any, Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
-    from reporter.report_generator import PdfReportGenerator
+    from reporter.report_generator import MarkdownReportGenerator
+    MARKDOWN_AVAILABLE = True
+except ImportError:
+    MARKDOWN_AVAILABLE = False
+
+try:
+    from tools.md_to_pdf_converter import MarkdownToPdfConverter
     PDF_AVAILABLE = True
 except ImportError:
     PDF_AVAILABLE = False
@@ -59,7 +65,8 @@ class ComprehensiveSecurityReporter:
         include_pentest: bool = False,
         include_network: bool = True,
         quick_scan: bool = False,
-        output_prefix: str = "comprehensive_security_report"
+        output_prefix: str = "comprehensive_security_report",
+        output_format: str = "json"
     ) -> str:
         """Run comprehensive security assessment using all available tools"""
 
@@ -94,7 +101,8 @@ class ComprehensiveSecurityReporter:
             self._run_penetration_testing(target_url, demo_mode, quick_scan)
 
         # Generate comprehensive report
-        report_path = self._generate_comprehensive_report(output_prefix)
+        report_path = self._generate_comprehensive_report(
+            output_prefix, output_format)
 
         print("\n✅ Comprehensive security assessment completed!")
         print(f"📄 Report saved to: {report_path}")
@@ -352,37 +360,118 @@ class ComprehensiveSecurityReporter:
                 return report_data['summary']['total']
         return 0
 
-    def _generate_comprehensive_report(self, output_prefix: str) -> str:
-        """Generate comprehensive PDF report"""
+    def _generate_comprehensive_report(self, output_prefix: str, output_format: str = "json") -> str:
+        """Generate comprehensive report in specified format"""
         print("\n📄 5. GENERATING COMPREHENSIVE REPORT")
         print("-" * 50)
 
-        # Generate JSON report
-        json_report_path = (
-            self.reports_dir / f"{output_prefix}_{self.session_id}.json"
-        )
+        # Generate comprehensive data
         comprehensive_data = self._create_comprehensive_json()
 
-        with open(json_report_path, 'w') as f:
-            json.dump(comprehensive_data, f, indent=2)
+        if output_format == 'json':
+            # JSON only
+            json_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.json"
+            )
+            with open(json_report_path, 'w') as f:
+                json.dump(comprehensive_data, f, indent=2)
+            print(f"   ✅ JSON report saved: {json_report_path}")
+            return str(json_report_path)
 
-        print(f"   ✅ JSON report saved: {json_report_path}")
+        elif output_format == 'md':
+            # JSON + Markdown
+            json_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.json"
+            )
+            md_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.md"
+            )
 
-        # Generate PDF report
-        if PDF_AVAILABLE:
-            try:
-                pdf_generator = PdfReportGenerator()
-                pdf_filename = f"{output_prefix}_{self.session_id}.pdf"
-                pdf_report_path = pdf_generator.generate_report(
-                    comprehensive_data, 'comprehensive', pdf_filename)
-                print(f"   ✅ PDF report saved: {pdf_report_path}")
-                return str(pdf_report_path)
-            except Exception as e:
-                print(f"   ❌ Failed to generate PDF report: {e}")
-                print(f"   📄 JSON report available: {json_report_path}")
+            # Save JSON
+            with open(json_report_path, 'w') as f:
+                json.dump(comprehensive_data, f, indent=2)
+            print(f"   ✅ JSON report saved: {json_report_path}")
+
+            # Generate markdown
+            if MARKDOWN_AVAILABLE:
+                try:
+                    generator = MarkdownReportGenerator()
+                    generator.generate_markdown_report(
+                        json_data=comprehensive_data,
+                        analyser_type='comprehensive',
+                        output_file=str(md_report_path.name)
+                    )
+                    print(f"   ✅ Markdown report saved: {md_report_path}")
+                    return str(md_report_path)
+                except Exception as e:
+                    print(f"   ❌ Failed to generate markdown report: {e}")
+                    return str(json_report_path)
+            else:
+                print("   ❌ Markdown generation not available")
                 return str(json_report_path)
+
+        elif output_format == 'pdf':
+            # JSON + Markdown + PDF
+            json_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.json"
+            )
+            md_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.md"
+            )
+            pdf_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.pdf"
+            )
+
+            # Save JSON
+            with open(json_report_path, 'w') as f:
+                json.dump(comprehensive_data, f, indent=2)
+            print(f"   ✅ JSON report saved: {json_report_path}")
+
+            # Generate markdown
+            if MARKDOWN_AVAILABLE:
+                try:
+                    generator = MarkdownReportGenerator()
+                    generator.generate_markdown_report(
+                        json_data=comprehensive_data,
+                        analyser_type='comprehensive',
+                        output_file=str(md_report_path.name)
+                    )
+                    print(f"   ✅ Markdown report saved: {md_report_path}")
+
+                    # Convert to PDF
+                    if PDF_AVAILABLE:
+                        try:
+                            converter = MarkdownToPdfConverter(
+                                page_break_mode="continuous"
+                            )
+                            converter.convert_file_to_pdf(
+                                input_file=Path(md_report_path),
+                                output_file=Path(pdf_report_path)
+                            )
+                            print(f"   ✅ PDF report saved: {pdf_report_path}")
+                            return str(pdf_report_path)
+                        except Exception as e:
+                            print(f"   ❌ Failed to convert to PDF: {e}")
+                            return str(md_report_path)
+                    else:
+                        print("   ❌ PDF conversion not available")
+                        return str(md_report_path)
+
+                except Exception as e:
+                    print(f"   ❌ Failed to generate markdown report: {e}")
+                    return str(json_report_path)
+            else:
+                print("   ❌ Markdown generation not available")
+                return str(json_report_path)
+
         else:
-            print("   ⚠️  PDF generation not available, only JSON report generated")
+            # Fallback to JSON
+            json_report_path = (
+                self.reports_dir / f"{output_prefix}_{self.session_id}.json"
+            )
+            with open(json_report_path, 'w') as f:
+                json.dump(comprehensive_data, f, indent=2)
+            print(f"   ✅ JSON report saved: {json_report_path}")
             return str(json_report_path)
 
     def _create_comprehensive_json(self) -> Dict[str, Any]:
@@ -1359,6 +1448,14 @@ Note: Only test applications you own or have explicit permission to test.
     )
 
     parser.add_argument(
+        '--format',
+        choices=['json', 'md', 'pdf'],
+        default='json',
+        help='Output format: json (JSON only), '
+             'md (JSON + Markdown), pdf (JSON + Markdown + PDF)'
+    )
+
+    parser.add_argument(
         '--educational', action='store_true',
         help='Enable educational mode with detailed explanations'
     )
@@ -1403,7 +1500,8 @@ Note: Only test applications you own or have explicit permission to test.
             include_pentest=args.include_pentest,
             include_network=not args.skip_network,
             quick_scan=args.quick_scan,
-            output_prefix=args.output
+            output_prefix=args.output,
+            output_format=args.format
         )
 
         print("\n🎉 Comprehensive security assessment completed successfully!")

@@ -32,11 +32,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 # Import the report generator for markdown output
 try:
-    from reporter.report_generator import PdfReportGenerator
+    from reporter.report_generator import MarkdownReportGenerator
     MARKDOWN_AVAILABLE = True
 except ImportError:
     MARKDOWN_AVAILABLE = False
     print("Warning: Markdown report generation not available")
+
+# Import the MD to PDF converter
+try:
+    from tools.md_to_pdf_converter import MarkdownToPdfConverter
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+    print("Warning: PDF conversion not available")
 
 
 class NetworkCLI:
@@ -172,9 +180,10 @@ Output Options:
         )
         parser.add_argument(
             '--format',
-            choices=['json', 'text'],
+            choices=['json', 'text', 'md', 'pdf'],
             default='text',
-            help='Output format (default: text)'
+            help='Output format: json (JSON only), text (text format), '
+                 'md (JSON + Markdown), pdf (JSON + Markdown + PDF)'
         )
 
         # Mode configuration
@@ -551,51 +560,135 @@ Output Options:
                 print(f"  {i}. {indicator}")
 
     def _generate_report(self, results: Dict[str, Any], args, analysis_type: str) -> Optional[str]:
-        """Generate and save analysis report"""
+        """Generate and save analysis report with support for multiple formats"""
         if args.format == 'json':
             return self._save_json_report(results, args, analysis_type)
-        else:
+        elif args.format == 'md':
+            return self._save_md_report(results, args, analysis_type)
+        elif args.format == 'pdf':
+            return self._save_pdf_report(results, args, analysis_type)
+        else:  # text format
             return self._save_text_report(results, args, analysis_type)
 
+    def _save_md_report(self, results: Dict[str, Any], args, analysis_type: str) -> Optional[str]:
+        """Save results as JSON + Markdown report"""
+        # First save JSON
+        json_path = self._resolve_output_path(args.output.replace(
+            '.md', '.json') if args.output else None, analysis_type, 'json')
+        md_path = self._resolve_output_path(args.output, analysis_type, 'md')
+
+        try:
+            # Save JSON
+            with open(json_path, 'w') as f:
+                json.dump(results, f, indent=2, default=str)
+            if not args.quiet:
+                print(f"📄 JSON report saved to: {json_path}")
+
+            # Generate markdown
+            if MARKDOWN_AVAILABLE:
+                try:
+                    generator = MarkdownReportGenerator()
+                    generator.generate_markdown_report(
+                        json_data=results,
+                        analyser_type='network',
+                        output_file=os.path.basename(md_path)
+                    )
+                    if not args.quiet:
+                        print(f"📄 Markdown report saved to: {md_path}")
+                    return md_path
+                except Exception as e:
+                    if not args.quiet:
+                        print(f"❌ Markdown generation failed: {e}")
+                    return json_path
+            else:
+                if not args.quiet:
+                    print("❌ Markdown generation not available")
+                return json_path
+
+        except Exception as e:
+            if not args.quiet:
+                print(f"Warning: Could not save reports: {e}")
+            return None
+
+    def _save_pdf_report(self, results: Dict[str, Any], args, analysis_type: str) -> Optional[str]:
+        """Save results as JSON + Markdown + PDF report"""
+        # First save JSON
+        json_path = self._resolve_output_path(args.output.replace(
+            '.pdf', '.json') if args.output else None, analysis_type, 'json')
+        md_path = self._resolve_output_path(args.output.replace(
+            '.pdf', '.md') if args.output else None, analysis_type, 'md')
+        pdf_path = self._resolve_output_path(args.output, analysis_type, 'pdf')
+
+        try:
+            # Save JSON
+            with open(json_path, 'w') as f:
+                json.dump(results, f, indent=2, default=str)
+            if not args.quiet:
+                print(f"📄 JSON report saved to: {json_path}")
+
+            # Generate markdown
+            if MARKDOWN_AVAILABLE:
+                try:
+                    generator = MarkdownReportGenerator()
+                    # Get the full path for the markdown file
+                    md_full_path = generator.generate_report(
+                        json_data=results,
+                        analyser_type='network',
+                        output_file=os.path.basename(md_path)
+                    )
+
+                    # If the generator saved to the reports directory, move it to our target location
+                    if md_full_path != md_path:
+                        import shutil
+                        shutil.move(md_full_path, md_path)
+
+                    if not args.quiet:
+                        print(f"📄 Markdown report saved to: {md_path}")
+
+                    # Convert to PDF
+                    if PDF_AVAILABLE:
+                        try:
+                            converter = MarkdownToPdfConverter(
+                                page_break_mode="continuous"
+                            )
+                            converter.convert_file_to_pdf(
+                                input_file=Path(md_path),
+                                output_file=Path(pdf_path)
+                            )
+                            if not args.quiet:
+                                print(f"📄 PDF report saved to: {pdf_path}")
+                            return pdf_path
+                        except Exception as e:
+                            if not args.quiet:
+                                print(f"❌ PDF conversion failed: {e}")
+                            return md_path
+                    else:
+                        if not args.quiet:
+                            print("❌ PDF conversion not available")
+                        return md_path
+
+                except Exception as e:
+                    if not args.quiet:
+                        print(f"❌ Markdown generation failed: {e}")
+                    return json_path
+            else:
+                if not args.quiet:
+                    print("❌ Markdown generation not available")
+                return json_path
+
+        except Exception as e:
+            if not args.quiet:
+                print(f"Warning: Could not save reports: {e}")
+            return None
+
     def _save_json_report(self, results: Dict[str, Any], args, analysis_type: str) -> Optional[str]:
-        """Save results as JSON report"""
+        """Save results as JSON report only"""
         output_path = self._resolve_output_path(
             args.output, analysis_type, 'json')
 
         try:
             with open(output_path, 'w') as f:
                 json.dump(results, f, indent=2, default=str)
-
-            # Generate markdown report alongside JSON if available
-            if MARKDOWN_AVAILABLE:
-                try:
-                    pdf_generator = PdfReportGenerator()
-
-                    # Generate base filename without extension
-                    base_path = os.path.splitext(output_path)[0]
-                    pdf_filename = os.path.basename(f"{base_path}.pdf")
-
-                    # Generate PDF content based on analysis type
-                    if analysis_type in ['network', 'traffic', 'connections',
-                                         'dns', 'connection_monitoring',
-                                         'service_scan', 'traffic_capture',
-                                         'dns_analysis', 'network_demo']:
-                        generated_path = (
-                            pdf_generator.generate_report(
-                                results, 'network', pdf_filename))
-                    else:
-                        generated_path = (
-                            pdf_generator.generate_report(
-                                results, 'general', pdf_filename))
-
-                    if not args.quiet:
-                        print(f"✓ Markdown report saved: {generated_path}")
-
-                except Exception as e:
-                    if not args.quiet:
-                        print(f"Warning: Failed to generate markdown "
-                              f"report: {e}")
-
             return output_path
         except Exception as e:
             if not args.quiet:
@@ -719,14 +812,17 @@ Output Options:
         ])
 
     def _resolve_output_path(self, output_arg: Optional[str], analysis_type: str, extension: str) -> str:
-        """Resolve output file path"""
-        if output_arg:
-            return output_arg
-
-        # Auto-generate path in reports directory
+        """Resolve output file path - always save to reports directory"""
+        # Ensure reports directory exists
         reports_dir = Path("reports")
         reports_dir.mkdir(exist_ok=True)
 
+        if output_arg:
+            # Extract just the filename from the output argument
+            output_filename = Path(output_arg).name
+            return str(reports_dir / output_filename)
+
+        # Auto-generate path in reports directory
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"network_{analysis_type}_{timestamp}.{extension}"
 

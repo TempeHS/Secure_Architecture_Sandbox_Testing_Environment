@@ -22,11 +22,11 @@ python samples/network-scenarios/backdoor_simulation.py
 ### Monitoring the Scenarios
 
 ```bash
-# Monitor while running scenarios
-python src/analyser/network_cli.py --monitor-connections --educational
+# Monitor while running scenarios (RECOMMENDED)
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output network_scenario_monitoring.pdf --format pdf --verbose
 
 # Capture traffic during scenarios
-python src/analyser/network_cli.py --capture-traffic --duration 60 --educational
+python src/analyser/network_cli.py --capture-traffic --duration 60 --educational --output network_scenario_traffic.pdf --format pdf --verbose
 ```
 
 ## 📂 Scenario Categories

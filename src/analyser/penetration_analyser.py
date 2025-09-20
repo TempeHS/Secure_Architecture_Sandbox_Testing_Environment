@@ -27,11 +27,14 @@ import re
 import socket
 import tempfile
 import urllib3
+import sys
+import json
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import logging
 from urllib.parse import urljoin, urlparse
+from pathlib import Path
 
 # Disable SSL warnings for testing purposes
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -42,6 +45,25 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Add the src directory to the Python path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import the report generator for markdown output
+try:
+    from reporter.report_generator import MarkdownReportGenerator
+    MARKDOWN_AVAILABLE = True
+except ImportError:
+    MARKDOWN_AVAILABLE = False
+    logger.warning("Markdown report generation not available")
+
+# Import the MD to PDF converter
+try:
+    from tools.md_to_pdf_converter import MarkdownToPdfConverter
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+    logger.warning("PDF conversion not available")
 
 
 @dataclass
@@ -1734,6 +1756,164 @@ def pentest_demo_applications(educational: bool = True) -> Dict[str, PentestRepo
     return results
 
 
+def save_penetration_report(report: PentestReport, output_path: str = None, output_format: str = 'pdf') -> str:
+    """
+    Save penetration testing report to file with specified format
+
+    Args:
+        report: PentestReport to save
+        output_path: Path to save the report (auto-generate if None)
+        output_format: Format to save ('json', 'md', 'pdf')
+
+    Returns:
+        Path to saved report file
+    """
+    # Ensure reports directory exists
+    reports_dir = Path("reports")
+    reports_dir.mkdir(exist_ok=True)
+
+    # Generate output filename if not provided
+    if not output_path:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        target_name = report.target.replace(
+            'http://', '').replace('https://', '').replace('/', '_').replace(':', '_')
+        output_path = f"penetration_test_{target_name}_{timestamp}.{output_format}"
+
+    # Ensure filename is in reports directory
+    output_filename = Path(output_path).name
+    full_output_path = reports_dir / output_filename
+
+    if output_format == 'json':
+        return _save_json_report(report, full_output_path)
+    elif output_format == 'md':
+        return _save_md_report(report, full_output_path)
+    elif output_format == 'pdf':
+        return _save_pdf_report(report, full_output_path)
+    else:
+        raise ValueError(f"Unsupported output format: {output_format}")
+
+
+def _save_json_report(report: PentestReport, output_path: Path) -> str:
+    """Save penetration test report as JSON"""
+    try:
+        with open(output_path, 'w') as f:
+            json.dump(report.to_dict(), f, indent=2, default=str)
+        logger.info(f"📄 JSON report saved to: {output_path}")
+        return str(output_path)
+    except Exception as e:
+        logger.error(f"Failed to save JSON report: {e}")
+        raise
+
+
+def _save_md_report(report: PentestReport, output_path: Path) -> str:
+    """Save penetration test report as JSON + Markdown"""
+    # First save JSON
+    json_path = output_path.with_suffix('.json')
+    _save_json_report(report, json_path)
+
+    if not MARKDOWN_AVAILABLE:
+        logger.warning(
+            "Markdown generation not available, returning JSON path")
+        return str(json_path)
+
+    try:
+        generator = MarkdownReportGenerator()
+        # Convert report to format expected by markdown generator
+        report_data = _convert_pentest_report_for_markdown(report)
+
+        md_full_path = generator.generate_report(
+            json_data=report_data,
+            analyser_type='pentest',
+            output_file=output_path.name
+        )
+
+        # If the generator saved to the reports directory, move it to our target location
+        if md_full_path != str(output_path):
+            import shutil
+            shutil.move(md_full_path, output_path)
+
+        logger.info(f"📄 Markdown report saved to: {output_path}")
+        return str(output_path)
+
+    except Exception as e:
+        logger.error(f"Failed to generate markdown report: {e}")
+        return str(json_path)
+
+
+def _save_pdf_report(report: PentestReport, output_path: Path) -> str:
+    """Save penetration test report as JSON + Markdown + PDF"""
+    # Generate markdown first
+    md_path = output_path.with_suffix('.md')
+    md_result = _save_md_report(report, md_path)
+
+    if not PDF_AVAILABLE:
+        logger.warning("PDF generation not available, returning markdown path")
+        return md_result
+
+    try:
+        converter = MarkdownToPdfConverter(page_break_mode="continuous")
+        converter.convert_file_to_pdf(
+            input_file=Path(md_result),
+            output_file=output_path
+        )
+        logger.info(f"📄 PDF report saved to: {output_path}")
+        return str(output_path)
+
+    except Exception as e:
+        logger.error(f"Failed to convert to PDF: {e}")
+        return md_result
+
+
+def _convert_pentest_report_for_markdown(report: PentestReport) -> Dict[str, Any]:
+    """Convert PentestReport to format expected by MarkdownReportGenerator"""
+    # Convert findings to the format expected by the markdown generator
+    formatted_findings = []
+    for finding in report.findings:
+        formatted_finding = {
+            'tool': finding.tool,
+            'severity': finding.severity,
+            'title': finding.title,
+            'description': finding.description,
+            'target': finding.target,
+            'file_path': finding.target,  # Map target to file_path for compatibility
+            'line_number': finding.port,
+            'cwe_id': finding.cwe_id,
+            'confidence': finding.confidence,
+            'rule_id': finding.attack_vector,
+            'category': 'penetration_testing',
+            'educational_note': f"Exploitation proof: {finding.exploitation_proof}" if finding.exploitation_proof else finding.impact,
+            'remediation': finding.remediation
+        }
+        formatted_findings.append(formatted_finding)
+
+    return {
+        'target_path': report.target,
+        'target_url': report.target,
+        'analysis_timestamp': report.timestamp,
+        'test_duration': report.test_duration,
+        'tools_used': report.tools_used,
+        'findings': formatted_findings,
+        'summary': {
+            'total': report.summary.get('total_findings', 0),
+            'critical': report.summary.get('severity_distribution', {}).get('critical', 0),
+            'high': report.summary.get('severity_distribution', {}).get('high', 0),
+            'medium': report.summary.get('severity_distribution', {}).get('medium', 0),
+            'low': report.summary.get('severity_distribution', {}).get('low', 0),
+            'info': report.summary.get('severity_distribution', {}).get('info', 0)
+        },
+        'metadata': {
+            'total_tests': report.total_tests,
+            'successful_exploits': report.successful_exploits,
+            'services_discovered': report.services_discovered,
+            'endpoints_tested': report.endpoints_tested,
+            'methodology': report.methodology,
+            'recommendations': report.recommendations,
+            'overall_risk_score': report.summary.get('overall_risk_score', 0),
+            'risk_level': report.summary.get('risk_level', 'unknown')
+        }
+    }
+
+
 if __name__ == "__main__":
     # Example usage
     import sys
@@ -1746,6 +1926,16 @@ if __name__ == "__main__":
         deep_test = '--deep' in sys.argv
         exploit_mode = '--exploit' in sys.argv
 
+        # Check for output options
+        output_pdf = '--pdf' in sys.argv
+        output_file = None
+
+        # Look for --output or -o option
+        for i, arg in enumerate(sys.argv):
+            if arg in ['--output', '-o'] and i + 1 < len(sys.argv):
+                output_file = sys.argv[i + 1]
+                break
+
         report = tester.conduct_penetration_test(
             target,
             test_types=['all'],
@@ -1753,7 +1943,33 @@ if __name__ == "__main__":
             exploit_mode=exploit_mode
         )
 
-        print(f"Penetration Test Report for: {target}")
+        # Save report if requested
+        if output_pdf or output_file:
+            try:
+                if output_file:
+                    # Determine format from file extension
+                    if output_file.endswith('.pdf'):
+                        saved_path = save_penetration_report(
+                            report, output_file, 'pdf')
+                    elif output_file.endswith('.md'):
+                        saved_path = save_penetration_report(
+                            report, output_file, 'md')
+                    elif output_file.endswith('.json'):
+                        saved_path = save_penetration_report(
+                            report, output_file, 'json')
+                    else:
+                        saved_path = save_penetration_report(
+                            report, output_file, 'pdf')
+                else:
+                    # Default to PDF
+                    saved_path = save_penetration_report(report, None, 'pdf')
+
+                print(f"\n📄 Report saved to: {saved_path}")
+            except Exception as e:
+                print(f"❌ Failed to save report: {e}")
+
+        # Display summary to console
+        print(f"\nPenetration Test Report for: {target}")
         print(f"Total findings: {report.summary['total_findings']}")
         print(f"Risk level: {report.summary['risk_level']}")
         print(
@@ -1769,7 +1985,17 @@ if __name__ == "__main__":
             if finding.exploitation_proof:
                 print(f"  Exploitation: {finding.exploitation_proof}")
     else:
-        print("Usage: python penetration_analyser.py <target_url>")
-        print("Options: --deep (thorough testing), --exploit (attempt exploitation)")
+        print("Usage: python penetration_analyser.py <target_url> [options]")
+        print("Options:")
+        print("  --deep          Thorough testing (takes longer)")
+        print("  --exploit       Attempt exploitation for proof-of-concept")
+        print("  --pdf           Generate PDF report (auto-named)")
+        print("  --output FILE   Save report to specific file (format detected from extension)")
+        print("  -o FILE         Short form of --output")
+        print("")
+        print("Examples:")
+        print("  python penetration_analyser.py http://localhost:5000")
+        print("  python penetration_analyser.py http://localhost:5000 --deep --exploit")
+        print("  python penetration_analyser.py http://localhost:5000 --output pentest_report.pdf")
         print(
-            "Example: python penetration_analyser.py http://localhost:5000 --deep --exploit")
+            "  python penetration_analyser.py http://localhost:5000 --deep --exploit --pdf")

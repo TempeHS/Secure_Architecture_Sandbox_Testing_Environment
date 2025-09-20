@@ -17,7 +17,11 @@ beautifulsoup4>=4.12.0
 jinja2>=3.1.0
 
 # Report generation
+# Note: WeasyPrint requires fonts-noto-color-emoji system package for emoji support
 reportlab>=4.0.0
+markdown>=3.5.0
+weasyprint>=60.0
+pygments>=2.16.0
 
 # Data handling
 pyyaml>=6.0

@@ -1,6 +1,7 @@
-#!/bin/bash
-
-# Post-creation script for Codespaces setup
+#!/bin/bash# Install essential security tools and PDF generation dependencies
+echo "🔧 Installing security tools and PDF generation libraries..."
+# Note: PDF generation libraries (Pango, Cairo, etc.) are required for WeasyPrint
+# which is used by the security reporting tools to generate PDF reports# Post-creation script for Codespaces setup
 set -e  # Exit on any error
 
 echo "🔧 Setting up Secure Architecture Sandbox environment..."
@@ -9,19 +10,8 @@ echo "🔧 Setting up Secure Architecture Sandbox environment..."
 echo "📦 Updating system packages..."
 sudo apt-get update -y
 
-# Install essential security tools availableecho "✅ Environment setup complete!"
-echo "📚 Check /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md for getting started instructions"
-echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
-echo "🔍 Run 'python3 .devcontainer/verify_environment.py' for quick verification"
-echo "🎯 Run 'python3 .devcontainer/test_environment.py' for comprehensive testing"
-echo "🐳 Use 'cd docker && docker-compose up -d' to start isolated testing environment"
-echo "🔧 If git clone issues occur, run 'bash .devcontainer/debug-git-clone.sh' for diagnostics"
-
-# Make sure WELCOME.md is prominently visible by echoing its location
-echo ""
-echo "📖 Opening WELCOME.md for getting started guide..."
-echo "   File location: /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md"t
-echo "🔧 Installing security tools..."
+# Install essential security tools and PDF generation dependencies
+echo "� Installing security tools and PDF generation libraries..."
 sudo apt-get install -y --no-install-recommends \
     nmap \
     dirb \
@@ -40,7 +30,18 @@ sudo apt-get install -y --no-install-recommends \
     zip \
     git \
     build-essential \
-    libpcap-dev
+    libpcap-dev \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpangoft2-1.0-0 \
+    libharfbuzz0b \
+    libfontconfig1 \
+    libcairo2 \
+    libgdk-pixbuf2.0-0 \
+    libffi-dev \
+    shared-mime-info \
+    wkhtmltopdf \
+    fonts-noto-color-emoji
 
 # Install Git LFS
 echo "📥 Installing Git LFS..."
@@ -185,6 +186,7 @@ def main():
         ("Safety", ["safety", "--version"]),
         ("Curl", ["curl", "--version"]),
         ("Docker", ["docker", "--version"]),
+        ("wkhtmltopdf", ["wkhtmltopdf", "--version"]),
     ]
     
     available = 0
@@ -194,8 +196,27 @@ def main():
     
     print(f"\n📊 {available}/{len(tools)} tools are available")
     
-    if available >= len(tools) - 1:  # Allow for one tool to be missing
-        print("🎉 Security tools are ready for educational use!")
+    # Test PDF generation capabilities
+    print("\n🔍 Testing PDF generation capabilities...")
+    try:
+        import weasyprint
+        print("✅ WeasyPrint: Available")
+        pdf_available = True
+    except ImportError as e:
+        print(f"❌ WeasyPrint: Not available ({e})")
+        pdf_available = False
+    
+    try:
+        import reportlab
+        print("✅ ReportLab: Available")
+    except ImportError:
+        print("❌ ReportLab: Not available")
+    
+    if available >= len(tools) - 1 and pdf_available:  # Allow for one tool to be missing
+        print("🎉 Security tools and PDF generation are ready for educational use!")
+        return 0
+    elif available >= len(tools) - 1:
+        print("🎉 Security tools are ready! PDF generation may need troubleshooting.")
         return 0
     else:
         print("⚠️  Some tools may need additional setup")

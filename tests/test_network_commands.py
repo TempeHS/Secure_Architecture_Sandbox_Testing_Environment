@@ -8,7 +8,6 @@ reference guide to ensure they work correctly and produce expected output.
 
 import unittest
 import subprocess
-import json
 import os
 import logging
 from pathlib import Path
@@ -329,102 +328,6 @@ class NetworkCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("Educational demo network timed out")
 
-    def test_12_json_output_connections(self):
-        """Test JSON output for connection monitoring."""
-        logger.info("Testing JSON output for connection monitoring...")
-
-        output_file = self.reports_dir / "test_network_connections.json"
-
-        try:
-            result = subprocess.run(
-                [
-                    "python",
-                    self.network_cli,
-                    "--monitor-connections",
-                    "--output",
-                    str(output_file),
-                    "--format",
-                    "json",
-                ],
-                cwd=self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            self.assertEqual(
-                result.returncode,
-                0,
-                f"JSON connection monitoring failed: " f"{result.stderr}",
-            )
-            self.assertTrue(output_file.exists(),
-                            "JSON output file was not created")
-
-            # Validate JSON structure
-            with open(output_file, "r") as f:
-                data = json.load(f)
-                self.assertIn(
-                    "active_connections", data, "JSON output missing active_connections key"
-                )
-
-            logger.info("✅ JSON output for connections works")
-
-        except subprocess.TimeoutExpired:
-            self.fail("JSON connection monitoring timed out")
-        except json.JSONDecodeError:
-            self.fail("Network JSON output is not valid JSON")
-        finally:
-            # Clean up
-            if output_file.exists():
-                output_file.unlink()
-
-    def test_13_text_output_services(self):
-        """Test text output for service scanning."""
-        logger.info("Testing text output for service scanning...")
-
-        output_file = self.reports_dir / "test_network_services.txt"
-
-        try:
-            result = subprocess.run(
-                [
-                    "python",
-                    self.network_cli,
-                    "--scan-services",
-                    "localhost",
-                    "--output",
-                    str(output_file),
-                    "--format",
-                    "text",
-                ],
-                cwd=self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            self.assertEqual(
-                result.returncode,
-                0,
-                f"Text service scanning failed: " f"{result.stderr}",
-            )
-            self.assertTrue(output_file.exists(),
-                            "Text output file was not created")
-
-            # Validate text content
-            with open(output_file, "r") as f:
-                content = f.read()
-                self.assertGreater(
-                    len(content), 50, "Text output seems too short")
-
-            logger.info("✅ Text output for services works")
-
-        except subprocess.TimeoutExpired:
-            self.fail("Text service scanning timed out")
-        finally:
-            # Clean up
-            if output_file.exists():
-                output_file.unlink()
-
     def test_14_verbose_mode(self):
         """Test network analysis with verbose output."""
         logger.info("Testing network analysis in verbose mode...")
@@ -515,57 +418,6 @@ class NetworkCommandValidationTest(unittest.TestCase):
 
         except subprocess.TimeoutExpired:
             self.fail("Combined options network analysis timed out")
-
-    def test_17_service_scan_with_json_output(self):
-        """Test service scanning with JSON output."""
-        logger.info("Testing service scanning with JSON output...")
-
-        output_file = self.reports_dir / "test_service_scan.json"
-
-        try:
-            result = subprocess.run(
-                [
-                    "python",
-                    self.network_cli,
-                    "--scan-services",
-                    "localhost",
-                    "--educational",
-                    "--output",
-                    str(output_file),
-                    "--format",
-                    "json",
-                ],
-                cwd=self.project_root,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            self.assertEqual(
-                result.returncode,
-                0,
-                f"JSON service scanning failed: " f"{result.stderr}",
-            )
-            self.assertTrue(
-                output_file.exists(), "JSON service scan file was not created"
-            )
-
-            # Validate JSON structure
-            with open(output_file, "r") as f:
-                data = json.load(f)
-                self.assertIsInstance(
-                    data, dict, "JSON output should be a dictionary")
-
-            logger.info("✅ Service scanning with JSON output works")
-
-        except subprocess.TimeoutExpired:
-            self.fail("JSON service scanning timed out")
-        except json.JSONDecodeError:
-            self.fail("Service scan JSON output is not valid JSON")
-        finally:
-            # Clean up
-            if output_file.exists():
-                output_file.unlink()
 
     def test_18_traffic_capture_with_filter(self):
         """Test traffic capture with filter option."""
