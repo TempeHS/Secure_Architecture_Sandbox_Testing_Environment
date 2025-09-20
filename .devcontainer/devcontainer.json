@@ -84,7 +84,7 @@
           "css": false,
           "SQL": false
         },
-        "chat.agent.enabled": true
+        "chat.agent.enabled": false
       }
     }
   },

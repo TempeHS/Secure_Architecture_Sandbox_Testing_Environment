@@ -91,15 +91,15 @@ sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
 cd /opt/security-tools
 
 
-# Update the embedded Unsecure PWA repo if present
-echo "� Updating embedded Unsecure PWA repository..."
-cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples/unsecure-pwa
-if [ -d ".git" ]; then
-    git pull || echo "⚠️  Could not update Unsecure PWA repo (check remote access)"
-else
-    echo "⚠️  Embedded Unsecure PWA repo not found. Please ensure it is present and tracked by Git."
+
+
+# Update the embedded Unsecure PWA repo (force fresh clone)
+echo "🔄 Updating embedded Unsecure PWA repository..."
+UNSECURE_PWA_DIR="/workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples/unsecure-pwa"
+if [ -d "$UNSECURE_PWA_DIR" ]; then
+    rm -rf "$UNSECURE_PWA_DIR"/* "$UNSECURE_PWA_DIR"/.* 2>/dev/null || true
 fi
-cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+git clone --branch sandbox_version https://github.com/TempeHS/The_Unsecure_PWA.git "$UNSECURE_PWA_DIR"
 
 # Ensure proper permissions for workspace
 sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Environment
