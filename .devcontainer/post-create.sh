@@ -1,26 +1,39 @@
-#!/bin/bash# Install essential security tools and PDF generation dependencies
-echo "🔧 Installing security tools and PDF generation libraries..."
-# Note: PDF generation libraries (Pango, Cairo, etc.) are required for WeasyPrint
-# which is used by the security reporting tools to generate PDF reports# Post-creation script for Codespaces setup
+#!/bin/bash
+# Post-creation script for Codespaces setup
 set -e  # Exit on any error
+
+# Source centralized build logger
+source /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/build-logger.sh
+init_logging
+
+# Start overall setup process
+setup_pid=$(start_timer "SETUP" "Secure Architecture Sandbox environment setup")
+log_message "INFO" "SETUP" "Starting Secure Architecture Sandbox environment setup" "$setup_pid"
+log_system_info "SETUP"
 
 echo "🔧 Setting up Secure Architecture Sandbox environment..."
 
 # Update package lists and install security tools
+update_pid=$(start_timer "SYSTEM" "Updating system packages")
 echo "📦 Updating system packages..."
-sudo apt-get update -y
+log_command "SYSTEM" "sudo apt-get update -y" "Update system packages" 120
 # Ensure vscode user is in the docker group and Docker socket is accessible
+docker_perm_pid=$(start_timer "DOCKER" "Setting up Docker permissions")
 echo "🔒 Ensuring Docker permissions for non-admin users..."
+log_message "INFO" "DOCKER" "Starting Docker permissions setup" "$docker_perm_pid"
 
 # Wait for Docker daemon to be available
 echo "⏳ Waiting for Docker daemon to be ready..."
+log_message "INFO" "DOCKER" "Waiting for Docker daemon to be ready" "$docker_perm_pid"
 for i in {1..30}; do
     if docker info >/dev/null 2>&1; then
         echo "✅ Docker daemon is ready"
+        log_message "INFO" "DOCKER" "Docker daemon is ready after $i seconds" "$docker_perm_pid"
         break
     fi
     if [ $i -eq 30 ]; then
         echo "⚠️ Docker daemon not ready after 30 seconds, continuing anyway"
+        log_message "WARN" "DOCKER" "Docker daemon not ready after 30 seconds, continuing anyway" "$docker_perm_pid"
         break
     fi
     sleep 1
@@ -29,24 +42,74 @@ done
 # Ensure docker group exists and add vscode user
 if getent group docker >/dev/null; then
     echo "✅ Docker group exists"
+    log_message "INFO" "DOCKER" "Docker group exists" "$docker_perm_pid"
     if id -nG vscode | grep -qw docker; then
         echo "✅ vscode user already in docker group"
+        log_message "INFO" "DOCKER" "vscode user already in docker group" "$docker_perm_pid"
     else
         echo "🔧 Adding vscode user to docker group"
+        log_message "INFO" "DOCKER" "Adding vscode user to docker group" "$docker_perm_pid"
         sudo usermod -aG docker vscode
     fi
     
     # Set Docker socket permissions if it exists
     if [ -S /var/run/docker.sock ]; then
         echo "🔧 Setting Docker socket permissions"
-        sudo chown root:docker /var/run/docker.sock || echo "⚠️ Could not change Docker socket ownership"
-        sudo chmod 660 /var/run/docker.sock || echo "⚠️ Could not change Docker socket permissions"
+        log_message "INFO" "DOCKER" "Setting Docker socket permissions" "$docker_perm_pid"
+        sudo chown root:docker /var/run/docker.sock || log_message "WARN" "DOCKER" "Could not change Docker socket ownership" "$docker_perm_pid"
+        sudo chmod 660 /var/run/docker.sock || log_message "WARN" "DOCKER" "Could not change Docker socket permissions" "$docker_perm_pid"
         echo "✅ Docker socket permissions configured"
+        log_message "INFO" "DOCKER" "Docker socket permissions configured successfully" "$docker_perm_pid"
     else
         echo "⚠️ Docker socket not found at /var/run/docker.sock"
+        log_message "WARN" "DOCKER" "Docker socket not found at /var/run/docker.sock" "$docker_perm_pid"
     fi
 else
     echo "⚠️ Docker group does not exist; Docker permissions may be limited."
+    log_message "WARN" "DOCKER" "Docker group does not exist; Docker permissions may be limited." "$docker_perm_pid"
+fi
+end_timer "DOCKER" "Setting up Docker permissions" "$docker_perm_pid"
+
+# Install essential security tools and PDF generation dependencies
+pkg_install_pid=$(start_timer "PACKAGES" "Installing security tools and PDF generation libraries")
+echo "📦 Installing security tools and PDF generation libraries..."
+log_message "INFO" "PACKAGES" "Starting installation of security tools and PDF generation libraries" "$pkg_install_pid"
+
+if sudo apt-get install -y --no-install-recommends \
+    nmap \
+    dirb \
+    netcat-traditional \
+    tcpdump \
+    net-tools \
+    dnsutils \
+    curl \
+    wget \
+    jq \
+    tree \
+    htop \
+    file \
+    binutils \
+    unzip \
+    zip \
+    git \
+    build-essential \
+    libpcap-dev \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpangoft2-1.0-0 \
+    libharfbuzz0b \
+    libfontconfig1 \
+    libcairo2 \
+    libgdk-pixbuf2.0-0 \
+    libffi-dev \
+    shared-mime-info \
+    wkhtmltopdf \
+    fonts-noto-color-emoji; then
+    log_message "INFO" "PACKAGES" "Security tools and PDF libraries installed successfully" "$pkg_install_pid"
+    end_timer "PACKAGES" "Installing security tools and PDF generation libraries" "$pkg_install_pid" "SUCCESS"
+else
+    log_message "ERROR" "PACKAGES" "Failed to install security tools and PDF libraries" "$pkg_install_pid"
+    end_timer "PACKAGES" "Installing security tools and PDF generation libraries" "$pkg_install_pid" "FAILED"
 fi
 
 # Install essential security tools and PDF generation dependencies
@@ -82,16 +145,36 @@ sudo apt-get install -y --no-install-recommends \
     wkhtmltopdf \
     fonts-noto-color-emoji
 # Install Git LFS
+git_lfs_pid=$(start_timer "GIT" "Installing Git LFS")
 echo "📥 Installing Git LFS..."
-curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-sudo apt-get install -y git-lfs
+log_message "INFO" "GIT" "Installing Git LFS" "$git_lfs_pid"
+
+if curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && sudo apt-get install -y git-lfs; then
+    log_message "INFO" "GIT" "Git LFS installed successfully" "$git_lfs_pid"
+    end_timer "GIT" "Installing Git LFS" "$git_lfs_pid" "SUCCESS"
+else
+    log_message "ERROR" "GIT" "Git LFS installation failed" "$git_lfs_pid"
+    end_timer "GIT" "Installing Git LFS" "$git_lfs_pid" "FAILED"
+fi
 
 # Initialise Git LFS for the user
+git_init_pid=$(start_timer "GIT" "Initializing Git LFS")
 echo "🔧 Initialising Git LFS..."
-git lfs install
+log_message "INFO" "GIT" "Initializing Git LFS for user" "$git_init_pid"
+
+if git lfs install; then
+    log_message "INFO" "GIT" "Git LFS initialized successfully" "$git_init_pid"
+    end_timer "GIT" "Initializing Git LFS" "$git_init_pid" "SUCCESS"
+else
+    log_message "ERROR" "GIT" "Git LFS initialization failed" "$git_init_pid"
+    end_timer "GIT" "Initializing Git LFS" "$git_init_pid" "FAILED"
+fi
 
 # Create necessary directories with proper permissions
+dir_setup_pid=$(start_timer "DIRS" "Creating directory structure")
 echo "📁 Creating directory structure with proper permissions..."
+log_message "INFO" "DIRS" "Creating directory structure with proper permissions" "$dir_setup_pid"
+
 sudo mkdir -p /opt/security-tools
 sudo chown -R vscode:vscode /opt/security-tools
 
@@ -105,31 +188,41 @@ workspace_dirs=(
 for dir in "${workspace_dirs[@]}"; do
     if [ ! -d "$dir" ]; then
         echo "📁 Creating directory: $dir"
+        log_message "INFO" "DIRS" "Creating directory: $dir" "$dir_setup_pid"
         mkdir -p "$dir"
     fi
     # Ensure vscode user owns the directory
-    chown -R vscode:vscode "$dir" 2>/dev/null || echo "⚠️ Could not change ownership of $dir"
+    chown -R vscode:vscode "$dir" 2>/dev/null || log_message "WARN" "DIRS" "Could not change ownership of $dir" "$dir_setup_pid"
     # Ensure directory is writable
-    chmod 755 "$dir" 2>/dev/null || echo "⚠️ Could not change permissions of $dir"
+    chmod 755 "$dir" 2>/dev/null || log_message "WARN" "DIRS" "Could not change permissions of $dir" "$dir_setup_pid"
 done
 
 echo "✅ Directory structure created with proper permissions"
+log_message "INFO" "DIRS" "Directory structure created successfully" "$dir_setup_pid"
+end_timer "DIRS" "Creating directory structure" "$dir_setup_pid" "SUCCESS"
 
 # Install additional security tools manually
 cd /opt/security-tools
 
 # Install Nikto
+nikto_pid=$(start_timer "TOOLS" "Installing Nikto")
 echo "📥 Installing Nikto..."
+log_message "INFO" "TOOLS" "Starting Nikto installation" "$nikto_pid"
+
 if [ ! -d "nikto" ]; then
     for attempt in 1 2 3; do
         echo "🔄 Nikto installation attempt $attempt"
+        log_message "INFO" "TOOLS" "Nikto installation attempt $attempt" "$nikto_pid"
         if timeout 60 git clone https://github.com/sullo/nikto.git; then
             echo "✅ Nikto cloned successfully"
+            log_message "INFO" "TOOLS" "Nikto cloned successfully on attempt $attempt" "$nikto_pid"
             break
         else
             echo "⚠️ Nikto clone attempt $attempt failed"
+            log_message "WARN" "TOOLS" "Nikto clone attempt $attempt failed" "$nikto_pid"
             if [ $attempt -eq 3 ]; then
                 echo "❌ All Nikto installation attempts failed"
+                log_message "ERROR" "TOOLS" "All Nikto installation attempts failed" "$nikto_pid"
             else
                 sleep 5
             fi
@@ -137,6 +230,7 @@ if [ ! -d "nikto" ]; then
     done
 else
     echo "⚙️  Nikto directory already exists, skipping clone"
+    log_message "INFO" "TOOLS" "Nikto directory already exists, skipping clone" "$nikto_pid"
 fi
 
 if [ -d "nikto/program" ]; then
@@ -145,46 +239,67 @@ if [ -d "nikto/program" ]; then
     sudo ln -sf /opt/security-tools/nikto/program/nikto.pl /usr/local/bin/nikto
     cd /opt/security-tools
     echo "✅ Nikto installation completed"
+    log_message "INFO" "TOOLS" "Nikto installation completed successfully" "$nikto_pid"
+    end_timer "TOOLS" "Installing Nikto" "$nikto_pid" "SUCCESS"
 else
     echo "⚠️ Nikto installation incomplete"
+    log_message "ERROR" "TOOLS" "Nikto installation incomplete" "$nikto_pid"
+    end_timer "TOOLS" "Installing Nikto" "$nikto_pid" "FAILED"
 fi
 
 # Install Gobuster
+gobuster_pid=$(start_timer "TOOLS" "Installing Gobuster")
 echo "📥 Installing Gobuster..."
+log_message "INFO" "TOOLS" "Starting Gobuster installation" "$gobuster_pid"
+
 for attempt in 1 2 3; do
     echo "🔄 Gobuster installation attempt $attempt"
+    log_message "INFO" "TOOLS" "Gobuster installation attempt $attempt" "$gobuster_pid"
     if timeout 60 wget -q https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz; then
         if tar -xzf gobuster_Linux_x86_64.tar.gz && [ -f gobuster ]; then
             sudo mv gobuster /usr/local/bin/
             rm -f gobuster_Linux_x86_64.tar.gz
             echo "✅ Gobuster installation completed"
+            log_message "INFO" "TOOLS" "Gobuster installation completed on attempt $attempt" "$gobuster_pid"
+            end_timer "TOOLS" "Installing Gobuster" "$gobuster_pid" "SUCCESS"
             break
         else
             echo "⚠️ Gobuster extraction failed on attempt $attempt"
+            log_message "WARN" "TOOLS" "Gobuster extraction failed on attempt $attempt" "$gobuster_pid"
         fi
     else
         echo "⚠️ Gobuster download attempt $attempt failed"
+        log_message "WARN" "TOOLS" "Gobuster download attempt $attempt failed" "$gobuster_pid"
     fi
     
     if [ $attempt -eq 3 ]; then
         echo "❌ All Gobuster installation attempts failed"
+        log_message "ERROR" "TOOLS" "All Gobuster installation attempts failed" "$gobuster_pid"
+        end_timer "TOOLS" "Installing Gobuster" "$gobuster_pid" "FAILED"
     else
         sleep 5
     fi
 done
 
 # Install WhatWeb
+whatweb_pid=$(start_timer "TOOLS" "Installing WhatWeb")
 echo "📥 Installing WhatWeb..."
+log_message "INFO" "TOOLS" "Starting WhatWeb installation" "$whatweb_pid"
+
 if [ ! -d "WhatWeb" ]; then
     for attempt in 1 2 3; do
         echo "🔄 WhatWeb installation attempt $attempt"
+        log_message "INFO" "TOOLS" "WhatWeb installation attempt $attempt" "$whatweb_pid"
         if timeout 60 git clone https://github.com/urbanadventurer/WhatWeb.git; then
             echo "✅ WhatWeb cloned successfully"
+            log_message "INFO" "TOOLS" "WhatWeb cloned successfully on attempt $attempt" "$whatweb_pid"
             break
         else
             echo "⚠️ WhatWeb clone attempt $attempt failed"
+            log_message "WARN" "TOOLS" "WhatWeb clone attempt $attempt failed" "$whatweb_pid"
             if [ $attempt -eq 3 ]; then
                 echo "❌ All WhatWeb installation attempts failed"
+                log_message "ERROR" "TOOLS" "All WhatWeb installation attempts failed" "$whatweb_pid"
             else
                 sleep 5
             fi
@@ -192,6 +307,7 @@ if [ ! -d "WhatWeb" ]; then
     done
 else
     echo "⚙️  WhatWeb directory already exists, skipping clone"
+    log_message "INFO" "TOOLS" "WhatWeb directory already exists, skipping clone" "$whatweb_pid"
 fi
 
 if [ -d "WhatWeb" ]; then
@@ -200,8 +316,12 @@ if [ -d "WhatWeb" ]; then
     sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
     cd /opt/security-tools
     echo "✅ WhatWeb installation completed"
+    log_message "INFO" "TOOLS" "WhatWeb installation completed successfully" "$whatweb_pid"
+    end_timer "TOOLS" "Installing WhatWeb" "$whatweb_pid" "SUCCESS"
 else
     echo "⚠️ WhatWeb installation incomplete"
+    log_message "ERROR" "TOOLS" "WhatWeb installation incomplete" "$whatweb_pid"
+    end_timer "TOOLS" "Installing WhatWeb" "$whatweb_pid" "FAILED"
 fi
 
 
@@ -279,19 +399,26 @@ sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Envi
 }
 
 # Install Python security packages for development and analysis
+python_pid=$(start_timer "PYTHON" "Installing Python security packages")
 echo "🐍 Installing Python security packages..."
+log_message "INFO" "PYTHON" "Starting Python security packages installation" "$python_pid"
+
 python3 -m pip install --upgrade pip
 
 # Install from requirements.txt if it exists, otherwise install individually
 requirements_file="/workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt"
 if [ -f "$requirements_file" ]; then
     echo "📋 Installing from requirements.txt..."
+    log_message "INFO" "PYTHON" "Installing from requirements.txt" "$python_pid"
     
     # Try installing with a single pip command first
     if python3 -m pip install --no-cache-dir -r "$requirements_file"; then
         echo "✅ Python packages installed successfully from requirements.txt"
+        log_message "INFO" "PYTHON" "Python packages installed successfully from requirements.txt" "$python_pid"
+        end_timer "PYTHON" "Installing Python security packages" "$python_pid" "SUCCESS"
     else
         echo "⚠️  Some packages from requirements.txt failed, trying safer installation..."
+        log_message "WARN" "PYTHON" "Some packages from requirements.txt failed, trying individual installation" "$python_pid"
         
         # Parse requirements.txt and install essential packages individually
         essential_packages=(
@@ -311,10 +438,13 @@ if [ -f "$requirements_file" ]; then
         # Install essential packages one by one
         for package in "${essential_packages[@]}"; do
             echo "📦 Installing $package"
+            log_message "INFO" "PYTHON" "Installing package: $package" "$python_pid"
             if python3 -m pip install --no-cache-dir "$package"; then
                 echo "✅ $package installed successfully"
+                log_message "INFO" "PYTHON" "$package installed successfully" "$python_pid"
             else
                 echo "⚠️ Failed to install $package"
+                log_message "WARN" "PYTHON" "Failed to install $package" "$python_pid"
             fi
         done
         
@@ -328,18 +458,25 @@ if [ -f "$requirements_file" ]; then
         )
         
         echo "📦 Installing optional packages (failures are acceptable)..."
+        log_message "INFO" "PYTHON" "Installing optional packages" "$python_pid"
         for package in "${optional_packages[@]}"; do
             echo "📦 Attempting to install $package"
+            log_message "INFO" "PYTHON" "Attempting to install optional package: $package" "$python_pid"
             if python3 -m pip install --no-cache-dir "$package"; then
                 echo "✅ $package installed successfully"
+                log_message "INFO" "PYTHON" "Optional package $package installed successfully" "$python_pid"
             else
                 echo "⚠️ Failed to install $package (this is optional)"
+                log_message "INFO" "PYTHON" "Optional package $package failed (acceptable)" "$python_pid"
             fi
         done
+        end_timer "PYTHON" "Installing Python security packages" "$python_pid" "PARTIAL_SUCCESS"
     fi
 else
     echo "❌ requirements.txt not found at $requirements_file"
+    log_message "ERROR" "PYTHON" "requirements.txt not found at $requirements_file" "$python_pid"
     echo "📦 Installing essential packages individually..."
+    log_message "INFO" "PYTHON" "Installing essential packages individually" "$python_pid"
     
     # Install minimal essential packages
     essential_packages=(
@@ -357,15 +494,20 @@ else
     
     for package in "${essential_packages[@]}"; do
         echo "📦 Installing $package"
+        log_message "INFO" "PYTHON" "Installing essential package: $package" "$python_pid"
         if python3 -m pip install --no-cache-dir "$package"; then
             echo "✅ $package installed successfully"
+            log_message "INFO" "PYTHON" "$package installed successfully" "$python_pid"
         else
             echo "⚠️ Failed to install $package"
+            log_message "ERROR" "PYTHON" "Failed to install essential package: $package" "$python_pid"
         fi
     done
+    end_timer "PYTHON" "Installing Python security packages" "$python_pid" "PARTIAL_SUCCESS"
 fi
 
 echo "✅ Python package installation completed"
+log_message "INFO" "PYTHON" "Python package installation process completed" "$python_pid"
 
 # Create a simple test script to verify security tools
 cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py << 'EOF'
@@ -453,8 +595,15 @@ if [ ! -f ~/.gitconfig ]; then
 fi
 
 # Install docker-compose and start services
+compose_pid=$(start_timer "DOCKER_COMPOSE" "Installing docker-compose and starting services")
 echo "📦 Installing docker-compose..."
-sudo apt-get update -y && sudo apt-get install -y docker-compose
+log_message "INFO" "DOCKER_COMPOSE" "Installing docker-compose" "$compose_pid"
+
+if sudo apt-get update -y && sudo apt-get install -y docker-compose; then
+    log_message "INFO" "DOCKER_COMPOSE" "docker-compose installed successfully" "$compose_pid"
+else
+    log_message "ERROR" "DOCKER_COMPOSE" "docker-compose installation failed" "$compose_pid"
+fi
 
 # Ensure Docker is ready
 echo "� Waiting for Docker to be ready..."
@@ -613,3 +762,15 @@ echo "   • You can open it by clicking: WELCOME.md in the file explorer"
 echo "   • Or run: code WELCOME.md"
 echo "   • Or use Ctrl+P and type: WELCOME.md"
 echo ""
+
+# Complete the overall setup process
+end_timer "SETUP" "Secure Architecture Sandbox environment setup" "$setup_pid" "SUCCESS"
+
+# Generate final build report
+report_file=$(generate_build_report "SETUP")
+log_message "INFO" "SETUP" "Build completed. Report generated: $report_file"
+
+# Show log status
+echo ""
+echo "📊 Build Process Summary:"
+log_status

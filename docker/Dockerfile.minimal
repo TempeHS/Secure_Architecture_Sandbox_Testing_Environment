@@ -1,8 +1,14 @@
 # Minimal, robust sandbox Dockerfile for cybersecurity education
 FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
 
+# Copy and source build logger
+COPY docker/docker-build-logger.sh /usr/local/bin/docker-build-logger.sh
+RUN chmod +x /usr/local/bin/docker-build-logger.sh && \
+    /usr/local/bin/docker-build-logger.sh docker_stage_start "BASE" "Starting minimal sandbox Docker build"
+
 # Install essential system packages only (no downloads)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "PACKAGES" "Installing system packages" && \
+    apt-get update && apt-get install -y --no-install-recommends \
     # Core utilities
     curl \
     wget \
@@ -26,42 +32,51 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && /usr/local/bin/docker-build-logger.sh docker_stage_end "PACKAGES" "System packages installation"
 
 # Copy runtime tool installer for additional tools
 COPY docker/install-tools.sh /usr/local/bin/install-tools.sh
-RUN chmod +x /usr/local/bin/install-tools.sh
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "TOOLS" "Setting up tool installer" && \
+    chmod +x /usr/local/bin/install-tools.sh && \
+    /usr/local/bin/docker-build-logger.sh docker_stage_end "TOOLS" "Tool installer setup"
 
 # Install minimal Python packages for security analysis
-RUN pip install --no-cache-dir \
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "PYTHON" "Installing Python packages" && \
+    pip install --no-cache-dir \
     requests \
     beautifulsoup4 \
     bandit \
     pytest \
     flask \
-    && pip cache purge
+    && pip cache purge \
+    && /usr/local/bin/docker-build-logger.sh docker_stage_end "PYTHON" "Python packages installation"
 
 # Create workspace structure
-
-# Create workspace structure
-RUN mkdir -p /workspace/{src,samples,reports,logs} \
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "WORKSPACE" "Creating workspace structure" && \
+    mkdir -p /workspace/{src,samples,reports,logs} \
     && mkdir -p /opt/tools \
-    && chown -R vscode:vscode /workspace /opt/tools
+    && chown -R vscode:vscode /workspace /opt/tools \
+    && /usr/local/bin/docker-build-logger.sh docker_stage_end "WORKSPACE" "Workspace structure creation"
 
 # Copy sample folders for security analysis
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "SAMPLES" "Copying sample applications"
 COPY samples/backdoor-apps /workspace/samples/backdoor-apps
 COPY samples/network-scenarios /workspace/samples/network-scenarios
 COPY samples/resource-abuse /workspace/samples/resource-abuse
 COPY samples/suspicious-scripts /workspace/samples/suspicious-scripts
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_end "SAMPLES" "Sample applications copied"
 
 # Create simple startup script
-RUN echo '#!/bin/bash\n\
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_start "STARTUP" "Creating startup script" && \
+    echo '#!/bin/bash\n\
     echo "Cybersecurity Sandbox Starting..."\n\
     echo "Available tools: nmap, dirb, curl, wget, bandit, pytest"\n\
     echo "Additional tools can be installed with: /usr/local/bin/install-tools.sh"\n\
     echo "Workspace: /workspace"\n\
     exec tail -f /dev/null' > /usr/local/bin/sandbox-startup.sh && \
-    chmod +x /usr/local/bin/sandbox-startup.sh
+    chmod +x /usr/local/bin/sandbox-startup.sh && \
+    /usr/local/bin/docker-build-logger.sh docker_stage_end "STARTUP" "Startup script creation"
 
 # Switch to vscode user
 USER vscode
@@ -71,6 +86,9 @@ WORKDIR /workspace
 
 # Expose ports
 EXPOSE 8080 8000
+
+# Log build completion and start
+RUN /usr/local/bin/docker-build-logger.sh docker_stage_end "BASE" "Minimal sandbox Docker build completed"
 
 # Simple startup command
 CMD ["/usr/local/bin/sandbox-startup.sh"]
