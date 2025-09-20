@@ -123,13 +123,11 @@ main() {
     
     ensure_directory
     
-    # Install tools concurrently for speed
-    install_gobuster &
-    install_whatweb &
-    install_nikto_dev &
-    
-    # Wait for all installations to complete
-    wait
+    # Install tools sequentially to prevent conflicts
+    log "Installing tools sequentially to prevent race conditions..."
+    install_gobuster
+    install_whatweb
+    install_nikto_dev
     
     log "Runtime tool installation completed"
     

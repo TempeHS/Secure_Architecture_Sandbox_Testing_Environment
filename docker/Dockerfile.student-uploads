@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Install system dependencies (minimal for simple Flask app)
 RUN apt-get update && apt-get install -y \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python packages

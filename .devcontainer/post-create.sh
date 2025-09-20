@@ -11,11 +11,39 @@ echo "📦 Updating system packages..."
 sudo apt-get update -y
 # Ensure vscode user is in the docker group and Docker socket is accessible
 echo "🔒 Ensuring Docker permissions for non-admin users..."
+
+# Wait for Docker daemon to be available
+echo "⏳ Waiting for Docker daemon to be ready..."
+for i in {1..30}; do
+    if docker info >/dev/null 2>&1; then
+        echo "✅ Docker daemon is ready"
+        break
+    fi
+    if [ $i -eq 30 ]; then
+        echo "⚠️ Docker daemon not ready after 30 seconds, continuing anyway"
+        break
+    fi
+    sleep 1
+done
+
+# Ensure docker group exists and add vscode user
 if getent group docker >/dev/null; then
-    sudo usermod -aG docker vscode
+    echo "✅ Docker group exists"
+    if id -nG vscode | grep -qw docker; then
+        echo "✅ vscode user already in docker group"
+    else
+        echo "🔧 Adding vscode user to docker group"
+        sudo usermod -aG docker vscode
+    fi
+    
+    # Set Docker socket permissions if it exists
     if [ -S /var/run/docker.sock ]; then
-        sudo chown root:docker /var/run/docker.sock || true
-        sudo chmod 660 /var/run/docker.sock || true
+        echo "🔧 Setting Docker socket permissions"
+        sudo chown root:docker /var/run/docker.sock || echo "⚠️ Could not change Docker socket ownership"
+        sudo chmod 660 /var/run/docker.sock || echo "⚠️ Could not change Docker socket permissions"
+        echo "✅ Docker socket permissions configured"
+    else
+        echo "⚠️ Docker socket not found at /var/run/docker.sock"
     fi
 else
     echo "⚠️ Docker group does not exist; Docker permissions may be limited."
@@ -63,8 +91,29 @@ echo "🔧 Initialising Git LFS..."
 git lfs install
 
 # Create necessary directories with proper permissions
+echo "📁 Creating directory structure with proper permissions..."
 sudo mkdir -p /opt/security-tools
 sudo chown -R vscode:vscode /opt/security-tools
+
+# Ensure workspace directories exist and have correct permissions
+workspace_dirs=(
+    "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/reports"
+    "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/logs"
+    "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/uploads"
+)
+
+for dir in "${workspace_dirs[@]}"; do
+    if [ ! -d "$dir" ]; then
+        echo "📁 Creating directory: $dir"
+        mkdir -p "$dir"
+    fi
+    # Ensure vscode user owns the directory
+    chown -R vscode:vscode "$dir" 2>/dev/null || echo "⚠️ Could not change ownership of $dir"
+    # Ensure directory is writable
+    chmod 755 "$dir" 2>/dev/null || echo "⚠️ Could not change permissions of $dir"
+done
+
+echo "✅ Directory structure created with proper permissions"
 
 # Install additional security tools manually
 cd /opt/security-tools
@@ -72,33 +121,88 @@ cd /opt/security-tools
 # Install Nikto
 echo "📥 Installing Nikto..."
 if [ ! -d "nikto" ]; then
-    git clone https://github.com/sullo/nikto.git
+    for attempt in 1 2 3; do
+        echo "🔄 Nikto installation attempt $attempt"
+        if timeout 60 git clone https://github.com/sullo/nikto.git; then
+            echo "✅ Nikto cloned successfully"
+            break
+        else
+            echo "⚠️ Nikto clone attempt $attempt failed"
+            if [ $attempt -eq 3 ]; then
+                echo "❌ All Nikto installation attempts failed"
+            else
+                sleep 5
+            fi
+        fi
+    done
 else
     echo "⚙️  Nikto directory already exists, skipping clone"
 fi
-cd nikto/program
-chmod +x nikto.pl
-sudo ln -sf /opt/security-tools/nikto/program/nikto.pl /usr/local/bin/nikto
-cd /opt/security-tools
+
+if [ -d "nikto/program" ]; then
+    cd nikto/program
+    chmod +x nikto.pl
+    sudo ln -sf /opt/security-tools/nikto/program/nikto.pl /usr/local/bin/nikto
+    cd /opt/security-tools
+    echo "✅ Nikto installation completed"
+else
+    echo "⚠️ Nikto installation incomplete"
+fi
 
 # Install Gobuster
 echo "📥 Installing Gobuster..."
-wget -q https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz
-tar -xzf gobuster_Linux_x86_64.tar.gz
-sudo mv gobuster /usr/local/bin/
-rm gobuster_Linux_x86_64.tar.gz
+for attempt in 1 2 3; do
+    echo "🔄 Gobuster installation attempt $attempt"
+    if timeout 60 wget -q https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz; then
+        if tar -xzf gobuster_Linux_x86_64.tar.gz && [ -f gobuster ]; then
+            sudo mv gobuster /usr/local/bin/
+            rm -f gobuster_Linux_x86_64.tar.gz
+            echo "✅ Gobuster installation completed"
+            break
+        else
+            echo "⚠️ Gobuster extraction failed on attempt $attempt"
+        fi
+    else
+        echo "⚠️ Gobuster download attempt $attempt failed"
+    fi
+    
+    if [ $attempt -eq 3 ]; then
+        echo "❌ All Gobuster installation attempts failed"
+    else
+        sleep 5
+    fi
+done
 
 # Install WhatWeb
 echo "📥 Installing WhatWeb..."
 if [ ! -d "WhatWeb" ]; then
-    git clone https://github.com/urbanadventurer/WhatWeb.git
+    for attempt in 1 2 3; do
+        echo "🔄 WhatWeb installation attempt $attempt"
+        if timeout 60 git clone https://github.com/urbanadventurer/WhatWeb.git; then
+            echo "✅ WhatWeb cloned successfully"
+            break
+        else
+            echo "⚠️ WhatWeb clone attempt $attempt failed"
+            if [ $attempt -eq 3 ]; then
+                echo "❌ All WhatWeb installation attempts failed"
+            else
+                sleep 5
+            fi
+        fi
+    done
 else
     echo "⚙️  WhatWeb directory already exists, skipping clone"
 fi
-cd WhatWeb
-chmod +x whatweb
-sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
-cd /opt/security-tools
+
+if [ -d "WhatWeb" ]; then
+    cd WhatWeb
+    chmod +x whatweb
+    sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
+    cd /opt/security-tools
+    echo "✅ WhatWeb installation completed"
+else
+    echo "⚠️ WhatWeb installation incomplete"
+fi
 
 
 
@@ -106,63 +210,162 @@ cd /opt/security-tools
 # Update the embedded Unsecure PWA repo (force fresh clone)
 echo "🔄 Updating embedded Unsecure PWA repository..."
 UNSECURE_PWA_DIR="/workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples/unsecure-pwa"
+
+# Safely clean up existing directory
 if [ -d "$UNSECURE_PWA_DIR" ]; then
-    rm -rf "$UNSECURE_PWA_DIR"/* "$UNSECURE_PWA_DIR"/.* 2>/dev/null || true
+    echo "🧹 Cleaning up existing unsecure-pwa directory"
+    # Use more specific cleanup to avoid errors
+    rm -rf "$UNSECURE_PWA_DIR" 2>/dev/null || {
+        echo "⚠️ Could not remove existing directory, trying alternative cleanup"
+        find "$UNSECURE_PWA_DIR" -mindepth 1 -delete 2>/dev/null || true
+    }
 fi
-git clone --branch sandbox_version https://github.com/TempeHS/The_Unsecure_PWA.git "$UNSECURE_PWA_DIR"
+
+# Ensure parent directory exists
+mkdir -p "$(dirname "$UNSECURE_PWA_DIR")"
+
+# Clone with timeout and retry logic
+echo "📥 Cloning Unsecure PWA repository..."
+for attempt in 1 2 3; do
+    echo "🔄 Clone attempt $attempt"
+    if timeout 120 git clone --branch sandbox_version --depth 1 \
+        https://github.com/TempeHS/The_Unsecure_PWA.git "$UNSECURE_PWA_DIR"; then
+        echo "✅ Unsecure PWA repository cloned successfully"
+        break
+    else
+        echo "⚠️ Clone attempt $attempt failed"
+        if [ $attempt -eq 3 ]; then
+            echo "❌ All clone attempts failed. Creating placeholder structure..."
+            mkdir -p "$UNSECURE_PWA_DIR"
+            echo "# Placeholder - Failed to clone The_Unsecure_PWA repository" > "$UNSECURE_PWA_DIR/README.md"
+            echo "flask==2.3.3" > "$UNSECURE_PWA_DIR/requirements.txt"
+            cat > "$UNSECURE_PWA_DIR/main.py" << 'EOF'
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "<h1>Placeholder - Unsecure PWA</h1><p>The original repository could not be cloned.</p>"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+EOF
+            echo "✅ Placeholder structure created"
+        else
+            sleep 10
+        fi
+    fi
+done
+
+# Ensure proper ownership
+chown -R vscode:vscode "$UNSECURE_PWA_DIR" 2>/dev/null || true
 
 # Ensure proper permissions for workspace
-sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+echo "🔒 Setting final workspace permissions..."
+sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Environment 2>/dev/null || {
+    echo "⚠️ Could not change ownership of entire workspace (this may be normal in some environments)"
+    # Ensure critical directories are owned by vscode
+    critical_dirs=(
+        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/reports"
+        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/logs"
+        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/uploads"
+        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer"
+    )
+    for dir in "${critical_dirs[@]}"; do
+        if [ -d "$dir" ]; then
+            chown -R vscode:vscode "$dir" 2>/dev/null || echo "⚠️ Could not change ownership of $dir"
+        fi
+    done
+}
 
 # Install Python security packages for development and analysis
 echo "🐍 Installing Python security packages..."
 python3 -m pip install --upgrade pip
 
 # Install from requirements.txt if it exists, otherwise install individually
-if [ -f "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt" ]; then
+requirements_file="/workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt"
+if [ -f "$requirements_file" ]; then
     echo "📋 Installing from requirements.txt..."
-    if python3 -m pip install -r /workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt; then
+    
+    # Try installing with a single pip command first
+    if python3 -m pip install --no-cache-dir -r "$requirements_file"; then
         echo "✅ Python packages installed successfully from requirements.txt"
     else
-        echo "⚠️  Some packages from requirements.txt failed, trying individual installation..."
-        # Fallback to individual package installation
-        python3 -m pip install --no-cache-dir \
-            pytest pytest-cov black flake8 mypy \
-            bandit safety semgrep \
-            flask requests beautifulsoup4 jinja2 \
-            reportlab pyyaml python-nmap scapy || true
+        echo "⚠️  Some packages from requirements.txt failed, trying safer installation..."
+        
+        # Parse requirements.txt and install essential packages individually
+        essential_packages=(
+            "pytest>=7.0.0"
+            "black>=23.0.0"
+            "flake8>=6.0.0"
+            "bandit>=1.7.5"
+            "safety>=2.3.0"
+            "flask>=2.3.0"
+            "requests>=2.31.0"
+            "beautifulsoup4>=4.12.0"
+            "jinja2>=3.1.0"
+            "reportlab>=4.0.0"
+            "pyyaml>=6.0"
+        )
+        
+        # Install essential packages one by one
+        for package in "${essential_packages[@]}"; do
+            echo "📦 Installing $package"
+            if python3 -m pip install --no-cache-dir "$package"; then
+                echo "✅ $package installed successfully"
+            else
+                echo "⚠️ Failed to install $package"
+            fi
+        done
+        
+        # Try optional packages with error tolerance
+        optional_packages=(
+            "python-nmap>=0.7.1"
+            "scapy>=2.5.0"
+            "weasyprint>=60.0"
+            "semgrep>=1.0.0"
+            "docker>=6.0.0"
+        )
+        
+        echo "📦 Installing optional packages (failures are acceptable)..."
+        for package in "${optional_packages[@]}"; do
+            echo "📦 Attempting to install $package"
+            if python3 -m pip install --no-cache-dir "$package"; then
+                echo "✅ $package installed successfully"
+            else
+                echo "⚠️ Failed to install $package (this is optional)"
+            fi
+        done
     fi
 else
-    echo "📦 Installing packages individually..."
-    # Install packages with better error handling
-    if python3 -m pip install --no-cache-dir \
-        pytest \
-        pytest-cov \
-        black \
-        flake8 \
-        mypy \
-        bandit \
-        safety \
-        semgrep \
-        requests \
-        beautifulsoup4 \
-        flask \
-        reportlab \
-        jinja2 \
-        pyyaml \
-        python-nmap; then
-        echo "✅ Python packages installed successfully"
-    else
-        echo "⚠️  Some Python packages may have failed to install"
-    fi
-
-    # Try to install scapy separately (may need special handling)
-    if python3 -m pip install --no-cache-dir scapy; then
-        echo "✅ Scapy installed successfully"
-    else
-        echo "⚠️  Scapy installation failed (this is optional)"
-    fi
+    echo "❌ requirements.txt not found at $requirements_file"
+    echo "📦 Installing essential packages individually..."
+    
+    # Install minimal essential packages
+    essential_packages=(
+        "pytest"
+        "black"
+        "flake8"
+        "bandit"
+        "safety"
+        "flask"
+        "requests"
+        "beautifulsoup4"
+        "reportlab"
+        "pyyaml"
+    )
+    
+    for package in "${essential_packages[@]}"; do
+        echo "📦 Installing $package"
+        if python3 -m pip install --no-cache-dir "$package"; then
+            echo "✅ $package installed successfully"
+        else
+            echo "⚠️ Failed to install $package"
+        fi
+    done
 fi
+
+echo "✅ Python package installation completed"
 
 # Create a simple test script to verify security tools
 cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py << 'EOF'
@@ -255,12 +458,14 @@ sudo apt-get update -y && sudo apt-get install -y docker-compose
 
 # Ensure Docker is ready
 echo "� Waiting for Docker to be ready..."
-timeout=30
-while ! docker info >/dev/null 2>&1; do
-    timeout=$((timeout - 1))
-    if [ $timeout -le 0 ]; then
-        echo "❌ Docker is not ready after 30 seconds"
+timeout=60
+for i in {1..60}; do
+    if docker info >/dev/null 2>&1; then
+        echo "✅ Docker is ready after ${i} seconds"
         break
+    fi
+    if [ $((i % 10)) -eq 0 ]; then
+        echo "⏳ Still waiting for Docker... (${i}/60 seconds)"
     fi
     sleep 1
 done
@@ -270,8 +475,19 @@ if docker info >/dev/null 2>&1; then
     # Use absolute paths to ensure reliability
     cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
     if [ -f "docker/docker-compose.yml" ]; then
-        docker-compose -f "$(pwd)/docker/docker-compose.yml" up -d
-        echo "✅ Docker services started"
+        echo "📋 Using docker-compose file: $(pwd)/docker/docker-compose.yml"
+        
+        # Pull images first to avoid build timeouts
+        echo "📥 Pulling base images..."
+        docker-compose -f "$(pwd)/docker/docker-compose.yml" pull --ignore-pull-failures || echo "⚠️ Some base images could not be pulled"
+        
+        # Start services with timeout
+        echo "🚀 Starting services..."
+        if timeout 300 docker-compose -f "$(pwd)/docker/docker-compose.yml" up -d --build; then
+            echo "✅ Docker services started successfully"
+        else
+            echo "⚠️ Docker services failed to start or timed out"
+        fi
     else
         echo "❌ docker-compose.yml not found at $(pwd)/docker/docker-compose.yml"
     fi
