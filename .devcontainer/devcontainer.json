@@ -117,10 +117,10 @@
       "onAutoForward": "notify"
     }
   },
-  "onCreateCommand": "echo '🏗️  Creating Secure Architecture Sandbox Testing environment...'",
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postStartCommand": "bash .devcontainer/setup-docker.sh",
-  "postAttachCommand": "bash .devcontainer/open-welcome.sh",
+  "onCreateCommand": "mkdir -p logs && echo '🏗️  Creating Secure Architecture Sandbox Testing environment...' | tee -a logs/build-process.log",
+  "postCreateCommand": "mkdir -p logs && bash .devcontainer/post-create.sh 2>&1 | tee -a logs/build-process.log",
+  "postStartCommand": "mkdir -p logs && bash .devcontainer/setup-docker.sh 2>&1 | tee -a logs/build-process.log",
+  "postAttachCommand": "mkdir -p logs && bash .devcontainer/open-welcome.sh 2>&1 | tee -a logs/build-process.log",
   "remoteUser": "vscode",
   "containerEnv": {
     "PYTHONPATH": "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src",
