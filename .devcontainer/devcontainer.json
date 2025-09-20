@@ -119,7 +119,7 @@
   },
   "onCreateCommand": "echo '🏗️  Creating Secure Architecture Sandbox Testing environment...'",
   "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postStartCommand": "echo '🔒 Secure Architecture Sandbox ready for educational testing!'",
+  "postStartCommand": "bash .devcontainer/setup-docker.sh",
   "postAttachCommand": "bash .devcontainer/open-welcome.sh",
   "remoteUser": "vscode",
   "containerEnv": {

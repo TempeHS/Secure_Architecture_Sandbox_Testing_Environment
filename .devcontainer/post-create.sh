@@ -9,6 +9,17 @@ echo "🔧 Setting up Secure Architecture Sandbox environment..."
 # Update package lists and install security tools
 echo "📦 Updating system packages..."
 sudo apt-get update -y
+# Ensure vscode user is in the docker group and Docker socket is accessible
+echo "🔒 Ensuring Docker permissions for non-admin users..."
+if getent group docker >/dev/null; then
+    sudo usermod -aG docker vscode
+    if [ -S /var/run/docker.sock ]; then
+        sudo chown root:docker /var/run/docker.sock || true
+        sudo chmod 660 /var/run/docker.sock || true
+    fi
+else
+    echo "⚠️ Docker group does not exist; Docker permissions may be limited."
+fi
 
 # Install essential security tools and PDF generation dependencies
 echo "� Installing security tools and PDF generation libraries..."
@@ -242,9 +253,31 @@ fi
 echo "📦 Installing docker-compose..."
 sudo apt-get update -y && sudo apt-get install -y docker-compose
 
-echo "🚀 Starting Docker Compose services..."
-cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
-docker-compose -f docker/docker-compose.yml up -d
+# Ensure Docker is ready
+echo "� Waiting for Docker to be ready..."
+timeout=30
+while ! docker info >/dev/null 2>&1; do
+    timeout=$((timeout - 1))
+    if [ $timeout -le 0 ]; then
+        echo "❌ Docker is not ready after 30 seconds"
+        break
+    fi
+    sleep 1
+done
+
+if docker info >/dev/null 2>&1; then
+    echo "�🚀 Starting Docker Compose services..."
+    # Use absolute paths to ensure reliability
+    cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
+    if [ -f "docker/docker-compose.yml" ]; then
+        docker-compose -f "$(pwd)/docker/docker-compose.yml" up -d
+        echo "✅ Docker services started"
+    else
+        echo "❌ docker-compose.yml not found at $(pwd)/docker/docker-compose.yml"
+    fi
+else
+    echo "❌ Docker is not available - services will not start"
+fi
 
 # Create a welcome message
 cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md << 'EOF'
