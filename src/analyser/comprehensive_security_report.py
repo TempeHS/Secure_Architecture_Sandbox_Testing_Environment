@@ -23,6 +23,12 @@ from typing import Dict, List, Any, Optional
 # Add the src directory to the Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+try:
+    from reporter.report_generator import PdfReportGenerator
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+
 
 class ComprehensiveSecurityReporter:
     """Orchestrates security testing tools and generates comprehensive reports"""
@@ -347,7 +353,7 @@ class ComprehensiveSecurityReporter:
         return 0
 
     def _generate_comprehensive_report(self, output_prefix: str) -> str:
-        """Generate comprehensive markdown report"""
+        """Generate comprehensive PDF report"""
         print("\n📄 5. GENERATING COMPREHENSIVE REPORT")
         print("-" * 50)
 
@@ -362,19 +368,22 @@ class ComprehensiveSecurityReporter:
 
         print(f"   ✅ JSON report saved: {json_report_path}")
 
-        # Generate markdown report
-        markdown_report_path = (
-            self.reports_dir / f"{output_prefix}_{self.session_id}.md"
-        )
-        markdown_content = self._create_comprehensive_markdown(
-            comprehensive_data)
-
-        with open(markdown_report_path, 'w') as f:
-            f.write(markdown_content)
-
-        print(f"   ✅ Markdown report saved: {markdown_report_path}")
-
-        return str(markdown_report_path)
+        # Generate PDF report
+        if PDF_AVAILABLE:
+            try:
+                pdf_generator = PdfReportGenerator()
+                pdf_filename = f"{output_prefix}_{self.session_id}.pdf"
+                pdf_report_path = pdf_generator.generate_report(
+                    comprehensive_data, 'comprehensive', pdf_filename)
+                print(f"   ✅ PDF report saved: {pdf_report_path}")
+                return str(pdf_report_path)
+            except Exception as e:
+                print(f"   ❌ Failed to generate PDF report: {e}")
+                print(f"   📄 JSON report available: {json_report_path}")
+                return str(json_report_path)
+        else:
+            print("   ⚠️  PDF generation not available, only JSON report generated")
+            return str(json_report_path)
 
     def _create_comprehensive_json(self) -> Dict[str, Any]:
         """Create comprehensive JSON report combining all analyser results"""

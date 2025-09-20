@@ -32,7 +32,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 # Import the report generator for markdown output
 try:
-    from reporter.report_generator import MarkdownReportGenerator
+    from reporter.report_generator import PdfReportGenerator
     MARKDOWN_AVAILABLE = True
 except ImportError:
     MARKDOWN_AVAILABLE = False
@@ -569,24 +569,24 @@ Output Options:
             # Generate markdown report alongside JSON if available
             if MARKDOWN_AVAILABLE:
                 try:
-                    markdown_generator = MarkdownReportGenerator()
+                    pdf_generator = PdfReportGenerator()
 
                     # Generate base filename without extension
                     base_path = os.path.splitext(output_path)[0]
-                    markdown_filename = os.path.basename(f"{base_path}.md")
+                    pdf_filename = os.path.basename(f"{base_path}.pdf")
 
-                    # Generate markdown content based on analysis type
+                    # Generate PDF content based on analysis type
                     if analysis_type in ['network', 'traffic', 'connections',
                                          'dns', 'connection_monitoring',
                                          'service_scan', 'traffic_capture',
                                          'dns_analysis', 'network_demo']:
                         generated_path = (
-                            markdown_generator.generate_markdown_report(
-                                results, 'network', markdown_filename))
+                            pdf_generator.generate_report(
+                                results, 'network', pdf_filename))
                     else:
                         generated_path = (
-                            markdown_generator.generate_markdown_report(
-                                results, 'general', markdown_filename))
+                            pdf_generator.generate_report(
+                                results, 'general', pdf_filename))
 
                     if not args.quiet:
                         print(f"✓ Markdown report saved: {generated_path}")

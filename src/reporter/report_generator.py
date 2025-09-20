@@ -1,18 +1,38 @@
 """
-Comprehensive Markdown Report Generator for Security Analysis Tools
+Comprehensive PDF Report Generator for Security Analysis Tools
 
-A clean, well-structured report generator that creates professional markdown
+A clean, well-structured report generator that creates professional PDF
 reports for all security analyser types with educational content.
 """
 
 import json
 import os
+import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+# Add the src directory to the path for importing tools
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-class MarkdownReportGenerator:
+try:
+    from tools.md_to_pdf_converter import MarkdownToPdfConverter
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+    print("❌ PDF generation not available. Please install WeasyPrint:")
+    print("   pip install weasyprint")
+    sys.exit(1)
+
+
+class PdfReportGenerator:
+    """
+    Generates educational PDF reports for security analysis results.
+
+    Supports SAST, DAST, Network, and Sandbox analysis with unified formatting,
+    educational content, and visual enhancements optimized for PDF output.
+    """
     """
     Generates educational markdown reports for security analysis results.
 
@@ -413,9 +433,9 @@ class MarkdownReportGenerator:
             ""
         ])
 
-    def generate_markdown_report(self, json_data: Dict[str, Any], analyser_type: str, output_file: Optional[str] = None) -> str:
+    def generate_report(self, json_data: Dict[str, Any], analyser_type: str, output_file: Optional[str] = None) -> str:
         """
-        Generate comprehensive markdown report from JSON data.
+        Generate comprehensive PDF report from JSON data.
 
         Args:
             json_data: Analysis results in JSON format
@@ -423,12 +443,12 @@ class MarkdownReportGenerator:
             output_file: Optional output filename
 
         Returns:
-            Path to generated markdown file
+            Path to generated PDF file
         """
         # Generate filename if not provided
         if not output_file:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            output_file = f"{analyser_type}_report_{timestamp}.md"
+            output_file = f"{analyser_type}_report_{timestamp}.pdf"
 
         output_path = self.reports_dir / output_file
 
@@ -485,15 +505,37 @@ class MarkdownReportGenerator:
             self._create_footer(analyser_type)
         ])
 
-        # Write the file
+        # Create markdown content
         markdown_content = "\n".join(content_sections)
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(markdown_content)
 
-        return str(output_path)
+        # Convert to PDF using temporary markdown file
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, encoding='utf-8') as temp_md:
+                temp_md.write(markdown_content)
+                temp_md_path = temp_md.name
 
-    def convert_json_to_markdown(self, json_file_path: str, analyser_type: str = None) -> str:
-        """Convert existing JSON report to markdown."""
+            # Convert markdown to PDF
+            converter = MarkdownToPdfConverter(
+                verbose=False, page_break_mode="sections")
+            success = converter.convert_file_to_pdf(
+                Path(temp_md_path), output_path)
+
+            if not success:
+                raise Exception("PDF conversion failed")
+
+            return str(output_path)
+
+        except Exception as e:
+            raise Exception(f"Failed to generate PDF report: {e}")
+        finally:
+            # Clean up temporary file
+            try:
+                os.remove(temp_md_path)
+            except (OSError, NameError):
+                pass
+
+    def convert_json_to_pdf(self, json_file_path: str, analyser_type: str = None) -> str:
+        """Convert existing JSON report to PDF."""
         with open(json_file_path, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
 
@@ -521,9 +563,9 @@ class MarkdownReportGenerator:
 
         # Generate output filename
         base_name = os.path.splitext(os.path.basename(json_file_path))[0]
-        output_file = f"{base_name}.md"
+        output_file = f"{base_name}.pdf"
 
-        return self.generate_markdown_report(json_data, analyser_type, output_file)
+        return self.generate_report(json_data, analyser_type, output_file)
 
 
 def main():
@@ -531,22 +573,22 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Generate markdown reports from JSON analysis files')
+        description='Generate PDF reports from JSON analysis files')
     parser.add_argument('json_file', help='Path to JSON report file')
     parser.add_argument(
         '--type', choices=['sast', 'dast', 'network', 'sandbox'], help='Analyser type')
-    parser.add_argument('--output', help='Output markdown filename')
+    parser.add_argument('--output', help='Output PDF filename')
     parser.add_argument('--reports-dir', default='reports',
                         help='Reports directory')
 
     args = parser.parse_args()
 
-    generator = MarkdownReportGenerator(args.reports_dir)
+    generator = PdfReportGenerator(args.reports_dir)
 
     try:
-        output_path = generator.convert_json_to_markdown(
+        output_path = generator.convert_json_to_pdf(
             args.json_file, args.type)
-        print(f"✅ Markdown report generated: {output_path}")
+        print(f"✅ PDF report generated: {output_path}")
     except Exception as e:
         print(f"❌ Error generating report: {e}")
         return 1
