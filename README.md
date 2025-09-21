@@ -6,7 +6,7 @@ This repository contains a comprehensive Docker-based sandbox environment for te
 
 ## Sandbox Architecture
 
-This sandbox uses a **multi-layer isolation and containerized architecture** using Codespaces and Docker that mirrors real-world cybersecurity practices.
+This sandbox uses a **multi-layer isolation and containerised architecture** using Codespaces and Docker that mirrors real-world cybersecurity practices.
 
 ![Docker/CodesSpaces Topology](/docs/images/secure_architecture_sandbox_network_topology.png)
 
