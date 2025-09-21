@@ -34,6 +34,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "lucasvazquez.markdown-preview-at-startup",
         "ms-python.python",
         "ms-python.flake8",
         "ms-python.black-formatter",
@@ -45,8 +46,7 @@
         "ms-toolsai.jupyter",
         "formulahendry.code-runner",
         "mathematic.vscode-pdf",
-        "tal7aouy.icons",
-        "lucasvazquez.markdown-preview-at-startup"
+        "tal7aouy.icons"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python3",
