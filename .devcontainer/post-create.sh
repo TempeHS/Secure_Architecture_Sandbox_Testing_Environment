@@ -2,6 +2,22 @@
 # Post-creation script for Codespaces setup
 set -e  # Exit on any error
 
+# Display early warning message in terminal
+echo ""
+echo "════════════════════════════════════════════════════════════"
+echo "🏗️ SECURE ARCHITECTURE SANDBOX - BUILDING ENVIRONMENT"
+echo ""
+echo "⏱️  Please wait approximately 4 minutes for setup to complete..."
+echo ""
+echo "📦 Installing security tools (nmap, dirb, netcat, tcpdump)"
+echo "🐳 Setting up Docker containers for vulnerable applications"
+echo "🐍 Configuring Python security libraries"
+echo "🔧 Preparing cybersecurity testing workspace"
+echo ""
+echo "☕ Perfect time for a coffee break!"
+echo "════════════════════════════════════════════════════════════"
+echo ""
+
 # Source centralized build logger
 source /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/build-logger.sh
 init_logging

@@ -36,6 +36,7 @@
         "remote.containers.showRebuildNotification": false,
         "dev.containers.showRebuildNotification": false,
         "python-envs.defaultEnvManager": "ms-python.python:system",
+        "markdownPreviewAtStartup.markdownFilePath": "WELCOME.md",
         "python-envs.pythonProjects": [],
                 "github.copilot.enable": {
           "python": false,
@@ -43,5 +44,8 @@
           "css": false,
           "SQL": false
         },
-        "chat.agent.enabled": false
+        "chat.agent.enabled": false,
+        "github.copilot.chat.participant.alwaysInclude": [
+          "copilot-instructions.md"
+        ]
 }

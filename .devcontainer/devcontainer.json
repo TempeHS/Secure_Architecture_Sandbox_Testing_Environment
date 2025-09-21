@@ -45,7 +45,8 @@
         "ms-toolsai.jupyter",
         "formulahendry.code-runner",
         "mathematic.vscode-pdf",
-        "tal7aouy.icons"
+        "tal7aouy.icons",
+        "lucasvazquez.markdown-preview-at-startup"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python3",
@@ -113,13 +114,17 @@
         "security.workspace.trust.startupPrompt": "never",
         "remote.containers.showRebuildNotification": false,
         "dev.containers.showRebuildNotification": false,
+        "markdownPreviewAtStartup.markdownFilePath": "WELCOME.md",
         "github.copilot.enable": {
           "python": false,
           "html": false,
           "css": false,
           "SQL": false
         },
-        "chat.agent.enabled": false
+        "chat.agent.enabled": false,
+        "github.copilot.chat.participant.alwaysInclude": [
+          "copilot-instructions.md"
+        ]
       }
     }
   },
@@ -153,9 +158,9 @@
     }
   },
   "onCreateCommand": "mkdir -p logs",
-  "postCreateCommand": "mkdir -p logs && bash .devcontainer/post-create.sh 2>&1 | tee -a logs/build-process.log",
+  "postCreateCommand": "mkdir -p logs && bash .devcontainer/post-create.sh 2>&1 | tee -a logs/build-process.log ",
   "postStartCommand": "mkdir -p logs && bash .devcontainer/setup-docker.sh 2>&1 | tee -a logs/docker-setup.log",
-  "postAttachCommand": "mkdir -p logs && bash .devcontainer/open-welcome.sh 2>&1 | tee -a logs/build-process.log",
+  "postAttachCommand": "echo '\n' && echo '\n' && mkdir -p logs && bash .devcontainer/open-welcome.sh 2>&1 | tee -a logs/build-process.log",
   "remoteUser": "vscode",
   "containerEnv": {
     "PYTHONPATH": "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src",
