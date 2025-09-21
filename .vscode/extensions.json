@@ -1,6 +1,6 @@
 {
     "recommendations": [
-        "ms-python.python",
+"ms-python.python",
         "ms-python.flake8",
         "ms-python.black-formatter",
         "ms-vscode.vscode-json",
@@ -10,9 +10,6 @@
         "github.copilot-chat",
         "ms-toolsai.jupyter",
         "formulahendry.code-runner",
-        "streetsidesoftware.code-spell-checker",
-        "ms-vscode.vscode-typescript-next",
-        "oderwat.indent-rainbow",
         "mathematic.vscode-pdf",
         "tal7aouy.icons"
     ]
