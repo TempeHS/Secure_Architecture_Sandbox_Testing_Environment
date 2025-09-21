@@ -42,7 +42,7 @@ This sandbox uses a **multi-layer isolation and containerized architecture** usi
 ### Required Files and Structure
 
 ```
-your-app-name/
+uploads/
 ├── app.py             # Main Flask application
 ├── requirements.txt   # Python dependencies
 └── README.md         # Optional documentation
@@ -65,8 +65,7 @@ your-app-name/
 ### Port Assignment
 
 - **Use port 8000** for your Flask application
-- Alternative ports: 3000, 8080
-- **Do NOT use port 5000** (reserved)
+- **Do NOT use port 3000, 5000, 8080 or 9000** (reserved)
 
 ## 🔄 Docker Management
 
@@ -102,14 +101,15 @@ principles:
 ### Deploy Your App
 
 ```bash
-# Copy template (optional)
-cp -r uploads/ uploads/your-app-name
+# 1. Rebuild and restart the student-uploads container
+docker-compose -f docker/docker-compose.yml up -d --build student-uploads
 
-# Install dependencies in isolated environment
-docker exec cybersec_sandbox bash -c "cd /workspace/uploads && pip3 install -r requirements.txt"
+# 2. Start the Docker services (if not already running)
+docker-compose -f docker/docker-compose.yml up -d
 
-# Run your app in controlled container
-docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
+# 3. Check if your app is running
+# https://your-codespace-name-8000.app.github.dev
+
 ```
 
 ### Refresh/Restart Commands
@@ -136,63 +136,33 @@ docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py
 - **Web file browser**: `http://localhost:8080/uploads/` (nginx serves uploads
   folder)
 
-### Quick Test
-
-```bash
-curl http://localhost:8000
-```
-
-### Quick Test
-
-```bash
-# Verify app is running
-curl http://localhost:8000
-```
-
 ## 🔒 Security Testing Commands
 
-These commands demonstrate **systematic vulnerability assessment** and
-**security management strategies** in containerized environments:
+These commands demonstrate **systematic vulnerability assessment** and **security management strategies** in containerised environments:
 
 ### Static Analysis (SAST) - **Source Code Analysis**
 
 ```bash
-# Demonstrates defensive programming analysis
-python3 src/analyser/analyse_cli.py uploads/ --educational
+python src/analyser/analyse_cli.py samples/unsecure-pwa --tools all --educational --output detailed_sast_unsecure_pwa.pdf --format pdf --verbose
 ```
-
-**Syllabus Connection**: **Input validation**, **sanitization**, and **error
-handling** detection
 
 ### Dynamic Analysis (DAST) - **Runtime Testing**
 
 ```bash
-# Tests running applications for security vulnerabilities
-python3 src/analyser/dast_cli.py http://localhost:8000 --educational
+python src/analyser/dast_cli.py http://localhost:8000 --deep-scan --educational --output detailed_dast_unsecure_pwa.pdf --format pdf --verbose
 ```
-
-**Syllabus Connection**: **Cross-site scripting (XSS)**, **authentication**, and
-**session management** testing
 
 ### Network Analysis - **Systematic Security Evaluation**
 
 ```bash
-# Monitors network behaviour and connections in isolation
-python3 src/analyser/network_cli.py --monitor-connections --educational
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_unsecure_pwa.pdf --format pdf --verbose
 ```
-
-**Syllabus Connection**: **Secure communication protocols** and **threat
-detection** analysis
 
 ### Penetration Testing - **Ethical Hacking and Exploitation Testing**
 
 ```bash
-# Comprehensive security assessment using controlled environment
-python3 src/analyser/pentest_cli.py http://localhost:8000 --educational
+python src/analyser/penetration_analyser.py http://localhost:8000 --deep --output detailed_pentest_unsecure_pwa.pdf
 ```
-
-**Syllabus Connection**: **Security testing and evaluation** with **incident
-response** preparation
 
 ## 🐛 Quick Troubleshooting
 

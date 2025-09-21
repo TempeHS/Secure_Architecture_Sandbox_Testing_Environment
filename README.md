@@ -2,11 +2,7 @@
 
 ## 🎯 Overview
 
-This repository contains a comprehensive Docker-based sandbox environment for
-teaching secure architecture concepts to high school students. The platform provides
-hands-on experience with security analysis, vulnerability detection, and
-remediation techniques using real applications in a safe, controlled
-environment.
+This repository contains a comprehensive Docker-based sandbox environment for teaching secure architecture concepts to high school students. The platform provides hands-on experience with security analysis, vulnerability detection, and remediation techniques using real applications in a safe, controlled environment.
 
 ## Sandbox Architecture
 
@@ -14,20 +10,12 @@ This sandbox uses a **multi-layer isolation and containerized architecture** usi
 
 ![Docker/CodesSpaces Topology](/docs/images/secure_architecture_sandbox_network_topology.png)
 
-## 🚀 Quick Start
+## 🚀 Quick Start Upload
 
 **GitHub Codespaces (Recommended):**
-1. Click "Code" → "Create codespace on main"
-2. Wait 2-3 minutes for setup completion
-3. See [docs/setup-guide.md](docs/setup-guide.md) for details
-
-**Test Your Own Flask App:**
-```bash
-cd uploads/
-# Deploy and test your app (see uploads/README.md)
-python3 src/analyser/analyse_cli.py uploads/ --tools all --educational --output detailed_sast_upload.pdf --format pdf --verbose
-python3 src/analyser/dast_cli.py http://localhost:8000 --deep-scan --educational --output detailed_dast_upload.pdf --format pdf --verbose
-```
+1. No need to fork, Click "Code" → "Create codespace on main"
+2. Wait 3-4 minutes for setup completion (wait for Welcome page)
+3. See [docs/upload-flask-app-setup-guide.md](docs/upload-flask-app-setup-guide.md) for uploading your own flask app to test.
 
 ## 🤖 AI Learning Assistant
 
@@ -37,18 +25,41 @@ Use `@workspace` in GitHub Copilot Chat for help:
 
 Built-in knowledge of the NESA Software Engineering Syllabus and safety features ensure ethical learning with instructor oversight.
 
-## 📊 Security Analysis & Reports
+## 📊 Security Testing/Analysis & Reports
 
-**Automated Report Generation:**
+These commands demonstrate **systematic vulnerability assessment** and **security management strategies** in containerised environments:
+
+### Static Analysis (SAST) - **Source Code Analysis**
+
 ```bash
-# All tools support --educational mode with timestamped reports
-python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose          # SAST
-python src/analyser/dast_cli.py <url> --deep-scan --educational --output detailed_dast_report.pdf --format pdf --verbose               # DAST  
-python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_report.pdf --format pdf --verbose  # Network
-python src/analyser/penetration_analyser.py localhost:5000 --deep --exploit --output comprehensive_security_report.pdf       # Penetration Testing
+python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose
 ```
 
-Reports auto-save to `reports/` with timestamps. Manual output: `--output reports/my_report.json`
+**Syllabus Connection**: **Input validation**, **sanitization**, and **error handling** detection
+
+### Dynamic Analysis (DAST) - **Runtime Testing**
+
+```bash
+python src/analyser/dast_cli.py <url> --deep-scan --educational --output detailed_dast_report.pdf --format pdf --verbose
+```
+
+**Syllabus Connection**: **Cross-site scripting (XSS)**, **authentication**, and **session management** testing
+
+### Network Analysis - **Systematic Security Evaluation**
+
+```bash
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_report.pdf --format pdf --verbose
+```
+
+**Syllabus Connection**: **Secure communication protocols** and **threat detection** analysis
+
+### Penetration Testing - **Ethical Hacking and Exploitation Testing**
+
+```bash
+python src/analyser/penetration_analyser.py localhost:5000 --deep --exploit --output comprehensive_security_report.pdf
+```
+
+**Syllabus Connection**: **Security testing and evaluation** with **incident response** preparation
 
 ## 📚 Educational Exercises
 
@@ -71,7 +82,9 @@ Reports auto-save to `reports/` with timestamps. Manual output: `--output report
 2. **Vulnerable Flask App** - Python web app with SQL injection, XSS, weak auth (47 vulnerabilities)
 3. **Unsecure PWA** - Progressive web app with open redirects, misconfigurations (17 vulnerabilities)
 
-See [uploads/README.md](uploads/README.md) for deployment instructions.
+## Upload and test a flask app
+
+See [docs/upload-flask-app-setup-guide.md](docs/upload-flask-app-setup-guide.md) for deployment instructions.
 
 ## 🔧 Security Analysis Tools
 
@@ -84,16 +97,16 @@ See [uploads/README.md](uploads/README.md) for deployment instructions.
 **Quick Commands:**
 ```bash
 # Static Analysis
-python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose
+python src/analyser/analyse_cli.py <path> --tools all --educational --output detailed_sast_unsecure_pwa.pdf --format pdf --verbose
 
 # Dynamic Analysis  
-python src/analyser/dast_cli.py <url> --deep-scan --educational --output detailed_dast_report.pdf --format pdf --verbose
+python src/analyser/dast_cli.py <host:port> --deep-scan --educational --output detailed_dast_unsecure_pwa.pdf --format pdf --verbose
 
 # Network Analysis
-python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_report.pdf --format pdf --verbose
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_unsecure_pwa.pdf --format pdf --verbose
 
 # Penetration Testing
-python src/analyser/penetration_analyser.py <host:port> --deep --exploit --output detailed_pentest_report.pdf
+python src/analyser/penetration_analyser.py <host:port> --deep --output detailed_pentest_unsecure_pwa.pdf
 ```
 
 ## 🎓 Learning Features
