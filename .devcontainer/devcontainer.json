@@ -170,7 +170,8 @@
     "PYTHONUNBUFFERED": "1",
     "PIP_CACHE_DIR": "/home/vscode/.cache/pip",
     "PIP_NO_COLOR": "1",
-    "GIT_PAGER": "cat"
+    "GIT_PAGER": "cat",
+    "DOCKER_API_VERSION": "1.43"
   },
   "init": true,
   "capAdd": [
