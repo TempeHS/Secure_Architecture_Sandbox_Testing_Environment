@@ -153,14 +153,120 @@ class SASTCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("SAST verbose analysis timed out")
 
+    def test_05_sast_json_output_mode(self):
+        """Test SAST analysis with JSON output format."""
+        logger.info("Testing SAST JSON output mode...")
+
+        try:
+            import json
+            import tempfile
+
+            # Create a temporary file for JSON output
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".json", delete=False
+            ) as tmp:
+                json_output_path = tmp.name
+
+            result = subprocess.run(
+                [
+                    "python",
+                    self.sast_cli,
+                    "samples/unsecure-pwa",
+                    "--output",
+                    json_output_path,
+                    "--format",
+                    "json",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode, 0, f"SAST JSON output failed: {result.stderr}"
+            )
+
+            # Read the JSON output file
+            with open(json_output_path, "r") as f:
+                json_content = f.read()
+
+            # Clean up temp file
+            os.unlink(json_output_path)
+
+            # JSON output should be valid JSON structure
+            self.assertIn(
+                "{", json_content, "JSON output missing opening brace"
+            )
+            self.assertIn(
+                "}", json_content, "JSON output missing closing brace"
+            )
+            # Verify it's valid JSON
+            try:
+                json_data = json.loads(json_content)
+                self.assertIsInstance(
+                    json_data, dict, "JSON output should be a dictionary")
+            except json.JSONDecodeError:
+                self.fail("JSON output is not valid JSON")
+
+            logger.info("✅ SAST JSON output mode works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("SAST JSON output timed out")
+
+    def test_05b_sast_educational_verbose_combined(self):
+        """Test SAST analysis with both --educational and --verbose flags."""
+        logger.info("Testing SAST with combined --educational --verbose...")
+
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    self.sast_cli,
+                    "samples/unsecure-pwa",
+                    "--educational",
+                    "--verbose",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode,
+                0,
+                f"SAST educational+verbose analysis failed: {result.stderr}",
+            )
+            # Should have educational content
+            self.assertIn(
+                "🎓 Educational Note",
+                result.stdout,
+                "Combined mode missing educational explanations",
+            )
+            # Verbose mode should produce detailed output
+            self.assertGreater(
+                len(result.stdout), 1000, "Combined output seems too short"
+            )
+
+            logger.info("✅ SAST educational+verbose combined mode works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("SAST educational+verbose analysis timed out")
+
     def test_06_sast_analysis_flask_secondary(self):
         """Test SAST analysis on Flask application (secondary target)."""
         logger.info("Testing SAST analysis on Flask app...")
 
         try:
             result = subprocess.run(
-                ["python", self.sast_cli,
-                    "samples/vulnerable-flask-app", "--educational"],
+                [
+                    "python",
+                    self.sast_cli,
+                    "samples/vulnerable-flask-app",
+                    "--educational",
+                    "--verbose",
+                ],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
@@ -174,6 +280,12 @@ class SASTCommandValidationTest(unittest.TestCase):
                 "Total:",
                 result.stdout,
                 "Flask analysis output missing findings summary",
+            )
+            # Verify educational content is present
+            self.assertIn(
+                "🎓 Educational Note",
+                result.stdout,
+                "Flask analysis missing educational explanations",
             )
 
             logger.info("✅ SAST analysis on Flask app works")
