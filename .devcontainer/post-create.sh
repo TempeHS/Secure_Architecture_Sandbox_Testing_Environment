@@ -32,6 +32,9 @@ echo "🔧 Setting up Secure Architecture Sandbox environment..."
 # Update package lists and install security tools
 update_pid=$(start_timer "SYSTEM" "Updating system packages")
 echo "📦 Updating system packages..."
+# Remove stale Yarn repo that has an expired GPG key (causes apt-get update to fail)
+sudo rm -f /etc/apt/sources.list.d/yarn.list 2>/dev/null || true
+sudo rm -f /etc/apt/keyrings/yarn.gpg 2>/dev/null || true
 log_command "SYSTEM" "sudo apt-get update -y" "Update system packages" 120
 # Ensure vscode user is in the docker group and Docker socket is accessible
 docker_perm_pid=$(start_timer "DOCKER" "Setting up Docker permissions")
