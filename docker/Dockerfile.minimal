@@ -1,5 +1,8 @@
 # Minimal, robust sandbox Dockerfile for cybersecurity education
-FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
+FROM mcr.microsoft.com/devcontainers/python:3.11-bookworm
+
+# Remove stale Yarn APT repository with expired GPG key
+RUN rm -f /etc/apt/sources.list.d/yarn.list && rm -f /etc/apt/keyrings/yarn.gpg
 
 # Copy and source build logger
 COPY docker/docker-build-logger.sh /usr/local/bin/docker-build-logger.sh
