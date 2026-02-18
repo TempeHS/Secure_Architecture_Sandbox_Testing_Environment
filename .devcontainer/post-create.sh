@@ -749,6 +749,10 @@ if __name__ == '__main__':
 Happy learning! 🎓🔍
 EOF
 
+# Force VS Code file watcher to detect the change so any open preview refreshes
+sleep 1
+touch /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md
+
 echo "✅ Environment setup complete!"
 echo "📚 Check /workspaces/Secure_Architecture_Sandbox_Testing_Environment/WELCOME.md for getting started instructions"
 echo "🧪 Run 'python3 .devcontainer/test_tools.py' to verify tool installation"
