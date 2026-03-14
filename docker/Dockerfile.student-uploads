@@ -1,10 +1,10 @@
-# Dockerfile for Student Uploads Flask Application
+# Dockerfile for Student Uploads Application (Flask or Django)
 FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies (minimal for simple Flask app)
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
@@ -16,16 +16,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY uploads/ .
 
+# Copy the entrypoint script
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Create upload directories if needed
 RUN mkdir -p uploads temp && \
     chmod 755 uploads temp
 
-# Set proper permissions for Flask app files
-RUN chmod 755 . && \
-    chmod 644 *.py
-
-# Expose port 8000 (as configured in app.py)
+# Expose port 8000
 EXPOSE 8000
 
-# Run the student Flask application
-CMD ["python", "app.py"]
+# Use the flexible entrypoint script to auto-detect app.py, main.py, run.py, or manage.py
+ENTRYPOINT ["/entrypoint.sh"]

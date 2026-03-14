@@ -86,7 +86,7 @@ services:
       start_period: 40s
     # NO depends_on - runs independently
 
-  # Student uploads Flask app - independent service
+  # Student uploads app (Flask or Django) - independent service
   student-uploads:
     build:
       context: ..
@@ -96,10 +96,11 @@ services:
     networks:
       - sandbox_network
     ports:
-      - "8000:8000" # Map host 8000 to student uploads Flask app port
+      - "8000:8000" # Map host 8000 to student uploads app port
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+      - DJANGO_SETTINGS_MODULE=config.settings
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000", "||", "exit", "1"]

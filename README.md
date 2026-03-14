@@ -10,6 +10,27 @@ This sandbox uses a **multi-layer isolation and containerised architecture** usi
 
 ![Docker/CodesSpaces Topology](/docs/images/secure_architecture_sandbox_network_topology.png)
 
+## 📊 Quick Start Reports
+
+Get education-specific security reports with these commands. Reports analyse the Unsecure PWA so you can review real findings immediately.
+
+> [Note]
+> Reports may take a few minutes to produce depending on the scan depth and system resources.
+
+```bash
+# Static Application Security Testing (SAST) - analyses source code
+python src/analyser/analyse_cli.py samples/unsecure-pwa --tools all --educational --output detailed_sast_unsecure_pwa.pdf --format pdf
+
+# Dynamic Application Security Testing (DAST) - tests the running application
+python src/analyser/dast_cli.py http://localhost:5000 --deep-scan --educational --output detailed_dast_unsecure_pwa.pdf --format pdf
+
+# Penetration Testing - simulates real-world attack scenarios
+python src/analyser/penetration_analyser.py http://localhost:5000 --deep --output detailed_pentest_unsecure_pwa.pdf
+
+# Network Traffic Analysis - monitors connections over 5 minutes
+python src/analyser/network_cli.py --monitor-connections --educational --duration 300 --output detailed_network_unsecure_pwa.pdf --format pdf
+```
+
 ## 🚀 Quick Start Upload
 
 **GitHub Codespaces (Recommended):**

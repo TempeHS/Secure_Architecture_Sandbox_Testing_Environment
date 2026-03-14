@@ -65,6 +65,11 @@ def run_test_suite():
             "name": "Penetration Testing Validation",
             "module": "test_penetration_testing_commands",
             "description": "Tests integrated penetration testing workflows",
+        },
+        {
+            "name": "Entrypoint Detection Validation",
+            "module": "test_entrypoint_detection",
+            "description": "Validates student app entry point detection logic",
         }
     ]
 

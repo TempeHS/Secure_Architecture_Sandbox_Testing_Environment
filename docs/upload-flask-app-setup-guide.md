@@ -1,11 +1,14 @@
-# Secure Architecture Sandbox Testing Environment - Student Flask App Requirements
+# Secure Architecture Sandbox Testing Environment - Student App Requirements
 
 ## 🎯 Overview
 
-Quick reference for students creating Flask applications for cybersecurity
-testing. This guide demonstrates how **application isolation and containment**
-principles support **safe execution environments for untrusted code** - key
-concepts in cybersecurity architecture.
+Quick reference for students creating **Flask or Django** applications for
+cybersecurity testing. This guide demonstrates how **application isolation and
+containment** principles support **safe execution environments for untrusted
+code** - key concepts in cybersecurity architecture.
+
+The sandbox automatically detects your application entry point file
+(`app.py`, `main.py`, `run.py`, or `manage.py`) and launches it correctly.
 
 ## 🐳 Understanding Our Educational Architecture
 
@@ -37,25 +40,56 @@ This sandbox uses a **multi-layer isolation and containerized architecture** usi
 - **Capability Restrictions**: Limited system permissions following least
   privilege principles
 
-## � Application Requirements
+## 📝 Application Requirements
 
-### Required Files and Structure
+### Supported Entry Point Files
+
+The container automatically detects your entry point in this priority order:
+
+| Priority | File | Framework | Notes |
+|----------|------|-----------|-------|
+| 1 | `app.py` | Flask | Most common for Flask apps |
+| 2 | `main.py` | Flask | Alternative Flask entry point |
+| 3 | `run.py` | Flask | Alternative Flask entry point |
+| 4 | `manage.py` | Django | See [Django Setup](#-django-application-setup) below |
+
+> **Note:** Only place **one** entry point file in the `uploads/` folder. If
+> multiple are present the highest priority file will be used.
+
+### Required Files and Structure (Flask)
 
 ```
 uploads/
-├── app.py             # Main Flask application
+├── app.py             # Entry point (or main.py / run.py)
 ├── requirements.txt   # Python dependencies
 └── README.md         # Optional documentation
 ```
 
-### File Specifications
+### Flask File Specifications
 
-#### `app.py` Requirements
+#### Entry Point (`app.py` / `main.py` / `run.py`)
 
-- Must import Flask: `from flask import Flask`
-- Must create app instance: `app = Flask(__name__)`
-- Must include at least one route: `@app.route("/")`
-- Must run on port 8000: `app.run(debug=True, host='0.0.0.0', port=8000)`
+Whichever filename you choose, the file must:
+
+- Import Flask: `from flask import Flask`
+- Create an app instance: `app = Flask(__name__)`
+- Include at least one route: `@app.route("/")`
+- Run on **port 8000**: `app.run(debug=True, host='0.0.0.0', port=8000)`
+
+**Example `app.py`** (also valid as `main.py` or `run.py`):
+
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello from the Secure Architecture Testing Sandbox!</p>"
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8000)
+```
 
 #### `requirements.txt` Requirements
 
@@ -64,7 +98,7 @@ uploads/
 
 ### Port Assignment
 
-- **Use port 8000** for your Flask application
+- **Use port 8000** for your application (Flask or Django)
 - **Do NOT use port 3000, 5000, 8080 or 9000** (reserved)
 
 ## 🔄 Docker Management
@@ -123,8 +157,7 @@ docker-compose -f docker/docker-compose.yml down
 docker-compose -f docker/docker-compose.yml up -d
 
 # Kill your app and restart (incident response simulation)
-docker exec cybersec_sandbox pkill -f "python.*app.py"
-docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
+docker-compose -f docker/docker-compose.yml restart student-uploads
 ```
 
 ## 🌐 Access Your Application
@@ -164,16 +197,126 @@ python src/analyser/network_cli.py --monitor-connections --educational --duratio
 python src/analyser/penetration_analyser.py http://localhost:8000 --deep --output detailed_pentest_unsecure_pwa.pdf
 ```
 
+## 🐍 Django Application Setup
+
+### Why Django Needs Extra Configuration
+
+Django applications use `manage.py runserver` instead of running a file
+directly. The sandbox entrypoint script detects `manage.py` and automatically
+runs `python manage.py runserver 0.0.0.0:8000`.
+
+However, Django requires additional configuration to work correctly in the
+container:
+
+### Step 1: Create Your Django Project Structure
+
+Place the following files in the `uploads/` folder:
+
+```
+uploads/
+├── manage.py
+├── requirements.txt
+├── config/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── myapp/
+    ├── __init__.py
+    ├── views.py
+    ├── urls.py
+    └── models.py
+```
+
+### Step 2: Configure `settings.py`
+
+Your `config/settings.py` must include these settings for the container:
+
+```python
+import os
+
+# SECURITY WARNING: In production, restrict this to your domain
+ALLOWED_HOSTS = ['*']
+
+# Use SQLite for simplicity in the sandbox
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+# Static files
+STATIC_URL = '/static/'
+```
+
+> **Important**: `ALLOWED_HOSTS = ['*']` is required for the container
+> networking to work. This is intentionally insecure for educational purposes.
+
+### Step 3: Configure `manage.py`
+
+Your `manage.py` should point to your settings module:
+
+```python
+#!/usr/bin/env python
+import os
+import sys
+
+def main():
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(sys.argv)
+
+if __name__ == '__main__':
+    main()
+```
+
+### Step 4: Configure `requirements.txt`
+
+```
+Django>=4.2,<5.0
+```
+
+### Step 5: Deploy and Migrate
+
+```bash
+# Build and start the container
+docker-compose -f docker/docker-compose.yml up -d --build student-uploads
+
+# Run Django migrations inside the container
+docker exec student_uploads python manage.py migrate
+
+# (Optional) Create a Django superuser
+docker exec -it student_uploads python manage.py createsuperuser
+```
+
+### Django Troubleshooting
+
+```bash
+# Check container logs for Django errors
+docker logs student_uploads
+
+# Verify Django settings are loaded
+docker exec student_uploads python manage.py check
+
+# Run migrations if you see database errors
+docker exec student_uploads python manage.py migrate
+```
 ## 🐛 Quick Troubleshooting
 
 ```bash
 # Check if app is running
 curl http://localhost:8000
 
-# Kill and restart your app
-docker exec cybersec_sandbox pkill -f "python.*app.py"
-docker exec -d cybersec_sandbox bash -c "cd /workspace/uploads && python3 app.py"
+# View container logs to see which entry point was detected
+docker logs student_uploads
+
+# Restart the student app container
+docker-compose -f docker/docker-compose.yml restart student-uploads
+
+# Full rebuild after changing files
+docker-compose -f docker/docker-compose.yml up -d --build student-uploads
 
 # Check port usage
-docker exec cybersec_sandbox netstat -tulpn | grep :8000
+docker exec student_uploads netstat -tulpn | grep :8000
 ```
