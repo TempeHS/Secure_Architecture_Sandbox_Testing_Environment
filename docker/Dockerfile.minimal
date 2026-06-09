@@ -1,5 +1,5 @@
 # Minimal, robust sandbox Dockerfile for cybersecurity education
-FROM mcr.microsoft.com/devcontainers/python:3.11-bookworm
+FROM mcr.microsoft.com/devcontainers/python:3.13
 
 # Remove stale Yarn APT repository with expired GPG key
 RUN rm -f /etc/apt/sources.list.d/yarn.list && rm -f /etc/apt/keyrings/yarn.gpg
