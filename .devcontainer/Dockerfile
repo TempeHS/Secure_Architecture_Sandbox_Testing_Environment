@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3.13
+FROM mcr.microsoft.com/devcontainers/python:3.13-bookworm
 
 # Remove stale Yarn APT repository with expired GPG key (NO_PUBKEY 62D54FD4003F6525)
 # This must happen before any feature installation runs apt-get update
