@@ -42,12 +42,11 @@ class BasicNetworkActivity:
         """Generate normal web browsing patterns."""
         print(f"\n🌐 Generating web requests for {duration} seconds...")
 
-        # Common legitimate websites for testing
+        # Sandbox's own sample apps — reliable and reproducible, no
+        # dependency on a third-party service being up
         test_sites = [
-            'http://httpbin.org/get',
-            'http://httpbin.org/json',
-            'http://httpbin.org/user-agent',
-            'http://httpbin.org/headers'
+            'http://localhost:5000/',
+            'http://localhost:9090/',
         ]
 
         start_time = time.time()

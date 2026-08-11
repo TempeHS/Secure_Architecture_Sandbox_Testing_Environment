@@ -225,7 +225,7 @@ fi
 # NOTE: docker-compose is now installed at image-build time in .devcontainer/Dockerfile.
 
 # Ensure Docker is ready
-echo "� Waiting for Docker to be ready..."
+echo "🐳 Waiting for Docker to be ready..."
 timeout=60
 for i in {1..60}; do
     if docker info >/dev/null 2>&1; then
@@ -239,7 +239,7 @@ for i in {1..60}; do
 done
 
 if docker info >/dev/null 2>&1; then
-    echo "�🚀 Starting Docker Compose services..."
+    echo "🚀 Starting Docker Compose services..."
     # Use absolute paths to ensure reliability
     cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
     if [ -f "docker/docker-compose.yml" ]; then

@@ -346,7 +346,7 @@ class NetworkAnalyser:
                 self.findings.append({
                     'severity': 'medium',
                     'title': f'Suspicious Port Activity: {port}',
-                    'description': f"Connection detected on port {port}, commonly used by malware or unauthorized services.",
+                    'description': f"Connection detected on port {port}, commonly used by malware or unauthorised services.",
                     'source_ip': ip,
                     'suspicious_port': port,
                     'protocol': conn.get('protocol'),
@@ -427,9 +427,12 @@ class NetworkAnalyser:
         """Scan for services on target"""
         services = []
 
-        # Common ports to check
+        # Common ports to check (classic well-known ports plus this
+        # sandbox's own sample application ports, since those are exactly
+        # what students are meant to discover in Exercise 5 Activity 2)
         common_ports = [21, 22, 23, 25, 53, 80,
-                        110, 143, 443, 993, 995, 3389, 5900]
+                        110, 143, 443, 993, 995, 3389, 5900,
+                        3000, 5000, 8000, 8080, 9090]
 
         for port in common_ports:
             if self._check_port_open(target, port):
@@ -462,11 +465,16 @@ class NetworkAnalyser:
             22: {'name': 'SSH', 'description': 'Secure Shell', 'security_concern': 'Potential brute force target'},
             23: {'name': 'Telnet', 'description': 'Telnet Protocol', 'security_concern': 'Unencrypted remote access'},
             25: {'name': 'SMTP', 'description': 'Simple Mail Transfer Protocol', 'security_concern': 'Email relay abuse'},
-            53: {'name': 'DNS', 'description': 'Domain Name System', 'security_concern': 'DNS tunneling potential'},
+            53: {'name': 'DNS', 'description': 'Domain Name System', 'security_concern': 'DNS tunnelling potential'},
             80: {'name': 'HTTP', 'description': 'Web Server', 'security_concern': 'Unencrypted web traffic'},
             443: {'name': 'HTTPS', 'description': 'Secure Web Server', 'security_concern': 'Certificate validation needed'},
             3389: {'name': 'RDP', 'description': 'Remote Desktop Protocol', 'security_concern': 'Remote access abuse'},
-            5900: {'name': 'VNC', 'description': 'Virtual Network Computing', 'security_concern': 'Weak authentication'}
+            5900: {'name': 'VNC', 'description': 'Virtual Network Computing', 'security_concern': 'Weak authentication'},
+            3000: {'name': 'Node.js App', 'description': 'Sandbox vulnerable Node.js application', 'security_concern': 'Intentionally vulnerable demo app'},
+            5000: {'name': 'Unsecure PWA', 'description': 'Sandbox unsecure PWA (Flask)', 'security_concern': 'Intentionally vulnerable demo app'},
+            8000: {'name': 'Student Uploads', 'description': 'Sandbox student Flask app upload server', 'security_concern': 'Runs student-supplied code'},
+            8080: {'name': 'Sandbox Web Server', 'description': 'Cybersecurity sandbox web server', 'security_concern': 'Sandbox tooling interface'},
+            9090: {'name': 'Vulnerable Flask App', 'description': 'Sandbox vulnerable Flask application', 'security_concern': 'Intentionally vulnerable demo app'}
         }
 
         return service_map.get(port, {
@@ -536,7 +544,7 @@ class NetworkAnalyser:
         """Generate educational insights about network security"""
         insights = {
             'network_security_concepts': [
-                "Network monitoring helps detect unauthorized access and data exfiltration",
+                "Network monitoring helps detect unauthorised access and data exfiltration",
                 "Port scanning is often the first step in network reconnaissance",
                 "Encrypted protocols (HTTPS, SSH) are preferred over unencrypted ones (HTTP, Telnet)",
                 "Unusual network patterns can indicate malware or insider threats"

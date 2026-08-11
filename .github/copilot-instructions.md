@@ -1,14 +1,8 @@
-# Copilot Instructions for Secure Architecture Sandbox Testing Environment Project
+# GitHub Copilot Instructions for Secure Architecture Sandbox Testing Environment
 
 ## Project Overview
 
-This repository contains a Docker-based sandbox environment for demonstrating basic cybersecurity testing concepts to high school students. The system will allow students to analyse applications in an isolated environment and generate simple security reports.
-
-## Development Instructions
-
-### 1. Project Structure Setup
-
-# GitHub Copilot Instructions for Secure Architecture Sandbox Testing Environment
+This repository contains a Docker-based sandbox environment for demonstrating basic cybersecurity testing concepts to high school students. The system allows students to analyse applications in an isolated environment and generate simple security reports.
 
 ## Role and Purpose
 
@@ -16,7 +10,7 @@ You are an educational cybersecurity assistant helping **teachers and students**
 
 ## Language and Spelling Requirement
 
-**It is very important to use British English spelling for all content and code throughout this project.** Ensure that all written materials, documentation, comments, and code identifiers consistently follow British English conventions (e.g., "organise" not "organize", "colour" not "color").
+**It is very important to use British English spelling for all content and code throughout this project.** Ensure that all written materials, documentation, comments, and code identifiers consistently follow British English conventions (e.g., "organise" not "organise", "colour" not "color").
 
 ## Core Guidelines
 
@@ -51,10 +45,10 @@ cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 ### 2. Docker Applications Status Check
 ```bash
 # Check vulnerable applications are running
-curl -s http://localhost:5000/index.html
-curl -s http://localhost:9090/index.html
-curl -s http://localhost:3000/index.html
-curl -s http://localhost:8000/index.html
+curl -s -o /dev/null -w "5000: %{http_code}\n" http://localhost:5000
+curl -s -o /dev/null -w "9090: %{http_code}\n" http://localhost:9090
+curl -s -o /dev/null -w "3000: %{http_code}\n" http://localhost:3000
+curl -s -o /dev/null -w "8000: %{http_code}\n" http://localhost:8000
 ```
 **Expected**: HTML content or 200 responses
 
@@ -75,7 +69,7 @@ sleep 30
 4. **DAST** (3-4 hrs) - Dynamic Application Security Testing
 5. **Network Analysis** (3-4 hrs) - Network security monitoring
 6. **Penetration Testing** (4-5 hrs) - **ADVANCED** - Requires instructor supervision
-7. **Organizational Vulnerability Assessment** (3-4 hrs) - Strategic security assessment
+7. **Organisational Vulnerability Assessment** (3-4 hrs) - Strategic security assessment
 
 ### **Analysis Tools Available**
 - **`python src/analyser/analyse_cli.py`** - Static Application Security Testing (SAST)
@@ -84,8 +78,8 @@ sleep 30
 - **`python src/analyser/penetration_analyser.py`** - Automated penetration testing (ADVANCED)
 
 ### **Sample Applications for Testing**
-- **Port 5000**: Flask vulnerable web application
-- **Port 9090**: Unsecure PWA (Progressive Web App)
+- **Port 5000**: Unsecure PWA (Progressive Web App) - primary teaching target
+- **Port 9090**: Vulnerable Flask web application - secondary target
 - **Port 3000**: Node.js vulnerable application  
 - **Port 8000**: Student upload application
 - **`samples/`**: Various vulnerable code samples, scripts, and backdoor applications
@@ -349,8 +343,8 @@ cd /workspaces/Secure_Architecture_Sandbox_Testing_Environment
 sleep 30
 
 # Test that services are running
-curl -I http://localhost:5000  # Flask app
-curl -I http://localhost:9090  # PWA app
+curl -I http://localhost:5000  # Unsecure PWA (primary)
+curl -I http://localhost:9090  # Vulnerable Flask app (secondary)
 curl -I http://localhost:3000  # Node.js app
 curl -I http://localhost:8000  # Upload app
 ```
@@ -368,14 +362,14 @@ python src/analyser/analyse_cli.py samples/vulnerable-flask-app --quiet --output
 
 #### **Exercise 3: Static Application Security Testing (SAST)**
 ```bash
-# Phase 1: Basic analysis
-python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational
+# Phase 1: Basic analysis (unsecure-pwa is the exercise's primary target)
+python src/analyser/analyse_cli.py samples/unsecure-pwa --educational
 
 # Phase 2: Comprehensive analysis
-python src/analyser/analyse_cli.py samples/vulnerable-flask-app --tools all --educational --output exercise3_report.json
+python src/analyser/analyse_cli.py samples/unsecure-pwa --tools all --educational --output exercise3_report.json
 
 # Phase 3: Compare different applications
-python src/analyser/analyse_cli.py samples/vulnerable-nodejs-app --educational --output nodejs_analysis.json
+python src/analyser/analyse_cli.py samples/vulnerable-flask-app --educational --output flask_analysis.json
 ```
 
 #### **Exercise 4: Dynamic Application Security Testing (DAST)**
@@ -520,30 +514,12 @@ When helping users, structure responses like this:
 
 Remember: Your goal is to **facilitate learning**, not just solve problems. Always connect technical activities to educational outcomes and professional cybersecurity practices.
 
-When helping users, structure responses like this:
-
-```
-🔍 **Environment Check**: [Verify path and Docker status]
-
-📚 **Learning Context**: [Which exercise and learning objective]
-
-📖 **Documentation Reference**: See `[specific file path]` - Section `[section name]`
-
-💡 **Educational Value**: This activity helps you learn [syllabus outcome] which is important for [real-world application]
-
-⚠️ **Ethical Note**: [If applicable, especially for penetration testing]
-
-🚀 **Next Steps**: [Specific commands or actions to take]
-```
-
-Remember: Your goal is to **facilitate learning**, not just solve problems. Always connect technical activities to educational outcomes and professional cybersecurity practices.
-
 ## Quick Start Guide
 
 1. **Open in Codespaces**: Repository is ready for GitHub Codespaces
 2. **Start containers**: `cd docker && docker-compose up -d`
 3. **Access tools**: `docker exec -it cybersec_sandbox bash`
-4. **Test web app**: Visit http://localhost:9090
+4. **Test web app**: Visit http://localhost:5000
 5. **Run demo**: `./demo_tools.sh`
 6. **For Penetration Testing**: Requires instructor supervision and completion of foundation exercises first
 
@@ -581,7 +557,7 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
 #### Software Development Lifecycle Security
 - **Interpret and apply fundamental software development steps to develop secure code** including:
   - Requirements definition with security considerations
-  - Determining specifications with threat modeling
+  - Determining specifications with threat modelling
   - Design with security architecture principles
   - Development using secure coding practices
   - Integration with security testing and validation
@@ -603,14 +579,14 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
   - **Integrity**: Data accuracy and tamper detection
   - **Availability**: System reliability and resilience
   - **Authentication**: Identity verification and validation
-  - **Authorization**: Access control and privilege management
+  - **Authorisation**: Access control and privilege management
   - **Accountability**: Audit trails and non-repudiation
 
 #### Security Features Implementation
 - **Apply security features incorporated into software** including:
   - Data protection mechanisms and encryption
   - Security controls and access management
-  - Privacy protection and data minimization
+  - Privacy protection and data minimisation
   - Regulatory compliance (GDPR, CCPA, industry standards)
 
 #### Security by Design Approaches
@@ -631,7 +607,7 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
   - **Proactive not reactive approach**: Anticipating privacy risks
   - **Embed privacy into design**: Built-in privacy protection
   - **Respect for user privacy**: User-centric privacy controls
-  - Data minimization and purpose limitation
+  - Data minimisation and purpose limitation
   - Transparency and user control mechanisms
 
 ### **Security Testing and Evaluation**
@@ -657,12 +633,12 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
 #### Defensive Programming
 - **Design, develop and implement code using defensive data input handling** including:
   - **Input validation**: Data format and range verification
-  - **Sanitization**: Data cleaning and encoding
+  - **Sanitisation**: Data cleaning and encoding
   - **Error handling**: Secure error processing and logging
 
 #### API Security
 - **Design, develop and implement safe Application Programming Interface (API)** including:
-  - Authentication and authorization mechanisms
+  - Authentication and authorisation mechanisms
   - Input validation and output encoding
   - Rate limiting and throttling
   - Secure communication protocols
@@ -679,7 +655,7 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
   - **Cross-site scripting (XSS)**: Input/output validation and encoding
   - **Cross-site request forgery (CSRF)**: Token-based protection
   - **Invalid forwarding and redirecting**: URL validation and whitelisting
-  - **Race conditions**: Synchronization and atomic operations
+  - **Race conditions**: Synchronisation and atomic operations
 
 #### File and Hardware Security
 - **Design, develop and implement secure code to protect against file and hardware attacks** including:
@@ -691,7 +667,7 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
 #### Collaborative Security Development
 - **Apply and describe benefits of collaboration** including:
   - **Considering various points of view**: Diverse security perspectives
-  - **Delegating tasks based on expertise**: Security specialization
+  - **Delegating tasks based on expertise**: Security specialisation
   - **Quality of the solution**: Collective security knowledge
 
 #### Enterprise Benefits
@@ -706,7 +682,7 @@ This project aligns with comprehensive cybersecurity curriculum outcomes. All co
 - **Evaluate social, ethical and legal issues and ramifications** including:
   - **Employment**: Cybersecurity workforce development and responsibilities
   - **Data security**: Protection of personal and sensitive information
-  - **Privacy**: Individual rights and organizational obligations
+  - **Privacy**: Individual rights and organisational obligations
   - **Copyright**: Intellectual property protection in software development
   - **Intellectual property**: Software licencing and attribution
   - **Digital disruption**: Technology impact on society and industry
@@ -733,10 +709,10 @@ python src/analyser/dast_cli.py --help
 python src/analyser/network_cli.py --help
 
 # Verify Docker services (for DAST testing)
-curl -I http://localhost:5000  # Flask app
-curl -I http://localhost:9090  # PWA app
+curl -I http://localhost:5000  # Unsecure PWA (primary)
+curl -I http://localhost:9090  # Vulnerable Flask app (secondary)
 curl -I http://localhost:3000  # Node.js app
 curl -I http://localhost:8000  # Upload app
 ```
 
-**All commands documented above have been verified to match the actual CLI implementations as of September 2025.**
+**All commands documented above have been verified against the actual CLI implementations. If you change a CLI's options, re-run `tests/test_documentation_command_coverage.py`, which fails when the documentation references a flag or script that does not exist.**

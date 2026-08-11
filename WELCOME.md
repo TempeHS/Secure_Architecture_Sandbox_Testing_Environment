@@ -1,17 +1,82 @@
-# 🏗️ Secure Architecture Sandbox - Building Environment
+# 🔒 Welcome to Secure Architecture Sandbox Testing Environment
 
-## ⏱️ Please wait approximately **4 minutes** for setup to complete...
+This environment is ready for sandbox testing for secure architecture!
 
-### What's happening:
-- 📦 Installing security tools (nmap, dirb, netcat, tcpdump)
-- 🐳 Setting up Docker containers for vulnerable applications  
-- 🐍 Configuring Python security libraries
-- 🔧 Preparing cybersecurity testing workspace
+## Quick Start
 
----
+1. **Test tools**: `python3 .devcontainer/test_tools.py`
+2. **Comprehensive test**: `python3 .devcontainer/test_environment.py`
+3. **Verify environment**: `python3 .devcontainer/verify_environment.py`
+4. **Start Docker services**: `cd docker && docker-compose up -d`
+5. **View logs**: `docker-compose logs -f`
+6. **Stop services**: `docker-compose down`
 
-### ☕ Perfect time for a coffee break!
+## Available Security Tools
 
-🚀 **Your security testing environment will be ready shortly.**
+- **Nmap**: Network scanning and host discovery
+- **Nikto**: Web vulnerability scanner
+- **Gobuster**: Directory/file brute-forcer
+- **WhatWeb**: Web technology identifier
+- **Bandit**: Python security linter
+- **Safety**: Python package vulnerability checker
+- **Semgrep**: Static analysis tool
 
-> This file will automatically close when setup is complete and WELCOME.md opens.
+## Development Tools
+
+- **Python 3.11+**: Main development language
+- **Flask**: Web framework for sample apps
+- **Docker**: Containerisation
+- **VS Code**: Fully configured IDE
+
+## Ports for Testing
+
+- **5000**: Unsecure PWA application (samples/unsecure-pwa) — primary target
+- **9090**: Vulnerable Flask application (samples/vulnerable-flask-app/app.py) — secondary target
+- **8000**: Student uploads application
+- **3000**: Vulnerable Node.js application
+- **8080**: Mapped for the sandbox container, but no application listens on it by default
+
+## Project Structure
+
+```
+/workspaces/Secure_Architecture_Sandbox_Testing_Environment/
+├── src/           # Source code (Python packages)
+├── samples/       # Sample vulnerable applications
+├── docs/          # Documentation
+├── docker/        # Docker configuration
+├── reports/       # Generated security reports
+|   └──examples/  # Example reports
+├── tests/         # Unit and integration tests
+└── uploads/       # Folder for students to upload a flask app for testing on port 8000
+```
+
+## Flask Application Development
+
+This environment supports Flask development! You can create Flask apps for:
+- Security testing tools
+- Vulnerable demo applications
+- Report generation interfaces
+- Educational web interfaces
+
+Example Flask app:
+```python
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return "Hello from the Secure Architecture Testing Sandbox!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
+```
+
+## Next Steps
+
+1. Explore the `/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src` directory
+2. Check out sample vulnerable applications in `samples/`
+3. Read documentation in `docs/`
+4. Start building your cybersecurity analysis tools!
+5. Use Docker services for isolated testing environments
+
+Happy learning! 🎓🔍

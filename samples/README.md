@@ -25,7 +25,7 @@ JavaScript **Port:** 3000
 - ✅ Command Injection (Ping functionality)
 - ✅ Path Traversal (File access)
 - ✅ Insecure Direct Object References (User profiles)
-- ✅ Missing Authentication/Authorization
+- ✅ Missing Authentication/Authorisation
 - ✅ Weak Session Management
 - ✅ Information Disclosure (Debug endpoint)
 - ✅ Unrestricted File Upload
@@ -56,7 +56,7 @@ npm start
 - ✅ Path Traversal (File reading)
 - ✅ Insecure Deserialization (Pickle)
 - ✅ Weak Cryptographic Practices (MD5 hashes)
-- ✅ Missing Authorization Controls
+- ✅ Missing Authorisation Controls
 - ✅ Information Disclosure (API & Debug)
 - ✅ Insecure Direct Object References
 

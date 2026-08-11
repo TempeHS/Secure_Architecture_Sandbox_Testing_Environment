@@ -220,8 +220,8 @@ class SandboxCommandValidationTest(unittest.TestCase):
         logger.info("✅ File system monitoring works")
 
     def test_09_process_tree_pstree(self):
-        """Test process tree visualization with pstree."""
-        logger.info("Testing process tree visualization...")
+        """Test process tree visualisation with pstree."""
+        logger.info("Testing process tree visualisation...")
 
         # Test pstree (if available)
         exit_code, output = self._exec_in_container("which pstree")
@@ -236,7 +236,7 @@ class SandboxCommandValidationTest(unittest.TestCase):
         self.assertGreaterEqual(
             len(output), 5, "Process output seems too short for minimal container")
 
-        logger.info("✅ Process tree visualization works")
+        logger.info("✅ Process tree visualisation works")
 
     def test_10_memory_monitoring(self):
         """Test memory monitoring with free command."""

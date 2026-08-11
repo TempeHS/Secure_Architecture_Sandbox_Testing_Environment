@@ -754,7 +754,7 @@ class ComprehensiveSecurityReporter:
              "team members"),
             "Establish secure development lifecycle (SDLC) practices",
             "Implement automated security testing in CI/CD pipelines",
-            "Conduct regular threat modeling exercises",
+            "Conduct regular threat modelling exercises",
             ("Maintain an inventory of all applications and their "
              "security status"),
             ("Establish relationships with security researchers for "
@@ -1036,7 +1036,7 @@ class ComprehensiveSecurityReporter:
                  'mitigation strategies'),
                 ('Understand the security testing pyramid: Unit tests, '
                  'Integration tests, System tests'),
-                ('Study threat modeling methodologies like '
+                ('Study threat modelling methodologies like '
                  'STRIDE or PASTA'),
                 ('Practice using security tools and understanding '
                  'their outputs'),
@@ -1052,7 +1052,7 @@ class ComprehensiveSecurityReporter:
         concepts = [
             "XSS (Cross-Site Scripting): Injection of malicious scripts into web pages",
             "SQL Injection: Injection of malicious SQL commands into database queries",
-            "CSRF (Cross-Site Request Forgery): Unauthorized commands from trusted users",
+            "CSRF (Cross-Site Request Forgery): Unauthorised commands from trusted users",
             "Authentication Flaws: Weaknesses in user verification mechanisms",
             "Session Management: Secure handling of user sessions and tokens",
             "Input Validation: Checking and sanitizing user input data",
@@ -1483,7 +1483,7 @@ Note: Only test applications you own or have explicit permission to test.
     if args.include_pentest:
         print("⚠️  WARNING: Penetration testing mode enabled")
         print("Only test applications you own or have explicit permission")
-        print("Unauthorized penetration testing is illegal")
+        print("Unauthorised penetration testing is illegal")
         print()
 
     # Initialize reporter

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Build Process Log Analyzer
-Analyzes build logs to identify failures, performance issues, and trends.
+Build Process Log Analyser
+Analyses build logs to identify failures, performance issues, and trends.
 """
 
 import os
@@ -127,7 +127,7 @@ class BuildLogAnalyzer:
         return logs
 
     def analyze_errors(self, logs):
-        """Analyze error patterns and trends."""
+        """Analyse error patterns and trends."""
         errors = [log for log in logs if log['level'] in ['ERROR', 'FATAL']]
         warnings = [log for log in logs if log['level'] == 'WARN']
 
@@ -260,10 +260,10 @@ class BuildLogAnalyzer:
         logs = self.load_logs()
 
         if not logs:
-            print("❌ No logs found to analyze!")
+            print("❌ No logs found to analyse!")
             return
 
-        print(f"📊 Analyzing {len(logs)} log entries...")
+        print(f"📊 Analysing {len(logs)} log entries...")
 
         # Perform analyses
         error_analysis = self.analyze_errors(logs)

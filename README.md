@@ -56,7 +56,7 @@ These commands demonstrate **systematic vulnerability assessment** and **securit
 python src/analyser/analyse_cli.py <target> --tools all --educational --output detailed_sast_report.pdf --format pdf --verbose
 ```
 
-**Syllabus Connection**: **Input validation**, **sanitization**, and **error handling** detection
+**Syllabus Connection**: **Input validation**, **sanitisation**, and **error handling** detection
 
 ### Dynamic Analysis (DAST) - **Runtime Testing**
 
@@ -87,11 +87,12 @@ python src/analyser/penetration_analyser.py localhost:5000 --deep --exploit --ou
 **Recommended Learning Sequence:**
 
 1. **Manual Code Review** - Security-focused code analysis fundamentals
-2. **SAST (Static Analysis)** - Automated vulnerability scanning in code
-3. **DAST (Dynamic Analysis)** - Runtime web application testing  
-4. **Network Traffic Analysis** - Monitor communications and detect threats
-5. **Sandbox Analysis** - Safe execution of suspicious applications
+2. **Sandbox Security Analysis** - Safe execution of suspicious applications
+3. **SAST (Static Analysis)** - Automated vulnerability scanning in code
+4. **DAST (Dynamic Analysis)** - Runtime web application testing  
+5. **Network Traffic Analysis** - Monitor communications and detect threats
 6. **Penetration Testing** - Comprehensive security assessment (Advanced)
+7. **Organisational Vulnerability Assessment** - Strategic risk and governance assessment
 
 **All exercises include:** Instructor guides, student worksheets, answer keys, and quick reference commands.
 

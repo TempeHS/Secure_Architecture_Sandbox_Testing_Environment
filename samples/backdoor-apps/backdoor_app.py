@@ -213,7 +213,7 @@ def system_health():
             <input type="submit" value="Run Diagnostic">
         </form>
     </div>
-    <p><small>⚠️ Administrative access required. Unauthorized usage prohibited.</small></p>
+    <p><small>⚠️ Administrative access required. Unauthorised usage prohibited.</small></p>
     '''
 
 

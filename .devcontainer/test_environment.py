@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 class Colors:
-    """ANSI color codes for colored output"""
+    """ANSI colour codes for coloured output"""
     GREEN = '\033[92m'
     RED = '\033[91m'
     YELLOW = '\033[93m'
@@ -49,7 +49,7 @@ def print_info(text):
     print(f"{Colors.CYAN}ℹ️  {text}{Colors.END}")
 
 
-def test_command_tool(tool_name, command, expected_in_output=None):
+def test_command_tool(tool_name, command, expected_in_output=None, allow_nonzero_returncode=False):
     """Test if a command-line tool is available and working"""
     try:
         result = subprocess.run(
@@ -59,6 +59,20 @@ def test_command_tool(tool_name, command, expected_in_output=None):
             timeout=15,
             shell=False
         )
+
+        combined_output = result.stdout + result.stderr
+
+        if allow_nonzero_returncode:
+            # Some tools (e.g. dirb) exit non-zero and print usage/banner text
+            # when called without their required arguments. Presence of the
+            # expected banner text is what proves the tool is installed and
+            # working, not the exit code.
+            if expected_in_output and expected_in_output.lower() in combined_output.lower():
+                print_success(f"{tool_name}: Available and working")
+                return True
+            print_error(
+                f"{tool_name}: Command failed (return code: {result.returncode})")
+            return False
 
         if result.returncode == 0:
             if expected_in_output and expected_in_output.lower() not in result.stdout.lower():
@@ -106,7 +120,6 @@ def test_directory_structure():
 
     required_dirs = [
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src",
-        "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/sandbox",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/analyser",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/src/reporter",
         "/workspaces/Secure_Architecture_Sandbox_Testing_Environment/samples",
@@ -136,7 +149,8 @@ def test_security_tools():
         ("Gobuster", ["gobuster", "--version"], "gobuster"),
         ("WhatWeb", ["whatweb", "--version"], "whatweb"),
         ("httptap", ["httptap", "--help"], "httptap"),
-        ("Dirb", ["dirb"], "dirb"),  # dirb shows help when no args
+        # dirb exits non-zero with no URL, but still prints its banner
+        ("Dirb", ["dirb"], "DIRB", True),
         ("Netcat", ["nc", "-h"], None),  # nc shows help with -h
         ("Curl", ["curl", "--version"], "curl"),
         ("Wget", ["wget", "--version"], "wget"),
@@ -145,8 +159,10 @@ def test_security_tools():
     passed = 0
     total = len(tools)
 
-    for tool_name, command, expected in tools:
-        if test_command_tool(tool_name, command, expected):
+    for tool in tools:
+        tool_name, command, expected, *rest = tool
+        allow_nonzero = rest[0] if rest else False
+        if test_command_tool(tool_name, command, expected, allow_nonzero):
             passed += 1
 
     print(f"\n{Colors.BOLD}Security Tools: {passed}/{total} available{Colors.END}")

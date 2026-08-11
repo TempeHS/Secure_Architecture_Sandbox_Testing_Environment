@@ -808,7 +808,7 @@ class VulnerabilityScanner:
                             severity="high",
                             title=f"Reflected XSS in Parameter '{param}'",
                             description=f"Reflected XSS vulnerability detected in parameter '{param}'. "
-                            f"User input is reflected without proper sanitization.",
+                            f"User input is reflected without proper sanitisation.",
                             target=response.url,
                             payload=payload,
                             evidence=f"Payload reflected in response",
@@ -884,7 +884,7 @@ class VulnerabilityScanner:
                                 confidence="high",
                                 risk_score=9.8,
                                 attack_vector="Network",
-                                impact="Complete account takeover, unauthorized access"
+                                impact="Complete account takeover, unauthorised access"
                             )
                             findings.append(finding)
 
@@ -1170,7 +1170,7 @@ class VulnerabilityScanner:
 
                             login_failed_indicators = [
                                 'invalid', 'incorrect', 'failed', 'error',
-                                'wrong', 'denied', 'unauthorized'
+                                'wrong', 'denied', 'unauthorised'
                             ]
 
                             response_text = post_response.text.lower()
@@ -1211,7 +1211,7 @@ class VulnerabilityScanner:
                                 confidence="high",
                                 risk_score=8.0,
                                 attack_vector="Network",
-                                impact="Unauthorized access to application and user data",
+                                impact="Unauthorised access to application and user data",
                                 remediation="Enforce strong password policies and account lockout mechanisms"
                             )
                             findings.append(finding)
@@ -1576,35 +1576,54 @@ class PenetrationTester:
         """Run nikto web vulnerability scanner"""
         findings = []
 
+        # Nikto 2.6+ auto-generates a report file (nikto_<host>_<port>_<time>.json)
+        # in the current working directory when -Format is given without -o, so
+        # we must pass an explicit -o pointing at a disposable temp file.
+        report_file = None
         try:
-            cmd = ['nikto', '-h', target_url, '-Format', 'csv']
-            result = subprocess.run(
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.json',
+                                             delete=False) as f:
+                report_file = f.name
+
+            cmd = ['nikto', '-h', target_url,
+                   '-Format', 'json', '-o', report_file]
+            subprocess.run(
                 cmd, capture_output=True, text=True, timeout=120)
 
-            if result.returncode == 0 and result.stdout:
-                lines = result.stdout.split('\n')
-                for line in lines[1:]:  # Skip header
-                    if line.strip():
-                        parts = line.split('","')
-                        if len(parts) >= 5:
-                            finding = PentestFinding(
-                                tool="nikto",
-                                severity="medium",
-                                title="Nikto Finding",
-                                description=parts[4].strip('"') if len(
-                                    parts) > 4 else "Web vulnerability detected",
-                                target=target_url,
-                                evidence=line.strip(),
-                                confidence="medium",
-                                attack_vector="Network",
-                                impact="Potential security vulnerability"
-                            )
-                            findings.append(finding)
+            # Nikto's JSON report (not stdout) holds the structured findings;
+            # modern nikto no longer prints a parseable CSV-like line to stdout.
+            if os.path.exists(report_file) and os.path.getsize(report_file) > 0:
+                with open(report_file) as report_handle:
+                    report_data = json.load(report_handle)
+
+                for host_report in report_data:
+                    for vuln in host_report.get('vulnerabilities', []):
+                        msg = vuln.get('msg', 'Web vulnerability detected')
+                        references = vuln.get('references')
+                        finding = PentestFinding(
+                            tool="nikto",
+                            severity="medium",
+                            title="Nikto Finding",
+                            description=msg,
+                            target=target_url,
+                            method=vuln.get('method', 'GET'),
+                            evidence=f"Nikto ID {vuln.get('id', 'unknown')}: {msg}",
+                            confidence="medium",
+                            references=[references] if references else None,
+                            attack_vector="Network",
+                            impact="Potential security vulnerability"
+                        )
+                        findings.append(finding)
 
         except subprocess.TimeoutExpired:
             logger.warning("Nikto scan timed out")
+        except (json.JSONDecodeError, OSError) as e:
+            logger.error(f"Error parsing Nikto report: {e}")
         except Exception as e:
             logger.error(f"Error running nikto: {e}")
+        finally:
+            if report_file and os.path.exists(report_file):
+                os.unlink(report_file)
 
         return findings
 
@@ -1918,7 +1937,26 @@ if __name__ == "__main__":
     # Example usage
     import sys
 
-    if len(sys.argv) > 1:
+    def print_usage():
+        print("Usage: python penetration_analyser.py <target_url> [options]")
+        print("Options:")
+        print("  --deep          Thorough testing (takes longer)")
+        print("  --exploit       Attempt exploitation for proof-of-concept")
+        print("  --pdf           Generate PDF report (auto-named)")
+        print("  --output FILE   Save report to specific file (format detected from extension)")
+        print("  -o FILE         Short form of --output")
+        print("  --help, -h      Show this message")
+        print("")
+        print("Examples:")
+        print("  python penetration_analyser.py http://localhost:5000")
+        print("  python penetration_analyser.py http://localhost:5000 --deep --exploit")
+        print("  python penetration_analyser.py http://localhost:5000 --output pentest_report.pdf")
+        print(
+            "  python penetration_analyser.py http://localhost:5000 --deep --exploit --pdf")
+
+    if '--help' in sys.argv or '-h' in sys.argv:
+        print_usage()
+    elif len(sys.argv) > 1:
         target = sys.argv[1]
         tester = PenetrationTester()
 
@@ -1985,17 +2023,4 @@ if __name__ == "__main__":
             if finding.exploitation_proof:
                 print(f"  Exploitation: {finding.exploitation_proof}")
     else:
-        print("Usage: python penetration_analyser.py <target_url> [options]")
-        print("Options:")
-        print("  --deep          Thorough testing (takes longer)")
-        print("  --exploit       Attempt exploitation for proof-of-concept")
-        print("  --pdf           Generate PDF report (auto-named)")
-        print("  --output FILE   Save report to specific file (format detected from extension)")
-        print("  -o FILE         Short form of --output")
-        print("")
-        print("Examples:")
-        print("  python penetration_analyser.py http://localhost:5000")
-        print("  python penetration_analyser.py http://localhost:5000 --deep --exploit")
-        print("  python penetration_analyser.py http://localhost:5000 --output pentest_report.pdf")
-        print(
-            "  python penetration_analyser.py http://localhost:5000 --deep --exploit --pdf")
+        print_usage()

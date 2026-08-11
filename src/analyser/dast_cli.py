@@ -141,6 +141,9 @@ class DASTCLI:
             # Display results
             self._display_report(report, args.educational, args.verbose)
 
+            if self._target_unreachable(report):
+                sys.exit(2)
+
         except Exception as e:
             print(f"❌ Dynamic analysis failed: {str(e)}")
             if args.verbose:
@@ -204,6 +207,12 @@ class DASTCLI:
             if args.verbose:
                 import traceback
                 traceback.print_exc()
+
+    @staticmethod
+    def _target_unreachable(report: DynamicAnalysisReport) -> bool:
+        """True when every request failed, so nothing was actually scanned."""
+        return (report.total_requests > 0
+                and report.successful_responses == 0)
 
     def _display_report(self, report: DynamicAnalysisReport, educational: bool, verbose: bool) -> None:
         """Display analysis results in a user-friendly format"""
@@ -304,11 +313,23 @@ class DASTCLI:
                                 print(
                                     f"   Response Time: {finding.response_time:.3f}s")
         else:
-            print(f"\n✅ No security issues found during dynamic analysis!")
-            print("This is good news, but remember:")
-            print("• Dynamic analysis only finds issues in tested paths")
-            print("• Combine with static analysis for comprehensive coverage")
-            print("• Consider manual testing for complex business logic")
+            if self._target_unreachable(report):
+                print(f"\n❌ Target unreachable - no security testing was "
+                      f"performed on {report.target_url}")
+                print("⚠️  This is NOT a clean result. Every request failed, "
+                      "so nothing was scanned.")
+                print("Cheque that:")
+                print("• The application is running "
+                      "(cd docker && docker-compose up -d)")
+                print("• The URL and port are correct")
+                print("• You can reach it manually "
+                      f"(curl -I {report.target_url})")
+            else:
+                print(f"\n✅ No security issues found during dynamic analysis!")
+                print("This is good news, but remember:")
+                print("• Dynamic analysis only finds issues in tested paths")
+                print("• Combine with static analysis for comprehensive coverage")
+                print("• Consider manual testing for complex business logic")
 
     def _get_severity_emoji(self, severity: str) -> str:
         """Get emoji for severity level"""

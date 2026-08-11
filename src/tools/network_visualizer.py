@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Docker Network Visualization Tool for Secure Architecture Sandbox Testing Environment
+Docker Network Visualisation Tool for Secure Architecture Sandbox Testing Environment
 
-This script generates a detailed network topology visualization of the Docker sandbox
+This script generates a detailed network topology visualisation of the Docker sandbox
 environment, showing container isol    dot_lines = [
         'digraph "Docker Network Topology" {',
         '    rankdir=TB;',
@@ -213,7 +213,7 @@ def analyse_sandbox_isolation(docker_info):
 
 
 def create_enhanced_network_graph(docker_info, analysis, output_path, include_ssh=False):
-    """Create an enhanced network visualization with security details."""
+    """Create an enhanced network visualisation with security details."""
     try:
         # Create a temporary DOT file for custom graph generation
         with tempfile.NamedTemporaryFile(mode='w', suffix='.dot',
@@ -227,7 +227,7 @@ def create_enhanced_network_graph(docker_info, analysis, output_path, include_ss
         try:
             subprocess.check_call(['dot', '-Tpng', dot_file, '-o',
                                    output_path])
-            print(f"✓ Network visualization saved to: {output_path}")
+            print(f"✓ Network visualisation saved to: {output_path}")
         except subprocess.CalledProcessError as e:
             print(f"Error generating PNG with graphviz: {e}")
             return False
@@ -609,8 +609,8 @@ def generate_detailed_report(analysis, output_dir):
 
 
 def main():
-    """Main function to generate network visualization."""
-    print("🔍 Docker Network Visualization Tool")
+    """Main function to generate network visualisation."""
+    print("🔍 Docker Network Visualisation Tool")
     print("=" * 40)
 
     # Ensure dependencies are installed
@@ -637,24 +637,24 @@ def main():
     # Generate network visualizations (both versions)
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
-    print("🎨 Generating network visualization...")
+    print("🎨 Generating network visualisation...")
 
     # First version without SSH
     output_path = os.path.join(
         output_dir, f'docker_network_topology_{timestamp}.png')
     if create_enhanced_network_graph(docker_info, analysis, output_path):
-        print(f"✓ Network visualization saved to: {output_path}")
+        print(f"✓ Network visualisation saved to: {output_path}")
     else:
-        print("❌ Failed to generate network visualization")
+        print("❌ Failed to generate network visualisation")
         return 1
 
     # Second version with SSH
     output_path_ssh = os.path.join(
         output_dir, f'docker_network_topology_with_ssh_{timestamp}.png')
     if create_enhanced_network_graph(docker_info, analysis, output_path_ssh, include_ssh=True):
-        print(f"✓ Network visualization with SSH saved to: {output_path_ssh}")
+        print(f"✓ Network visualisation with SSH saved to: {output_path_ssh}")
     else:
-        print("❌ Failed to generate SSH network visualization")
+        print("❌ Failed to generate SSH network visualisation")
         return 1
 
     # Generate detailed report

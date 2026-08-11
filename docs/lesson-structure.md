@@ -29,11 +29,11 @@ assessment
    immediate feedback
 4. **DAST Fourth**: Adds runtime testing to complement static analysis
    understanding
-5. **Penetration Testing Fifth**: Integrates all previous skills into
+5. **Network Traffic Analysis Fifth**: Adds comprehensive network security
+   monitoring and threat detection
+6. **Penetration Testing Sixth**: Integrates all previous skills into
    professional methodology
-6. **Network Analysis Sixth**: Adds comprehensive network security monitoring
-   and threat detection
-7. **Organizational Vulnerability Assessment Last**: Develops strategic security
+7. **Organisational Vulnerability Assessment Last**: Develops strategic security
    thinking and business alignment
 
 This progression ensures students build foundational security thinking before
@@ -73,7 +73,7 @@ thinking skills that complement automated testing.
   vulnerabilities
 - ✅ Recognise common security anti-patterns through manual source code
   inspection
-- ✅ Evaluate authentication, authorization, and input validation
+- ✅ Evaluate authentication, authorisation, and input validation
   implementations
 - ✅ Document security findings with clear explanations and remediation
   recommendations
@@ -97,72 +97,6 @@ thinking skills that complement automated testing.
 - Systematic analysis methodology
 - Vulnerability pattern recognition
 - Professional documentation skills
-
----
-
-## 📖 Lesson 2: Sandbox Security Analysis
-
-**Foundation Building - Understanding Malicious Behaviour**
-
-### 📍 Overview
-
-Students learn to safely analyse suspicious applications in controlled
-environments, developing fundamental threat detection and behavioural analysis
-skills.
-
-### ⏱️ Duration: 3-4 hours
-
-### 📋 Materials
-
-- **Main Exercise**:
-  [`exercises/2.sandbox-security-analysis-exercise.md`](exercises/2.sandbox-security-analysis-exercise.md)
-- **Instructor Guide**:
-  [`instructor-guides/2.sandbox-instructor-guide.md`](instructor-guides/2.sandbox-instructor-guide.md)
-- **Student Worksheet**:
-  [`student-worksheets/2.sandbox-student-worksheet.md`](student-worksheets/2.sandbox-student-worksheet.md)
-- **Quick Reference**:
-  [`quick-reference-guides/2.sandbox-quick-reference.md`](quick-reference-guides/2.sandbox-quick-reference.md)
-
-### 🎯 Key Learning Outcomes
-
-- ✅ Understand what sandbox analysis is and why it's critical for cybersecurity
-- ✅ **Master containerization concepts and why isolation is essential for
-  security testing**
-- ✅ **Learn how Docker containers create safe, controlled environments for
-  malware analysis**
-- ✅ **Experience professional security testing architecture with
-  multi-container environments**
-- ✅ Safely execute and monitor suspicious applications using system call
-  tracing
-- ✅ Identify behavioural indicators of malicious software (malware, backdoors,
-  miners)
-- ✅ Use network monitoring and resource analysis to detect threats
-- ✅ **Understand how container isolation mirrors real-world security testing
-  environments**
-- ✅ Document security findings and behavioural patterns professionally
-
-### 🧪 Sample Applications Used
-
-- **Suspicious Script**:
-  [`samples/suspicious-scripts/suspicious_script.py`](../samples/suspicious-scripts/suspicious_script.py)
-- **Backdoor Web App**:
-  [`samples/backdoor-apps/backdoor_app.py`](../samples/backdoor-apps/backdoor_app.py)
-- **Crypto Miner**:
-  [`samples/resource-abuse/crypto_miner.py`](../samples/resource-abuse/crypto_miner.py)
-
-### 🔧 Primary Tools
-
-- System call monitoring and process analysis
-- Network connection monitoring
-- Resource usage analysis
-- Behavioural pattern recognition
-
-### 📊 Assessment Focus
-
-- Threat detection accuracy
-- Behavioural analysis skills
-- Professional documentation
-- Safety protocol adherence
 
 ---
 
@@ -339,7 +273,71 @@ complementing their static analysis skills with runtime testing techniques.
 
 ---
 
-## 📖 Lesson 5: Penetration Testing Methodology
+## 📖 Lesson 5: Network Traffic Analysis
+
+**Network Security Monitoring and Threat Detection**
+
+### 📍 Overview
+
+Students learn to monitor network traffic, identify suspicious communication
+patterns, and detect network-based threats to complement application-level
+security analysis.
+
+### ⏱️ Duration: 3-4 hours
+
+### 📋 Materials
+
+- **Main Exercise**:
+  [`exercises/5.network-traffic-analysis-exercise.md`](exercises/5.network-traffic-analysis-exercise.md)
+- **Instructor Guide**:
+  [`instructor-guides/5.network-instructor-guide.md`](instructor-guides/5.network-instructor-guide.md)
+- **Student Worksheet**:
+  [`student-worksheets/5.network-student-worksheet.md`](student-worksheets/5.network-student-worksheet.md)
+- **Quick Reference**:
+  [`quick-reference-guides/5.network-quick-reference.md`](quick-reference-guides/5.network-quick-reference.md)
+
+### 🎯 Key Learning Outcomes
+
+- ✅ Understand what network traffic analysis is and how it complements
+  SAST/DAST
+- ✅ Monitor network connections and identify suspicious communication patterns
+- ✅ Perform service discovery and DNS traffic analysis using network scanning
+  tools
+- ✅ Distinguish between normal and malicious network behaviour patterns
+- ✅ Use real-time network monitoring tools for threat detection and incident
+  response
+- ✅ Break down an HTTPS request into DNS/TCP/TLS/transfer phases and
+  visualise the full HTTP stream using `dig`, `curl -w`, and `curl -v`
+
+### 🧪 Network Scenarios
+
+- **Basic Network Activity**:
+  [`samples/network-scenarios/basic_network_activity.py`](../samples/network-scenarios/basic_network_activity.py)
+- **Suspicious Traffic**:
+  [`samples/network-scenarios/suspicious_traffic_generator.py`](../samples/network-scenarios/suspicious_traffic_generator.py)
+- **Backdoor Communication**:
+  [`samples/network-scenarios/backdoor_simulation.py`](../samples/network-scenarios/backdoor_simulation.py)
+- **DNS Threats**:
+  [`samples/network-scenarios/dns_threat_scenarios.py`](../samples/network-scenarios/dns_threat_scenarios.py)
+
+### 🔧 Primary Tools
+
+- **Network Connection Monitoring**: Real-time connection tracking
+- **Nmap**: Network scanning and service discovery
+- **DNS Analysis**: DNS query monitoring and threat detection
+- **CLI Interface**:
+  [`src/analyser/network_cli.py`](../src/analyser/network_cli.py)
+
+### 📊 Assessment Focus
+
+- Network monitoring proficiency
+- Pattern recognition skills
+- Threat detection accuracy
+- Network security understanding
+
+---
+
+## 📖 Lesson 6: Penetration Testing Methodology
 
 **Advanced Integration Exercise**
 
@@ -400,75 +398,13 @@ ethical considerations.
 
 ---
 
-## 📖 Lesson 6: Network Traffic Analysis
-
-**Network Security Monitoring and Threat Detection**
-
-### 📍 Overview
-
-Students learn to monitor network traffic, identify suspicious communication
-patterns, and detect network-based threats to complement application-level
-security analysis.
-
-### ⏱️ Duration: 3-4 hours
-
-### 📋 Materials
-
-- **Main Exercise**:
-  [`exercises/5.network-traffic-analysis-exercise.md`](exercises/5.network-traffic-analysis-exercise.md)
-- **Instructor Guide**:
-  [`instructor-guides/5.network-instructor-guide.md`](instructor-guides/5.network-instructor-guide.md)
-- **Student Worksheet**:
-  [`student-worksheets/5.network-student-worksheet.md`](student-worksheets/5.network-student-worksheet.md)
-- **Quick Reference**:
-  [`quick-reference-guides/5.network-quick-reference.md`](quick-reference-guides/5.network-quick-reference.md)
-
-### 🎯 Key Learning Outcomes
-
-- ✅ Understand what network traffic analysis is and how it complements
-  SAST/DAST
-- ✅ Monitor network connections and identify suspicious communication patterns
-- ✅ Perform service discovery and DNS traffic analysis using network scanning
-  tools
-- ✅ Distinguish between normal and malicious network behaviour patterns
-- ✅ Use real-time network monitoring tools for threat detection and incident
-  response
-
-### 🧪 Network Scenarios
-
-- **Basic Network Activity**:
-  [`samples/network-scenarios/basic_network_activity.py`](../samples/network-scenarios/basic_network_activity.py)
-- **Suspicious Traffic**:
-  [`samples/network-scenarios/suspicious_traffic_generator.py`](../samples/network-scenarios/suspicious_traffic_generator.py)
-- **Backdoor Communication**:
-  [`samples/network-scenarios/backdoor_simulation.py`](../samples/network-scenarios/backdoor_simulation.py)
-- **DNS Threats**:
-  [`samples/network-scenarios/dns_threat_scenarios.py`](../samples/network-scenarios/dns_threat_scenarios.py)
-
-### 🔧 Primary Tools
-
-- **Network Connection Monitoring**: Real-time connection tracking
-- **Nmap**: Network scanning and service discovery
-- **DNS Analysis**: DNS query monitoring and threat detection
-- **CLI Interface**:
-  [`src/analyser/network_cli.py`](../src/analyser/network_cli.py)
-
-### 📊 Assessment Focus
-
-- Network monitoring proficiency
-- Pattern recognition skills
-- Threat detection accuracy
-- Network security understanding
-
----
-
-## 📖 Lesson 7: Organizational Vulnerability Assessment
+## 📖 Lesson 7: Organisational Vulnerability Assessment
 
 **Strategic Security Analysis and Business Alignment**
 
 ### 📍 Overview
 
-**CAPSTONE EXERCISE** - Students evaluate organizational security posture beyond
+**CAPSTONE EXERCISE** - Students evaluate organisational security posture beyond
 technical vulnerabilities, focusing on people, processes, technology practices,
 and strategic factors that contribute to sustainable security.
 
@@ -477,27 +413,27 @@ and strategic factors that contribute to sustainable security.
 ### ⚠️ Prerequisites
 
 **REQUIRED**: Completion of previous exercises to provide technical findings for
-organizational analysis
+organisational analysis
 
 ### 📋 Materials
 
 - **Main Exercise**:
-  [`exercises/7.organizational-vulnerability-assessment-exercise.md`](exercises/7.organizational-vulnerability-assessment-exercise.md)
+  [`exercises/7.organisational-vulnerability-assessment-exercise.md`](exercises/7.organisational-vulnerability-assessment-exercise.md)
 - **Instructor Guide**:
-  [`instructor-guides/7.organizational-vulnerability-assessment-instructor-guide.md`](instructor-guides/7.organizational-vulnerability-assessment-instructor-guide.md)
+  [`instructor-guides/7.organisational-vulnerability-assessment-instructor-guide.md`](instructor-guides/7.organisational-vulnerability-assessment-instructor-guide.md)
 - **Student Worksheet**:
-  [`student-worksheets/7.organizational-vulnerability-assessment-student-worksheet.md`](student-worksheets/7.organizational-vulnerability-assessment-student-worksheet.md)
+  [`student-worksheets/7.organisational-vulnerability-assessment-student-worksheet.md`](student-worksheets/7.organisational-vulnerability-assessment-student-worksheet.md)
 - **Quick Reference**:
-  [`quick-reference-guides/7.organizational-vulnerability-assessment-quick-reference.md`](quick-reference-guides/7.organizational-vulnerability-assessment-quick-reference.md)
+  [`quick-reference-guides/7.organisational-vulnerability-assessment-quick-reference.md`](quick-reference-guides/7.organisational-vulnerability-assessment-quick-reference.md)
 
 ### 🎯 Key Learning Outcomes
 
-- ✅ Understand what organizational vulnerability assessment encompasses beyond
+- ✅ Understand what organisational vulnerability assessment encompasses beyond
   technical testing
 - ✅ Evaluate technology stack security posture and architectural decisions
-- ✅ Assess security policies, procedures, and organizational practices
+- ✅ Assess security policies, procedures, and organisational practices
 - ✅ Analyse development lifecycle security integration and security culture
-- ✅ Document comprehensive security recommendations for organizational
+- ✅ Document comprehensive security recommendations for organisational
   improvement
 - ✅ Understand the business impact and strategic importance of security
   assessment
@@ -507,15 +443,15 @@ organizational analysis
 - **Case Study**: Comprehensive analysis of the Unsecure PWA organisation using
   all previous technical findings
 - **Root Cause Analysis**: Connecting technical vulnerabilities to
-  organizational factors
+  organisational factors
 - **Strategic Planning**: Developing business-aligned security improvement
   roadmaps
 
 ### 🔧 Assessment Methodology
 
-- **Evidence-Based Analysis**: Inferring organizational gaps from technical
+- **Evidence-Based Analysis**: Inferring organisational gaps from technical
   findings
-- **Maturity Assessment**: Evaluating organizational security maturity levels
+- **Maturity Assessment**: Evaluating organisational security maturity levels
 - **Gap Analysis**: Identifying specific improvement opportunities
 - **Business Communication**: Developing stakeholder-appropriate recommendations
 
@@ -526,13 +462,13 @@ organizational analysis
 - **Sustainable Security**: Addressing root causes rather than symptoms
 - **Executive Communication**: Developing business justification for security
   investments
-- **Organizational Culture**: Understanding how culture affects security
+- **Organisational Culture**: Understanding how culture affects security
   outcomes
 
 ### 📊 Assessment Focus
 
 - **Strategic Thinking**: Integration of technical findings with business impact
-- **Root Cause Analysis**: Understanding organizational factors contributing to
+- **Root Cause Analysis**: Understanding organisational factors contributing to
   vulnerabilities
 - **Business Communication**: Professional stakeholder communication skills
 - **Sustainable Planning**: Realistic improvement roadmap development
@@ -554,7 +490,7 @@ Each lesson requires:
 ### Overall Course Requirements
 
 - [ ] **All 7 Lessons Completed**: Manual Code Review → Sandbox → SAST → DAST →
-      Penetration Testing → Network Analysis → Organizational Assessment
+      Network Analysis → Penetration Testing → Organisational Assessment
 - [ ] **Integrated Final Report**: Comprehensive security assessment combining
       all methodologies
 - [ ] **Ethical Compliance Demonstration**: Understanding of responsible
@@ -678,7 +614,7 @@ Each lesson requires:
 
 ### Programme Success Metrics
 
-- **Completion Rate**: Percentage of students successfully completing all 5
+- **Completion Rate**: Percentage of students successfully completing all 7
   lessons
 - **Knowledge Retention**: Post-course assessment scores and practical
   application

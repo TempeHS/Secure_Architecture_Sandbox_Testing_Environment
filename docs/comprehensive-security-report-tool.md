@@ -125,7 +125,7 @@ The tool generates two main output files:
 
 ⚠️ **Important**: Only test applications you own or have explicit permission to test.
 
-- **Penetration Testing**: Requires explicit authorization and `--include-pentest` flag
+- **Penetration Testing**: Requires explicit authorisation and `--include-pentest` flag
 - **Network Analysis**: May require appropriate network permissions
 - **Demo Mode**: Safe for educational testing with included vulnerable applications
 

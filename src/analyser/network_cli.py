@@ -423,6 +423,13 @@ Output Options:
         print(f"Services Discovered: {len(services)}")
         print(f"Security Score: {analysis.get('security_score', 0)}/100")
 
+        if not services:
+            print("\n⚠️  No services were reachable on this target.")
+            print("A high score here does NOT mean the target is secure - it "
+                  "means nothing answered.")
+            print(f"Cheque the target is running and the hostname/IP is "
+                  f"correct.")
+
         if services:
             print(f"\n🔍 DISCOVERED SERVICES ({len(services)})")
             print("-" * 40)

@@ -34,7 +34,7 @@ static analysis training using Python security tools.
 
 ### 🟠 Medium Severity Issues
 
-8. **Missing Authorization** - Unprotected admin endpoints
+8. **Missing Authorisation** - Unprotected admin endpoints
 9. **Information Disclosure** - Debug and API endpoints
 10. **Insecure Direct Object References** - User profile access
 
@@ -154,7 +154,7 @@ Students will learn to:
 - `GET /read_file` - Path traversal vulnerability
 - `POST /set_session` - Insecure deserialization
 - `GET /get_session` - Pickle unpickling
-- `GET /admin` - Missing authorization
+- `GET /admin` - Missing authorisation
 - `GET /api/users` - Information disclosure
 - `GET /profile/<id>` - Insecure direct object reference
 - `GET /debug` - Debug information disclosure

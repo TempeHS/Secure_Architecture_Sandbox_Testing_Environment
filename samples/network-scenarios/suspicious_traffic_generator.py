@@ -143,15 +143,15 @@ class SuspiciousTrafficGenerator:
         print(f"🚨 Completed {connection_count} backdoor connection attempts")
 
     def simulate_dns_tunneling(self, duration=60):
-        """Simulate DNS tunneling patterns for data exfiltration."""
-        print(f"\n🕳️  Simulating DNS tunneling for {duration} seconds...")
+        """Simulate DNS tunnelling patterns for data exfiltration."""
+        print(f"\n🕳️  Simulating DNS tunnelling for {duration} seconds...")
 
         start_time = time.time()
         query_count = 0
 
         while time.time() - start_time < duration and self.running:
             # Generate suspicious DNS query patterns
-            # Long subdomains typical of DNS tunneling
+            # Long subdomains typical of DNS tunnelling
             random_data = ''.join(random.choices('abcdef0123456789', k=32))
             suspicious_domain = f"{random_data}.suspicious-domain.com"
 
@@ -324,7 +324,7 @@ class SuspiciousTrafficGenerator:
             'educational_objectives': [
                 'Identify port scanning patterns',
                 'Recognise backdoor communication attempts',
-                'Detect DNS tunneling indicators',
+                'Detect DNS tunnelling indicators',
                 'Spot rapid/automated connection patterns',
                 'Understand risk levels of different activities'
             ],
@@ -362,7 +362,7 @@ def main():
     print("\n🚨 This scenario will generate:")
     print("  • Port scanning patterns")
     print("  • Backdoor connection attempts")
-    print("  • DNS tunneling simulation")
+    print("  • DNS tunnelling simulation")
     print("  • Rapid connection patterns")
     print("  • Unusual port activity")
     print()
@@ -405,7 +405,7 @@ def main():
         print("\n💡 Key Learning Points:")
         print("  • Port scanning creates distinctive connection patterns")
         print("  • Backdoor ports are immediate red flags")
-        print("  • DNS tunneling uses unusual domain structures")
+        print("  • DNS tunnelling uses unusual domain structures")
         print("  • Automated attacks show rapid, repetitive patterns")
         print("  • Context and frequency matter in threat detection")
 

@@ -34,8 +34,9 @@ management standards.
 - **Main branch**: Stable, production-ready code
 - **Feature branches**: Use descriptive names (feature/new-exercise)
 - **Release branches**: For major version releases
-- **Hotfix branches**: For critical security fixest Structure & Folder
-  Organisation
+- **Hotfix branches**: For critical security fixes
+
+## Project Structure & Folder Organisation
 
 ### Root Directory Structure
 
@@ -50,7 +51,7 @@ Secure_Architecture_Sandbox_Testing_Environment/
 ├── samples/                   # Sample vulnerable applications and scenarios
 ├── src/                       # Source code for analysis tools
 ├── README.md                  # Main project documentation
-├── copilot-instructions.md    # AI assistant configuration
+├── WELCOME.md                  # Getting started instructions
 ├── demo_tools.sh             # Quick demo script
 └── requirements.txt          # Python dependencies
 ```
@@ -99,7 +100,7 @@ Secure_Architecture_Sandbox_Testing_Environment/
 
 - **Purpose**: Docker container configuration and orchestration
 - **Contents**:
-  - `Dockerfile` - Main sandbox container definition
+  - `Dockerfile.minimal` - Main sandbox container definition
   - `docker-compose.yml` - Service orchestration
   - `nginx.conf` - Web server configuration for vulnerable apps
   - `install-tools.sh` - On-demand runtime tool installer bundled into
@@ -316,7 +317,7 @@ All exercise files should follow this structure:
 - **Type hints**: Use where beneficial for clarity
 - **Error handling**: Comprehensive exception handling with educational messages
 - **Comments**: Explain security concepts and educational points
-- **Educational focus**: Prioritise clarity over performance optimization
+- **Educational focus**: Prioritise clarity over performance optimisation
 
 Example:
 
@@ -420,7 +421,7 @@ environment:
   - FLASK_DEBUG=1
 ```
 
-### Codespaces Optimization
+### Codespaces Optimisation
 
 #### Performance Considerations
 
@@ -473,7 +474,7 @@ security(samples): fix overly permissive vulnerable app configuration
 - **Container isolation**: Maintain proper container security boundaries
 - **Regular updates**: Keep security tools and dependencies current
 
-## � Internal Development Tools
+## 🛠️ Internal Development Tools
 
 ### Worksheet Conversion Utilities
 
@@ -515,7 +516,7 @@ maintenance tasks:
 **Note**: These tools are for maintainer use only. Students and instructors
 should use the pre-converted DOCX files provided in the repository.
 
-## �🔄 Maintenance Tasks
+## 🔄 Maintenance Tasks
 
 ### Regular Updates (Monthly)
 
@@ -553,7 +554,7 @@ should use the pre-converted DOCX files provided in the repository.
 - [ ] **Test shell command execution patterns in containers**
 - [ ] **Verify educational mode security explanations are current**
 
-## � Common Maintenance Issues & Solutions
+## 🔄 Common Maintenance Issues & Solutions
 
 ### Import Dependencies
 

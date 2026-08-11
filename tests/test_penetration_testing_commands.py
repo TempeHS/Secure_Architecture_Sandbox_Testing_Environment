@@ -512,6 +512,7 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         ]
 
         successful_tests = 0
+        failed_payloads = []
 
         for payload in test_payloads:
             try:
@@ -527,11 +528,21 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                     logger.info(
                         f"SQL payload test completed: " f"{response.status_code}"
                     )
-            except requests.exceptions.RequestException:
-                logger.info(
-                    "SQL injection test connection failed " "(acceptable)")
+            except requests.exceptions.RequestException as e:
+                failed_payloads.append((payload, str(e)))
 
-        # At least the requests should complete without errors
+        self.assertEqual(
+            failed_payloads,
+            [],
+            f"Target did not respond to SQL injection payloads: "
+            f"{failed_payloads}",
+        )
+        self.assertEqual(
+            successful_tests,
+            len(test_payloads),
+            "Not every SQL injection payload received an HTTP response",
+        )
+
         logger.info(
             f"✅ SQL injection methodology tested "
             f"({successful_tests}/{len(test_payloads)} payloads)"
@@ -548,16 +559,30 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             "javascript:alert('XSS')",
         ]
 
+        statuses = {}
+        failed_payloads = []
+
         for payload in test_payloads:
             try:
                 response = requests.get(
                     f"{self.pwa_url}/search", params={"q": payload}, timeout=10
                 )
-                # We're testing that requests complete
+                statuses[payload] = response.status_code
                 logger.info(
                     f"XSS payload test completed: " f"{response.status_code}")
-            except requests.exceptions.RequestException:
-                logger.info("XSS test connection failed (acceptable)")
+            except requests.exceptions.RequestException as e:
+                failed_payloads.append((payload, str(e)))
+
+        self.assertEqual(
+            failed_payloads,
+            [],
+            f"Target did not respond to XSS payloads: {failed_payloads}",
+        )
+        self.assertEqual(
+            len(statuses),
+            len(test_payloads),
+            "Not every XSS payload received an HTTP response",
+        )
 
         logger.info("✅ XSS testing methodology completed")
 
@@ -568,13 +593,30 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         # Test common configuration endpoints
         config_endpoints = ["/debug", "/config", "/admin", "/status", "/info"]
 
+        statuses = {}
+        unreachable = []
+
         for endpoint in config_endpoints:
             try:
                 response = requests.get(
                     f"{self.pwa_url}{endpoint}", timeout=10)
+                statuses[endpoint] = response.status_code
                 logger.info(f"Config test {endpoint}: {response.status_code}")
-            except requests.exceptions.RequestException:
-                logger.info(f"Config test {endpoint}: Connection failed")
+            except requests.exceptions.RequestException as e:
+                unreachable.append((endpoint, str(e)))
+
+        self.assertEqual(
+            unreachable,
+            [],
+            f"Target did not respond on configuration endpoints: "
+            f"{unreachable}",
+        )
+        # Every probe must produce a real HTTP status (404 is a valid result;
+        # a missing/garbled response is not).
+        self.assertTrue(
+            all(100 <= status < 600 for status in statuses.values()),
+            f"Configuration probes returned invalid HTTP statuses: {statuses}",
+        )
 
         logger.info("✅ Configuration testing methodology completed")
 
@@ -686,6 +728,12 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         logger.info("Testing automated penetration testing tool...")
 
         # Test if the penetration analyser tool exists and can be called
+        analyser = self.project_root / "src/analyser/penetration_analyser.py"
+        self.assertTrue(
+            analyser.exists(),
+            f"Documented penetration analyser tool is missing: {analyser}",
+        )
+
         try:
             # Test help functionality
             result = subprocess.run(
@@ -700,25 +748,22 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 timeout=30
             )
 
-            if result.returncode == 0:
-                logger.info(
-                    "✅ Automated penetration testing tool help available"
-                )
-            else:
-                logger.warning(
-                    "⚠️ Penetration analyser help not available - "
-                    "tool may not exist yet"
-                )
+            self.assertEqual(
+                result.returncode,
+                0,
+                f"Penetration analyser --help failed: {result.stderr}",
+            )
+            self.assertIn(
+                "usage",
+                result.stdout.lower(),
+                "Penetration analyser --help did not print usage information",
+            )
+            logger.info(
+                "✅ Automated penetration testing tool help available"
+            )
 
-        except FileNotFoundError:
-            logger.warning(
-                "⚠️ Penetration analyser tool not found - "
-                "may not be implemented yet"
-            )
         except subprocess.TimeoutExpired:
-            logger.warning(
-                "⚠️ Penetration analyser tool help command timed out"
-            )
+            self.fail("Penetration analyser tool help command timed out")
 
         # Test penetration testing against localhost applications
         for port in [5000, 9090]:
@@ -735,33 +780,25 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                     timeout=self.timeout
                 )
 
-                if result.returncode == 0:
-                    logger.info(
-                        f"✅ Automated penetration testing completed "
-                        f"for port {port}"
-                    )
-                    # Check for key indicators in output
-                    output = result.stdout + result.stderr
-                    if ("penetration" in output.lower() or
-                            "vulnerability" in output.lower()):
-                        logger.info(
-                            f"✅ Penetration testing output contains expected "
-                            f"content for port {port}"
-                        )
-                else:
-                    logger.warning(
-                        f"⚠️ Penetration testing tool returned non-zero "
-                        f"exit code for port {port}"
-                    )
+                self.assertEqual(
+                    result.returncode,
+                    0,
+                    f"Penetration testing failed for port {port}: "
+                    f"{result.stderr}",
+                )
+                output = (result.stdout + result.stderr).lower()
+                self.assertTrue(
+                    "penetration" in output or "vulnerability" in output,
+                    f"Penetration testing output for port {port} is missing "
+                    f"expected findings content",
+                )
+                logger.info(
+                    f"✅ Automated penetration testing completed "
+                    f"for port {port}"
+                )
 
-            except FileNotFoundError:
-                logger.warning(
-                    f"⚠️ Penetration analyser tool not found for port {port}"
-                )
             except subprocess.TimeoutExpired:
-                logger.warning(
-                    f"⚠️ Penetration testing timed out for port {port}"
-                )
+                self.fail(f"Penetration testing timed out for port {port}")
 
         logger.info(
             "✅ Automated penetration testing tool validation completed"
@@ -772,26 +809,28 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         logger.info("Testing SAST advanced options...")
 
         advanced_commands = [
-            # Test dependency checking
+            # Dependency vulnerability scanning is safety's job
             (
                 [
                     "python",
                     "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
-                    "--check-dependencies"
+                    "--tools",
+                    "safety"
                 ],
                 "dependency check"
             ),
-            # Test severity filtering
+            # Test multiple specific tools
             (
                 [
                     "python",
                     "src/analyser/analyse_cli.py",
                     "samples/unsecure-pwa",
-                    "--severity",
-                    "high,critical"
+                    "--tools",
+                    "bandit",
+                    "semgrep"
                 ],
-                "severity filtering"
+                "multiple tool selection"
             ),
             # Test verbose output
             (
@@ -826,64 +865,60 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             )
         ]
 
-        successful_commands = 0
-
-        for command, description in advanced_commands:
-            try:
-                result = subprocess.run(
-                    command,
-                    cwd=self.project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=self.timeout
-                )
-
-                if result.returncode == 0:
-                    logger.info(f"✅ SAST {description} completed successfully")
-                    successful_commands += 1
-                else:
-                    logger.warning(
-                        f"⚠️ SAST {description} returned non-zero exit code"
-                    )
-
-            except subprocess.TimeoutExpired:
-                logger.warning(f"⚠️ SAST {description} command timed out")
-            except Exception as e:
-                logger.warning(f"⚠️ SAST {description} failed: {e}")
-
-        # Require at least 3 out of 5 advanced SAST commands to succeed
-        self.assertGreaterEqual(
-            successful_commands,
-            3,
-            f"SAST advanced options failed: only {successful_commands}/5 commands succeeded"
-        )
+        self._assert_all_commands_succeed(advanced_commands, "SAST")
 
         logger.info("✅ SAST advanced options testing completed")
+
+    def _assert_all_commands_succeed(self, commands, label):
+        """Run each documented command and require it to exit cleanly."""
+        for command, description in commands:
+            with self.subTest(command=description):
+                try:
+                    result = subprocess.run(
+                        command,
+                        cwd=self.project_root,
+                        capture_output=True,
+                        text=True,
+                        timeout=self.timeout
+                    )
+                except subprocess.TimeoutExpired:
+                    self.fail(
+                        f"{label} {description} timed out after "
+                        f"{self.timeout}s: {' '.join(command)}")
+
+                self.assertEqual(
+                    result.returncode,
+                    0,
+                    f"{label} {description} failed "
+                    f"(exit {result.returncode}): {' '.join(command)}\n"
+                    f"{result.stderr[-500:]}",
+                )
+                logger.info(f"✅ {label} {description} completed successfully")
 
     def test_17_dast_specific_vulnerability_testing(self):
         """Test DAST commands with specific vulnerability testing options."""
         logger.info("Testing DAST specific vulnerability testing...")
 
         specific_vuln_commands = [
-            # Test XSS and SQL injection testing
+            # Built-in checks cover XSS/SQLi probing
             (
                 [
                     "python",
                     "src/analyser/dast_cli.py",
                     self.pwa_url,
-                    "--test-xss",
-                    "--test-sqli",
+                    "--tools",
+                    "basic_tests",
                     "--educational"
                 ],
                 "XSS and SQL injection testing"
             ),
-            # Test security headers analysis
+            # Security headers are part of the basic scan
             (
                 [
                     "python",
                     "src/analyser/dast_cli.py",
                     self.pwa_url,
-                    "--check-headers",
+                    "--quick",
                     "--educational"
                 ],
                 "security headers analysis"
@@ -898,12 +933,12 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                 ],
                 "demo apps testing"
             ),
-            # Test multiple URLs
+            # Test the secondary application
             (
                 [
                     "python",
                     "src/analyser/dast_cli.py",
-                    "http://localhost:8080",
+                    self.flask_url,
                     "--quick",
                     "--educational"
                 ],
@@ -911,55 +946,66 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             )
         ]
 
-        successful_commands = 0
-
-        for command, description in specific_vuln_commands:
-            try:
-                result = subprocess.run(
-                    command,
-                    cwd=self.project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=self.timeout
-                )
-
-                if result.returncode == 0:
-                    logger.info(f"✅ DAST {description} completed successfully")
-                    successful_commands += 1
-                else:
-                    logger.warning(
-                        f"⚠️ DAST {description} returned non-zero exit code")
-
-            except subprocess.TimeoutExpired:
-                logger.warning(f"⚠️ DAST {description} command timed out")
-            except Exception as e:
-                logger.warning(f"⚠️ DAST {description} failed: {e}")
-
-        # Require at least 2 out of 4 specific DAST commands to succeed
-        self.assertGreaterEqual(
-            successful_commands,
-            2,
-            f"DAST specific vulnerability testing failed: only {successful_commands}/4 commands succeeded"
-        )
+        self._assert_all_commands_succeed(specific_vuln_commands, "DAST")
 
         logger.info("✅ DAST specific vulnerability testing completed")
+
+    def test_17b_dast_reports_unreachable_target_as_error(self):
+        """An unreachable target must never be reported as a clean scan."""
+        logger.info("Testing DAST unreachable target handling...")
+
+        dead_url = "http://localhost:8081"
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    "src/analyser/dast_cli.py",
+                    dead_url,
+                    "--quick"
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("DAST scan of unreachable target timed out")
+
+        self.assertEqual(
+            result.returncode,
+            2,
+            "DAST must exit 2 when the target was never reached, so a dead "
+            "app cannot be mistaken for a passing scan",
+        )
+        output = result.stdout.lower()
+        self.assertIn(
+            "unreachable",
+            output,
+            "DAST must tell the student the target was unreachable",
+        )
+        self.assertNotIn(
+            "no security issues found",
+            output,
+            "DAST must not report a clean bill of health for a target it "
+            "never reached",
+        )
+
+        logger.info("✅ DAST reports unreachable targets as errors")
 
     def test_18_network_analysis_advanced_options(self):
         """Test network analysis commands with advanced options from documentation."""
         logger.info("Testing network analysis advanced options...")
 
         advanced_network_commands = [
-            # Test port range scanning
+            # Service scanning (network_cli scans its own default port set)
             (
                 [
                     "python",
                     "src/analyser/network_cli.py",
                     "--scan-services",
-                    "localhost",
-                    "--ports",
-                    "21,22,23,25,53,80,443,993,995,3389,5900"
+                    "localhost"
                 ],
-                "specific port range scanning"
+                "service scanning"
             ),
             # Test extended connection monitoring
             (
@@ -999,37 +1045,8 @@ class PenetrationTestingValidationTest(unittest.TestCase):
             )
         ]
 
-        successful_commands = 0
-
-        for command, description in advanced_network_commands:
-            try:
-                result = subprocess.run(
-                    command,
-                    cwd=self.project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=self.timeout
-                )
-
-                if result.returncode == 0:
-                    logger.info(
-                        f"✅ Network {description} completed successfully")
-                    successful_commands += 1
-                else:
-                    logger.warning(
-                        f"⚠️ Network {description} returned non-zero exit code")
-
-            except subprocess.TimeoutExpired:
-                logger.warning(f"⚠️ Network {description} command timed out")
-            except Exception as e:
-                logger.warning(f"⚠️ Network {description} failed: {e}")
-
-        # Require at least 2 out of 4 advanced network commands to succeed
-        self.assertGreaterEqual(
-            successful_commands,
-            2,
-            f"Network analysis advanced options failed: only {successful_commands}/4 commands succeeded"
-        )
+        self._assert_all_commands_succeed(
+            advanced_network_commands, "Network")
 
         logger.info("✅ Network analysis advanced options testing completed")
 
@@ -1054,31 +1071,33 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         successful_tests = 0
 
         for command, description in manual_test_commands:
-            try:
-                result = subprocess.run(
-                    command.split(),
-                    cwd=self.project_root,
-                    capture_output=True,
-                    text=True,
-                    timeout=30
+            with self.subTest(command=description):
+                try:
+                    result = subprocess.run(
+                        command.split(),
+                        cwd=self.project_root,
+                        capture_output=True,
+                        text=True,
+                        timeout=30
+                    )
+                except subprocess.TimeoutExpired:
+                    self.fail(f"Manual test '{description}' timed out")
+
+                # curl exits non-zero only when it cannot reach the server;
+                # a 404 response is still a successful request.
+                self.assertEqual(
+                    result.returncode,
+                    0,
+                    f"Manual test '{description}' could not reach the target "
+                    f"(curl exit {result.returncode}): {command}",
                 )
-
-                # For manual testing, we expect some commands to fail gracefully
-                # We're mainly testing that the commands can be executed
-                logger.info(
-                    f"✅ Manual test '{description}' executed (exit code: {result.returncode})")
                 successful_tests += 1
+                logger.info(f"✅ Manual test '{description}' executed")
 
-            except subprocess.TimeoutExpired:
-                logger.warning(f"⚠️ Manual test '{description}' timed out")
-            except Exception as e:
-                logger.warning(f"⚠️ Manual test '{description}' failed: {e}")
-
-        # Most manual tests should at least execute without throwing exceptions
-        self.assertGreaterEqual(
+        self.assertEqual(
             successful_tests,
-            3,
-            f"Manual testing commands failed: only {successful_tests}/5 commands executed successfully"
+            len(manual_test_commands),
+            "Not every documented manual curl command reached its target",
         )
 
         logger.info("✅ Manual testing curl commands validation completed")
@@ -1101,8 +1120,15 @@ class PenetrationTestingValidationTest(unittest.TestCase):
         ]
 
         successful_samples = 0
+        failures = []
 
         for command, description in sample_commands:
+            script = self.project_root / command[1]
+            self.assertTrue(
+                script.exists(),
+                f"Documented sample application is missing: {script}",
+            )
+
             try:
                 # Start the process
                 process = subprocess.Popen(
@@ -1125,21 +1151,26 @@ class PenetrationTestingValidationTest(unittest.TestCase):
                     successful_samples += 1
                 except subprocess.TimeoutExpired:
                     process.kill()
-                    logger.warning(
-                        f"⚠️ Sample application '{description}' had to be forcefully terminated")
+                    failures.append(
+                        f"'{description}' ignored SIGTERM and had to be "
+                        f"killed")
 
             except Exception as e:
-                logger.warning(
-                    f"⚠️ Sample application '{description}' failed: {e}")
+                failures.append(f"'{description}' failed to start: {e}")
 
-        # This is optional functionality, so we don't require strict success
-        if successful_samples > 0:
-            logger.info(
-                f"✅ Sample application testing completed ({successful_samples} successful)")
-        else:
-            logger.warning("⚠️ No sample applications executed successfully")
+        self.assertEqual(
+            failures, [],
+            f"Documented sample applications did not run cleanly: {failures}",
+        )
+        self.assertEqual(
+            successful_samples,
+            len(sample_commands),
+            "Not every documented sample application executed successfully",
+        )
 
-        logger.info("✅ Sample application execution testing completed")
+        logger.info(
+            f"✅ Sample application execution testing completed "
+            f"({successful_samples} successful)")
 
 
 if __name__ == "__main__":

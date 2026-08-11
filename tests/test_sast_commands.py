@@ -386,6 +386,42 @@ class SASTCommandValidationTest(unittest.TestCase):
         except subprocess.TimeoutExpired:
             self.fail("SAST safety analysis timed out")
 
+    def test_09b_sast_specific_tools_semgrep(self):
+        """Test SAST analysis with specific tool (semgrep)."""
+        logger.info("Testing SAST with semgrep tool only...")
+
+        try:
+            result = subprocess.run(
+                [
+                    "python",
+                    self.sast_cli,
+                    "samples/unsecure-pwa",
+                    "--tools",
+                    "semgrep",
+                    "--educational",
+                ],
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+
+            self.assertEqual(
+                result.returncode,
+                0,
+                f"SAST semgrep analysis failed: {result.stderr}",
+            )
+            self.assertIn(
+                "semgrep",
+                result.stdout.lower(),
+                "Semgrep tool not mentioned in output",
+            )
+
+            logger.info("✅ SAST semgrep-only analysis works")
+
+        except subprocess.TimeoutExpired:
+            self.fail("SAST semgrep analysis timed out")
+
     def test_10_sast_multiple_tools(self):
         """Test SAST analysis with multiple specific tools."""
         logger.info("Testing SAST with multiple tools...")

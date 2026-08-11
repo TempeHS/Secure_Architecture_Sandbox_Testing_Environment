@@ -205,7 +205,7 @@ class VulnerabilityTester:
                             severity="high",
                             title=f"Reflected XSS in parameter '{param}'",
                             description=f"The parameter '{param}' appears to be vulnerable to reflected XSS. "
-                            f"User input is reflected in the response without proper sanitization.",
+                            f"User input is reflected in the response without proper sanitisation.",
                             url=response.url,
                             method="GET",
                             status_code=response.status_code,
@@ -507,32 +507,49 @@ class DynamicAnalyser:
         """Run Nikto web vulnerability scanner"""
         findings = []
 
+        # Nikto 2.6+ auto-generates a report file (nikto_<host>_<port>_<time>.json)
+        # in the current working directory when -Format is given without -o, so
+        # we must pass an explicit -o pointing at a disposable temp file.
+        report_file = None
         try:
-            # Run nikto with basic options
-            cmd = ['nikto', '-h', url, '-Format', 'json']
-            result = subprocess.run(
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.json',
+                                             delete=False) as f:
+                report_file = f.name
+
+            cmd = ['nikto', '-h', url, '-Format', 'json', '-o', report_file]
+            subprocess.run(
                 cmd, capture_output=True, text=True, timeout=60)
 
-            if result.returncode == 0 and result.stdout:
-                # Parse nikto output (simplified)
-                lines = result.stdout.split('\n')
-                for line in lines:
-                    if 'OSVDB' in line or 'OWASP' in line:
+            # Nikto's JSON report (not stdout) holds the structured findings;
+            # modern nikto no longer prints legacy OSVDB/OWASP tags to stdout.
+            if os.path.exists(report_file) and os.path.getsize(report_file) > 0:
+                with open(report_file) as report_handle:
+                    report_data = json.load(report_handle)
+
+                for host_report in report_data:
+                    for vuln in host_report.get('vulnerabilities', []):
                         finding = DynamicFinding(
                             tool="nikto",
                             severity="medium",
                             title="Nikto Finding",
-                            description=line.strip(),
-                            url=url,
-                            method="GET",
-                            confidence="medium"
+                            description=vuln.get(
+                                'msg', 'Web vulnerability detected'),
+                            url=urljoin(url, vuln.get('url', '/')),
+                            method=vuln.get('method', 'GET'),
+                            confidence="medium",
+                            evidence=f"Nikto ID {vuln.get('id', 'unknown')}"
                         )
                         findings.append(finding)
 
         except subprocess.TimeoutExpired:
             logger.warning("Nikto scan timed out")
+        except (json.JSONDecodeError, OSError) as e:
+            logger.error(f"Error parsing Nikto report: {e}")
         except Exception as e:
             logger.error(f"Error running Nikto: {e}")
+        finally:
+            if report_file and os.path.exists(report_file):
+                os.unlink(report_file)
 
         return findings
 

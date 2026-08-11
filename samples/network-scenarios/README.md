@@ -50,13 +50,13 @@ python src/analyser/network_cli.py --capture-traffic --duration 60 --educational
 
 - **Purpose**: Simulate backdoor/malware network communication patterns
 - **File**: `backdoor_simulation.py`
-- **Activities**: C&C communication, reverse shells, data tunneling
+- **Activities**: C&C communication, reverse shells, data tunnelling
 
 ### 4. DNS-based Threats
 
 - **Purpose**: Demonstrate DNS-based attack patterns and detection
 - **File**: `dns_threat_scenarios.py`
-- **Activities**: DNS tunneling, DGA patterns, malicious domain queries
+- **Activities**: DNS tunnelling, DGA patterns, malicious domain queries
 
 ### 5. Service Discovery Attacks
 

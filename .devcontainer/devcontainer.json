@@ -8,7 +8,8 @@
   "runArgs": [
     "--cpus=2",
     "--memory=4g",
-    "--shm-size=1g"
+    "--shm-size=1g",
+    "--device=/dev/net/tun"
   ],
   "mounts": [
     "type=tmpfs,target=/tmp,tmpfs-size=512m"
@@ -28,6 +29,7 @@
     "vscode": {
       "extensions": [
         "lucasvazquez.markdown-preview-at-startup",
+        "bierner.markdown-mermaid",
         "ms-python.python",
         "ms-python.flake8",
         "ms-python.black-formatter",
@@ -114,7 +116,7 @@
           "css": false,
           "SQL": false
         },
-        "chat.agent.enabled": true,
+        "chat.agent.enabled": false,
         "github.copilot.chat.participant.alwaysInclude": [
           "copilot-instructions.md"
         ]
@@ -168,9 +170,12 @@
   },
   "init": true,
   "capAdd": [
-    "SYS_PTRACE"
+    "SYS_PTRACE",
+    "NET_ADMIN",
+    "SYS_ADMIN"
   ],
   "securityOpt": [
-    "seccomp=unconfined"
+    "seccomp=unconfined",
+    "apparmor=unconfined"
   ]
 }

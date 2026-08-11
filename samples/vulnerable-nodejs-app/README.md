@@ -40,7 +40,7 @@ This Node.js application demonstrates common web application security vulnerabil
 
 ### 6. Insecure Direct Object References (IDOR)
 - **Endpoint**: `/user/:id`
-- **Vulnerability**: Direct database ID access without authorization
+- **Vulnerability**: Direct database ID access without authorisation
 - **Demonstration**: User profile viewing
 - **Exploitation**: Incrementing user IDs to access other profiles
 

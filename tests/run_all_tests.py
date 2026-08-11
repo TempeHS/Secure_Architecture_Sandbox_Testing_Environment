@@ -70,6 +70,12 @@ def run_test_suite():
             "name": "Entrypoint Detection Validation",
             "module": "test_entrypoint_detection",
             "description": "Validates student app entry point detection logic",
+        },
+        {
+            "name": "Documentation Command Coverage",
+            "module": "test_documentation_command_coverage",
+            "description": "Meta-tests: every lesson's documented commands "
+                           "have real, asserting test coverage",
         }
     ]
 

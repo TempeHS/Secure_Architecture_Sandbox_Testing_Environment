@@ -108,7 +108,7 @@ pentest_cli.py              # Command-line interface with educational features
 | **Reporting Quality** | ✅ Educational | ✅ Professional | ✅ Professional | ⚠️ Basic | ✅ Enterprise | Business-ready reports |
 | **Ease of Use** | ✅ Simple CLI | ❌ Complex | ⚠️ Moderate | ✅ GUI-friendly | ✅ GUI-friendly | User experience |
 | **Cost** | ✅ Free | ⚠️ Community/Paid | ❌ Expensive | ✅ Free | ❌ Very Expensive | Budget considerations |
-| **Legal Safety** | ✅ Educational only | ⚠️ Requires authorization | ⚠️ Requires authorization | ✅ Safe for testing | ⚠️ Enterprise use | Legal protection |
+| **Legal Safety** | ✅ Educational only | ⚠️ Requires authorisation | ⚠️ Requires authorisation | ✅ Safe for testing | ⚠️ Enterprise use | Legal protection |
 | **Update Frequency** | ❌ Manual | ✅ Daily | ✅ Weekly | ✅ Regular | ✅ Daily | Current threat coverage |
 | **Integration Capabilities** | ❌ Standalone | ✅ Extensive | ✅ API-rich | ✅ Plugin system | ✅ Enterprise | Workflow integration |
 | **Performance** | ✅ Lightweight | ⚠️ Resource-intensive | ⚠️ Resource-intensive | ✅ Moderate | ⚠️ Heavy | Scalability |
@@ -255,7 +255,7 @@ THREAD_POOL_SIZE = 5       # Concurrent testing threads
 - **Linear Testing Process**: Follows structured phases vs. adaptive professional testing
 - **Limited Tool Integration**: Basic external tool usage vs. comprehensive frameworks
 - **Reduced Complexity**: Simplified vulnerability discovery vs. multi-stage attacks
-- **Educational Pacing**: Deliberately slower for learning vs. efficiency optimization
+- **Educational Pacing**: Deliberately slower for learning vs. efficiency optimisation
 
 #### **Safety Restrictions**
 - **Rate Limiting**: Built-in delays prevent aggressive testing
@@ -312,7 +312,7 @@ THREAD_POOL_SIZE = 5       # Concurrent testing threads
 - **Expanded Vulnerability Coverage**: Additional OWASP Top 10 vulnerabilities
 - **Advanced Reporting**: PDF generation and executive summary templates
 - **Configuration Management**: Customizable testing parameters and wordlists
-- **Performance Optimization**: Multi-threaded testing with educational controls
+- **Performance Optimisation**: Multi-threaded testing with educational controls
 - **Enhanced Documentation**: Video tutorials and interactive guides
 
 ### Medium-term Goals (6-12 months)

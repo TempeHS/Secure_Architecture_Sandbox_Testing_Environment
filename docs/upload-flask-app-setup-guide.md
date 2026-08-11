@@ -166,8 +166,8 @@ docker-compose -f docker/docker-compose.yml restart student-uploads
 
 - **Codespaces**: `https://your-codespace-name-8000.app.github.dev`
 - **Local test**: `curl http://localhost:8000`
-- **Web file browser**: `http://localhost:8080/uploads/` (nginx serves uploads
-  folder)
+- **Uploaded files**: served by the app itself at `http://localhost:8000/uploads/`
+  (port 8080 is mapped for the sandbox container but no web server listens on it)
 
 ## 🔒 Security Testing Commands
 

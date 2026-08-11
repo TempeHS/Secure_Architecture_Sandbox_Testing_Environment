@@ -1,0 +1,14 @@
+{
+  "name": "secure-architecture-sandbox-testing-environment",
+  "private": true,
+  "description": "Spelling tooling for the Secure Architecture Sandbox Testing Environment. Enforces Australian/British English across documentation and code prose.",
+  "scripts": {
+    "spell": "cspell lint --no-progress \"**/*.md\" \"src/**\" \"tests/**\" \"samples/**/*.py\" \"docker/**\" \"*.sh\" \".devcontainer/**\"",
+    "spell:docs": "cspell lint --no-progress \"docs/**/*.md\" \"*.md\" \".github/*.md\"",
+    "spell:suggest": "cspell lint --no-progress --show-suggestions \"**/*.md\""
+  },
+  "devDependencies": {
+    "@cspell/dict-en-gb": "^5.0.19",
+    "cspell": "^10.0.1"
+  }
+}

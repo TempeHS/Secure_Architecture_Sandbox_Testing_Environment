@@ -14,7 +14,7 @@ Common vulnerabilities included:
 - Insecure Deserialization
 - Server-Side Template Injection (SSTI)
 - Insecure Direct Object References
-- Missing Authentication/Authorization
+- Missing Authentication/Authorisation
 - Weak Cryptographic Practices
 - Information Disclosure
 """
@@ -370,7 +370,7 @@ def posts():
 def ping():
     host = request.form['host']
 
-    # VULNERABILITY: Direct command execution without sanitization
+    # VULNERABILITY: Direct command execution without sanitisation
     try:
         result = subprocess.run(
             f'ping -c 3 {host}', shell=True, capture_output=True, text=True, timeout=10)
@@ -431,7 +431,7 @@ def get_session():
     except Exception as e:
         return f'Error: {str(e)}'
 
-# VULNERABILITY: Missing authorization
+# VULNERABILITY: Missing authorisation
 
 
 @app.route('/admin')

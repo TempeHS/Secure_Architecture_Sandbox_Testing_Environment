@@ -3,7 +3,7 @@
 DNS Threat Scenarios Generator
 Educational tool for demonstrating DNS-based security threats.
 
-This script simulates various DNS-based attack patterns including DNS tunneling,
+This script simulates various DNS-based attack patterns including DNS tunnelling,
 domain generation algorithms, and malicious domain queries.
 
 Author: Secure Architecture Sandbox Testing Environment
@@ -41,10 +41,10 @@ class DNSThreatSimulator:
     def _get_educational_note(self, activity_type):
         """Get educational explanation for each DNS threat type."""
         notes = {
-            'DNS_TUNNELING': 'DNS tunneling uses DNS queries to exfiltrate data or establish covert channels',
+            'DNS_TUNNELING': 'DNS tunnelling uses DNS queries to exfiltrate data or establish covert channels',
             'DGA_QUERY': 'Domain Generation Algorithms create random domains to evade detection',
             'MALICIOUS_DOMAIN': 'Queries to known malicious domains indicate potential compromise',
-            'EXCESSIVE_QUERIES': 'Unusually high DNS query volume may indicate tunneling or scanning',
+            'EXCESSIVE_QUERIES': 'Unusually high DNS query volume may indicate tunnelling or scanning',
             'SUBDOMAIN_ENUM': 'Subdomain enumeration is reconnaissance for attack planning',
             'DNS_CACHE_POISON': 'DNS cache poisoning attempts to redirect legitimate domains',
             'TYPOSQUATTING': 'Typosquatting domains mimic legitimate sites for phishing'
@@ -71,13 +71,13 @@ class DNSThreatSimulator:
         return domains
 
     def simulate_dns_tunneling(self, duration=60):
-        """Simulate DNS tunneling for data exfiltration."""
-        print(f"\n🕳️  Simulating DNS tunneling for {duration} seconds...")
+        """Simulate DNS tunnelling for data exfiltration."""
+        print(f"\n🕳️  Simulating DNS tunnelling for {duration} seconds...")
 
         start_time = time.time()
         tunnel_count = 0
 
-        # Base64-like data for tunneling simulation
+        # Base64-like data for tunnelling simulation
         data_chunks = [
             "SGVsbG8gV29ybGQ",  # "Hello World" in base64
             "U2VjcmV0RGF0YQ",    # "SecretData" in base64
@@ -86,12 +86,12 @@ class DNSThreatSimulator:
         ]
 
         while time.time() - start_time < duration and self.running:
-            # Create long subdomain typical of DNS tunneling
+            # Create long subdomain typical of DNS tunnelling
             data_chunk = random.choice(data_chunks)
             random_suffix = ''.join(random.choices(
                 string.ascii_lowercase + string.digits, k=8))
 
-            # Very long subdomain - characteristic of DNS tunneling
+            # Very long subdomain - characteristic of DNS tunnelling
             subdomain = f"{data_chunk}.{random_suffix}.exfiltration-server.com"
 
             try:
@@ -109,10 +109,10 @@ class DNSThreatSimulator:
 
             tunnel_count += 1
 
-            # High frequency is characteristic of tunneling
+            # High frequency is characteristic of tunnelling
             time.sleep(random.uniform(0.5, 2))
 
-        print(f"🕳️  Generated {tunnel_count} DNS tunneling queries")
+        print(f"🕳️  Generated {tunnel_count} DNS tunnelling queries")
 
     def simulate_dga_queries(self, duration=60):
         """Simulate Domain Generation Algorithm queries."""
@@ -330,7 +330,7 @@ class DNSThreatSimulator:
         activity_time = duration // 6
 
         activities = [
-            ('DNS Tunneling', self.simulate_dns_tunneling),
+            ('DNS Tunnelling', self.simulate_dns_tunneling),
             ('DGA Queries', self.simulate_dga_queries),
             ('Malicious Domains', self.simulate_malicious_domains),
             ('Excessive Queries', self.simulate_excessive_queries),
@@ -386,7 +386,7 @@ class DNSThreatSimulator:
             'risk_summary': risk_summary,
             'activities': self.activity_log,
             'dns_threat_indicators': [
-                'Long subdomains with encoded data (DNS tunneling)',
+                'Long subdomains with encoded data (DNS tunnelling)',
                 'Random domain patterns (Domain Generation Algorithms)',
                 'High volume of DNS queries in short time periods',
                 'Queries to suspicious TLDs (.tk, .ml, .ga)',
@@ -426,7 +426,7 @@ def main():
 
     print(f"⏱️  Scenario duration: {duration} seconds")
     print("\n🚨 This scenario will simulate:")
-    print("  • DNS tunneling for data exfiltration")
+    print("  • DNS tunnelling for data exfiltration")
     print("  • Domain Generation Algorithm queries")
     print("  • Malicious domain lookups")
     print("  • Excessive DNS query volume")
@@ -471,13 +471,13 @@ def main():
             print(f"  • {risk_level}: {count}")
 
         print("\n🔍 Analysis Instructions:")
-        print("  1. Look for DNS tunneling patterns (long subdomains)")
+        print("  1. Look for DNS tunnelling patterns (long subdomains)")
         print("  2. Identify DGA domain characteristics")
         print("  3. Monitor query frequency and volume")
         print(f"  4. Review detailed analysis in: {report_file}")
 
         print("\n💡 Key DNS Threat Indicators:")
-        print("  • Long, encoded subdomains (tunneling)")
+        print("  • Long, encoded subdomains (tunnelling)")
         print("  • Random domain generation patterns")
         print("  • High query frequency to non-existent domains")
         print("  • Queries to suspicious TLDs (.tk, .ml, .ga)")

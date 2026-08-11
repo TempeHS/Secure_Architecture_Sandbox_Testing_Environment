@@ -19,6 +19,8 @@ RUN apt-get install -y --no-install-recommends \
     tcpdump \
     net-tools \
     dnsutils \
+    iputils-ping \
+    traceroute \
     curl \
     wget \
     jq \

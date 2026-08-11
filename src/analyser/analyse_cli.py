@@ -307,7 +307,7 @@ class AnalysisCLI:
 
         if any(f.tool == 'bandit' for f in report.findings):
             print("   • Study Python security best practices")
-            print("   • Learn about input validation and sanitization")
+            print("   • Learn about input validation and sanitisation")
 
         if any(f.category == 'dependency_vulnerability' for f in report.findings):
             print("   • Practice dependency management")

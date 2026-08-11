@@ -8,18 +8,20 @@ This document describes the comprehensive unit testing framework for the Docker 
 
 ### Test Structure
 
-The testing framework consists of 6 specialised test modules plus 1 comprehensive system runner:
+The testing framework consists of 9 specialised test modules plus 1 comprehensive system runner:
 
 ```
 tests/
-├── run_all_tests.py                       # Master test runner
-├── test_sast_commands.py                  # Static Analysis tests (12 tests)
-├── test_dast_commands.py                  # Dynamic Analysis tests (15 tests)
-├── test_network_commands.py               # Network Analysis tests (20 tests)
-├── test_sandbox_commands.py               # Sandbox Security tests (15 tests)
-├── test_penetration_testing_commands.py   # Integrated Pentest tests (14 tests)
-├── test_penetration_analyser_unit.py      # Penetration Analyser Unit tests (35 tests)
-└── test_docker_environment.py             # Docker/Infrastructure tests (optional)
+├── run_all_tests.py                        # Master test runner
+├── test_sast_commands.py                   # Static Analysis tests
+├── test_dast_commands.py                   # Dynamic Analysis tests
+├── test_network_commands.py                # Network Analysis tests
+├── test_sandbox_commands.py                # Sandbox Security tests
+├── test_penetration_testing_commands.py    # Integrated Pentest tests
+├── test_comprehensive_analysis.py          # End-to-end analysis tests
+├── test_entrypoint_detection.py            # Student app entry point tests
+├── test_documentation_command_coverage.py  # Meta-tests over docs + tests
+└── test_docker_environment.py              # Docker/Infrastructure tests
 ```
 
 ### Test Execution Order
@@ -29,10 +31,12 @@ Tests are executed in logical dependency order with **111 total tests**:
 1. **SAST Commands** (12 tests) - Tests static analysis capabilities
 2. **DAST Commands** (15 tests) - Tests dynamic analysis capabilities
 3. **Network Commands** (20 tests) - Tests network monitoring capabilities
-4. **Sandbox Commands** (15 tests) - Tests container-based security analysis
-5. **Penetration Testing** (14 tests) - Tests integrated workflows
-6. **Penetration Analyser Unit Tests** (35 tests) - Tests individual modules and components
-7. **Docker Environment** (optional) - Validates infrastructure is ready
+4. **Sandbox Commands** - Tests container-based security analysis
+5. **Penetration Testing** - Tests integrated workflows
+6. **Documentation Coverage** - Meta-tests keeping docs and tests in sync
+7. **Comprehensive Analysis** - End-to-end analysis of every sample app
+8. **Entry Point Detection** - Student application entry point logic
+9. **Docker Environment** - Validates infrastructure is ready
 
 ## Quick Start
 
@@ -54,7 +58,7 @@ docker exec cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app
 docker exec -d cybersec_sandbox bash -c "cd /workspace/samples/vulnerable-flask-app && python3 app.py"
 ```
 
-📖 **For complete setup instructions, see [setup-guide.md](setup-guide.md)**
+📖 **For complete setup instructions, see [../WELCOME.md](../WELCOME.md)**
 
 ### Running All Tests
 
@@ -72,7 +76,7 @@ python tests/run_all_tests.py
 # [3/6] Running Network Analysis Validation...
 # [4/6] Running Sandbox Command Validation...
 # [5/6] Running Penetration Testing Validation...
-# [6/6] Running Penetration Analyser Unit Tests...
+# [6/6] Running Documentation Coverage Validation...
 # 🎉 SYSTEM STATUS: ALL TESTS PASSED!
 ```
 
@@ -88,14 +92,14 @@ python -m pytest tests/test_dast_commands.py -v
 # Test Network analysis only (20 tests)
 python -m pytest tests/test_network_commands.py -v
 
-# Test Sandbox commands only (15 tests)
+# Test Sandbox commands only
 python -m pytest tests/test_sandbox_commands.py -v
 
-# Test Penetration testing workflows only (14 tests)
+# Test Penetration testing workflows only
 python -m pytest tests/test_penetration_testing_commands.py -v
 
-# Test Penetration analyser unit tests only (35 tests)
-python -m pytest tests/test_penetration_analyser_unit.py -v
+# Test documentation/test-suite consistency only
+python -m pytest tests/test_documentation_command_coverage.py -v
 
 # Optional: Test Docker environment
 python -m pytest tests/test_docker_environment.py -v
@@ -294,9 +298,9 @@ python src/analyser/network_cli.py --monitor-connections --duration 60 --educati
 **Test Validation**: All 14 tests pass consistently, validating complete
 penetration testing workflow integration
 
-### 6. Penetration Analyser Unit Tests (`test_penetration_analyser_unit.py`) - 35 tests
+### 6. Documentation Coverage Meta-Tests (`test_documentation_command_coverage.py`)
 
-**Purpose**: Comprehensive unit testing of penetration analyser internal components
+**Purpose**: Validate that the documentation and the test suite stay in sync
 
 **Key Test Classes**:
 
@@ -319,7 +323,7 @@ penetration testing workflow integration
 - Complete vulnerability scan integration
 
 #### TestExploitEngine (2 tests)
-- Exploit engine initialization and configuration
+- Exploit engine initialisation and configuration
 - Exploit findings processing and validation
 
 #### TestPentestReporter (4 tests)
@@ -329,7 +333,7 @@ penetration testing workflow integration
 - Finding statistics and categorization
 
 #### TestPenetrationAnalyserIntegration (4 tests)
-- Complete analyser initialization
+- Complete analyser initialisation
 - Full penetration test workflow execution
 - Configuration parameter validation
 - Error handling and graceful failure modes
@@ -343,14 +347,14 @@ penetration testing workflow integration
 
 ```bash
 # What it tests:
-# Unit tests with mocking - no external dependencies
-python -m pytest tests/test_penetration_analyser_unit.py::TestVulnerabilityScanner::test_01_debug_console_detection -v
+# Every documented command exists, is spelled correctly and is test-covered
+python -m pytest tests/test_documentation_command_coverage.py -v
 
-# Integration tests with real components
-python -m pytest tests/test_penetration_analyser_unit.py::TestPenetrationAnalyserIntegration -v
+# End-to-end analysis across every sample application
+python -m pytest tests/test_comprehensive_analysis.py -v
 
-# CLI interface testing
-python -m pytest tests/test_penetration_analyser_unit.py::TestPenetrationCLIIntegration -v
+# Student application entry point detection
+python -m pytest tests/test_entrypoint_detection.py -v
 ```
 
 **Dependencies**: unittest.mock for component isolation, tempfile for report testing
@@ -487,7 +491,7 @@ export TEST_REPORTS_DIR=reports  # Custom reports directory
 
 ```bash
 # Ensure containers are running
-docker-compose up -d
+docker-compose -f docker/docker-compose.yml up -d
 
 # Verify container status
 docker ps | grep -E "(cybersec_sandbox|flask|pwa)"
@@ -512,8 +516,8 @@ Container cybersec_sandbox not found
 **Solution**:
 
 ```bash
-docker-compose down
-docker-compose up -d
+docker-compose -f docker/docker-compose.yml down
+docker-compose -f docker/docker-compose.yml up -d
 docker ps  # Verify containers are running
 ```
 
@@ -534,7 +538,7 @@ netstat -tuln | grep 9090
 lsof -i :9090
 
 # Restart docker-compose
-docker-compose restart
+docker-compose -f docker/docker-compose.yml restart
 ```
 
 #### 3. Permission Denied
@@ -627,7 +631,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Docker
         run: |
-          docker-compose up -d
+          docker-compose -f docker/docker-compose.yml up -d
           sleep 30  # Wait for services to start
       - name: Run Tests
         run: |
@@ -665,15 +669,15 @@ pre-commit install
 
 ### Expected Test Execution Times
 
-| Test Module                    | Duration         | Test Count   | Key Operations                         |
-| ------------------------------ | ---------------- | ------------ | -------------------------------------- |
-| SAST Commands                  | 60-120s          | 12 tests     | File analysis, report generation       |
-| DAST Commands                  | 120-300s         | 15 tests     | Web scanning, deep analysis            |
-| Network Analysis               | 90-180s          | 20 tests     | Network monitoring, traffic capture    |
-| Sandbox Commands               | 60-120s          | 15 tests     | Container operations, tool execution   |
-| Penetration Testing            | 180-360s         | 14 tests     | Integrated workflows, manual testing   |
-| Penetration Analyser Unit      | 30-60s           | 35 tests     | Unit tests, mocked components          |
-| **Total**                      | **9-21 minutes** | **111 tests** | **Full system validation**            |
+| Test Module                    | Duration         | Key Operations                         |
+| ------------------------------ | ---------------- | -------------------------------------- |
+| SAST Commands                  | 60-120s          | File analysis, report generation       |
+| DAST Commands                  | 120-300s         | Web scanning, deep analysis            |
+| Network Analysis               | 90-180s          | Network monitoring, traffic capture    |
+| Sandbox Commands               | 60-120s          | Container operations, tool execution   |
+| Penetration Testing            | 180-360s         | Integrated workflows, manual testing   |
+| Documentation Coverage         | <10s             | Static checks over docs and tests      |
+| **Total**                      | **9-21 minutes** | **Full system validation**             |
 
 ### Resource Usage
 
@@ -688,7 +692,7 @@ pre-commit install
 
 ```bash
 # Weekly: Update test data
-docker-compose pull
+docker-compose -f docker/docker-compose.yml pull
 docker system prune
 
 # Monthly: Update dependencies
@@ -741,7 +745,7 @@ def test_99_new_feature_validation(self):
 - All tests run in isolated Docker containers
 - No external network access during testing (except DNS)
 - Sample applications are intentionally vulnerable (educational use only)
-- Test data is sanitized and does not contain real sensitive information
+- Test data is sanitised and does not contain real sensitive information
 
 ### Safe Testing Practices
 

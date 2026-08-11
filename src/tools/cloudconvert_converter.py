@@ -396,15 +396,15 @@ Setup:
         if 'error' in account_info:
             print(f"❌ Error: {account_info['error']}")
         else:
-            print(f"� Status: {account_info.get('status', 'Unknown')}")
+            print(f"📊 Status: {account_info.get('status', 'Unknown')}")
             print(
                 f"🔑 API Key Format: {account_info.get('api_key_format', 'Unknown')}")
             print(
-                f"� API Key Length: {account_info.get('api_key_length', 0)} characters")
+                f"📏 API Key Length: {account_info.get('api_key_length', 0)} characters")
             print(
                 f"✅ Ready for Conversion: {account_info.get('ready_for_conversion', False)}")
             if 'note' in account_info:
-                print(f"� Note: {account_info['note']}")
+                print(f"📝 Note: {account_info['note']}")
         return
 
     # List worksheets
