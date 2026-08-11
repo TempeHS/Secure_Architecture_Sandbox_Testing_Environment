@@ -119,7 +119,7 @@ pentest_cli.py              # Command-line interface with educational features
 
 | Vulnerability Class | Educational Tool | Metasploit | Burp Suite Pro | OWASP ZAP | Industry Standard |
 |--------------------|------------------|------------|-----------------|-----------|------------------|
-| **Web Applications** | 8 core vulnerabilities | 200+ web exploits | 150+ vulnerability cheques | 100+ passive/active rules | 50-200 cheques |
+| **Web Applications** | 8 core vulnerabilities | 200+ web exploits | 150+ vulnerability checks | 100+ passive/active rules | 50-200 checks |
 | **Network Services** | Basic port/service enum | 1500+ network exploits | Limited network testing | Basic network scanning | Comprehensive coverage |
 | **Operating Systems** | None | 800+ OS exploits | None | None | Full OS vulnerability assessment |
 | **Database Security** | Basic SQL injection | 50+ database exploits | Advanced SQL testing | Basic SQL detection | Complete database assessment |

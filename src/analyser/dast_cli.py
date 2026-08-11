@@ -114,7 +114,7 @@ class DASTCLI:
             if deep_scan:
                 print("🔍 Deep scan mode enabled - this may take several minutes")
             elif args.quick:
-                print("⚡ Quick scan mode - basic vulnerability cheques only")
+                print("⚡ Quick scan mode - basic vulnerability checks only")
 
             if tools:
                 print(f"🛠️  Using tools: {', '.join(tools)}")
@@ -318,7 +318,7 @@ class DASTCLI:
                       f"performed on {report.target_url}")
                 print("⚠️  This is NOT a clean result. Every request failed, "
                       "so nothing was scanned.")
-                print("Cheque that:")
+                print("Check that:")
                 print("• The application is running "
                       "(cd docker && docker-compose up -d)")
                 print("• The URL and port are correct")
@@ -568,7 +568,7 @@ Examples:
                         help='Enable deep scanning with crawling and comprehensive testing')
 
     parser.add_argument('--quick', action='store_true',
-                        help='Quick scan mode - basic vulnerability cheques only')
+                        help='Quick scan mode - basic vulnerability checks only')
 
     parser.add_argument('--output', '-o', help='Output file path for report')
 

@@ -378,7 +378,7 @@ class SASTCommandValidationTest(unittest.TestCase):
             self.assertEqual(
                 result.returncode, 0, f"SAST safety analysis failed: {result.stderr}"
             )
-            # Safety cheques dependencies, so output might be different
+            # Safety checks dependencies, so output might be different
             # Just ensure it runs without error
 
             logger.info("✅ SAST safety-only analysis works")

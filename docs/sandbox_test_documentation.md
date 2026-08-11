@@ -126,7 +126,7 @@ python -m pytest tests/test_dast_commands.py::DASTCommandValidationTest -v
 - Container status and accessibility
 - Port connectivity (5000, 9090, etc.)
 - Application endpoint availability
-- Service health cheques
+- Service health checks
 - Reports directory structure
 
 **Example**:

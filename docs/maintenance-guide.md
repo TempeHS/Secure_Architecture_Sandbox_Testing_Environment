@@ -625,7 +625,7 @@ major changes **Command**: `python -m pytest tests/test_*.py -v`
 1. **Diagnosis**: Check logs and resource usage
 2. **Recovery**: Restart services or rebuild containers
 3. **Prevention**: Identify and fix root causes
-4. **Monitoring**: Implement better health cheques
+4. **Monitoring**: Implement better health checks
 
 ## 📞 Support and Contact
 

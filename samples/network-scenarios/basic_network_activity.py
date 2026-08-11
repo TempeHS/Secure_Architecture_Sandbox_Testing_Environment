@@ -134,7 +134,7 @@ class BasicNetworkActivity:
                     f"Connection to {host}:{port} failed: {str(e)}"
                 )
 
-        print("✅ Service connectivity cheques completed")
+        print("✅ Service connectivity checks completed")
 
     def generate_local_activity(self, duration=60):
         """Generate normal local network activity."""
@@ -264,7 +264,7 @@ def main():
     print("  • Normal web browsing requests")
     print("  • Legitimate DNS queries")
     print("  • Local network connectivity tests")
-    print("  • Service availability cheques")
+    print("  • Service availability checks")
     print()
 
     input("Press Enter to start the scenario...")
@@ -288,7 +288,7 @@ def main():
         print(
             f"  • Local connections: {len([a for a in activity_log if a['type'] == 'LOCAL_CONNECTION'])}")
         print(
-            f"  • Service cheques: {len([a for a in activity_log if a['type'] == 'SERVICE_CHECK'])}")
+            f"  • Service checks: {len([a for a in activity_log if a['type'] == 'SERVICE_CHECK'])}")
         print(
             f"  • Errors: {len([a for a in activity_log if 'ERROR' in a['type']])}")
 

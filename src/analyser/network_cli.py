@@ -427,7 +427,7 @@ Output Options:
             print("\n⚠️  No services were reachable on this target.")
             print("A high score here does NOT mean the target is secure - it "
                   "means nothing answered.")
-            print(f"Cheque the target is running and the hostname/IP is "
+            print(f"Check the target is running and the hostname/IP is "
                   f"correct.")
 
         if services:
