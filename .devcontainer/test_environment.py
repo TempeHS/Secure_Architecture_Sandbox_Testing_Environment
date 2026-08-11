@@ -133,8 +133,9 @@ def test_security_tools():
     tools = [
         ("Nmap", ["nmap", "--version"], "nmap"),
         ("Nikto", ["nikto", "-Version"], "nikto"),
-        ("Gobuster", ["gobuster", "version"], "gobuster"),
+        ("Gobuster", ["gobuster", "--version"], "gobuster"),
         ("WhatWeb", ["whatweb", "--version"], "whatweb"),
+        ("httptap", ["httptap", "--help"], "httptap"),
         ("Dirb", ["dirb"], "dirb"),  # dirb shows help when no args
         ("Netcat", ["nc", "-h"], None),  # nc shows help with -h
         ("Curl", ["curl", "--version"], "curl"),

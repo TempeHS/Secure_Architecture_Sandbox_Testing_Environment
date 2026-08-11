@@ -1,7 +1,8 @@
 {
   "name": "Secure Architecture Sandbox Testing Environment",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "Dockerfile",
+    "context": ".."
   },
   "workspaceFolder": "/workspaces/Secure_Architecture_Sandbox_Testing_Environment",
   "runArgs": [
@@ -113,7 +114,7 @@
           "css": false,
           "SQL": false
         },
-        "chat.agent.enabled": false,
+        "chat.agent.enabled": true,
         "github.copilot.chat.participant.alwaysInclude": [
           "copilot-instructions.md"
         ]

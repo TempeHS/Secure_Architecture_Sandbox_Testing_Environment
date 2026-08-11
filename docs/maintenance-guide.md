@@ -61,11 +61,39 @@ Secure_Architecture_Sandbox_Testing_Environment/
 
 - **Purpose**: GitHub Codespaces and VS Code dev container configuration
 - **Contents**: `devcontainer.json` with container settings, extensions, and
-  post-create commands
-- **Features**: Automatic Git LFS installation and initialization for handling
-  large files
-- **Maintenance**: Update when adding new VS Code extensions or changing
-  container requirements
+  post-create commands; `Dockerfile` defining the pre-built container image
+- **Image-layer tooling**: Security/analysis tools (`nmap`, `dirb`, `tcpdump`,
+  `nikto`, `gobuster`, `whatweb`, `httptap`, `git-lfs`, `docker-compose`) and
+  Python dependencies (`requirements.txt`) are installed at **image-build
+  time** in `.devcontainer/Dockerfile`, not at container-create time. This
+  keeps Codespace/container startup fast — `postCreateCommand`
+  (`post-create.sh`) is reserved for things that genuinely can't be baked
+  into the image (Docker socket permissions, cloning the external
+  Unsecure PWA sample repo, starting docker-compose services).
+- **Adding a new tool**: add a pinned-version install step to
+  `.devcontainer/Dockerfile` (not `post-create.sh`), then add a smoke-check
+  for it to `.devcontainer/test_tools.py`.
+- **Version pinning policy**: binary/release-based tools (`gobuster`,
+  `nikto`, `whatweb`, `httptap`) are pinned to a specific tag, never
+  `@latest`/`master`, for reproducibility. Current pinned versions (checked
+  2026-08-11 via the GitHub releases API):
+  - `gobuster` — `v3.8.2`
+  - `nikto` — `2.6.1`
+  - `whatweb` — `v0.6.4`
+  - `httptap` — `v0.1.1`
+
+  Review and bump these periodically (e.g. once per school term) by
+  querying `https://api.github.com/repos/<owner>/<repo>/releases/latest`
+  for each tool, smoke-testing the candidate version, then updating the
+  version strings in `.devcontainer/Dockerfile` and this table together.
+- **Runtime dependencies for baked-in tools**: `nikto` needs the
+  `libxml-writer-perl` apt package; `whatweb` needs `ruby` (apt) plus the
+  `addressable` gem (`gem install addressable`). Verified by building the
+  image and running `nikto -Version`, `whatweb --version`, `gobuster
+  --version` (not `gobuster version`), and `httptap --help` inside a
+  container from it.
+- **Maintenance**: Update when adding new VS Code extensions, changing
+  container requirements, or bumping pinned tool versions
 
 #### `docker/`
 
@@ -74,6 +102,9 @@ Secure_Architecture_Sandbox_Testing_Environment/
   - `Dockerfile` - Main sandbox container definition
   - `docker-compose.yml` - Service orchestration
   - `nginx.conf` - Web server configuration for vulnerable apps
+  - `install-tools.sh` - On-demand runtime tool installer bundled into
+    `Dockerfile.minimal` for optional/manual use inside that lightweight
+    sandbox image (not part of the main devcontainer setup)
 - **Maintenance**: Update when adding new tools, changing security settings, or
   modifying service architecture
 

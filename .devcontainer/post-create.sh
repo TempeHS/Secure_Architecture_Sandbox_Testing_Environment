@@ -7,11 +7,10 @@ echo ""
 echo "════════════════════════════════════════════════════════════"
 echo "🏗️ SECURE ARCHITECTURE SANDBOX - BUILDING ENVIRONMENT"
 echo ""
-echo "⏱️  Please wait approximately 4 minutes for setup to complete..."
+echo "⏱️  Most tools are pre-installed in the container image, so this should be quick..."
 echo ""
-echo "📦 Installing security tools (nmap, dirb, netcat, tcpdump)"
 echo "🐳 Setting up Docker containers for vulnerable applications"
-echo "🐍 Configuring Python security libraries"
+echo "🐍 Verifying Python security libraries"
 echo "🔧 Preparing cybersecurity testing workspace"
 echo ""
 echo "☕ Perfect time for a coffee break!"
@@ -88,93 +87,9 @@ else
     log_message "WARN" "DOCKER" "Docker group does not exist; Docker permissions may be limited." "$docker_perm_pid"
 fi
 end_timer "DOCKER" "Setting up Docker permissions" "$docker_perm_pid"
-
-# Install essential security tools and PDF generation dependencies
-pkg_install_pid=$(start_timer "PACKAGES" "Installing security tools and PDF generation libraries")
-echo "📦 Installing security tools and PDF generation libraries..."
-log_message "INFO" "PACKAGES" "Starting installation of security tools and PDF generation libraries" "$pkg_install_pid"
-
-if sudo apt-get install -y --no-install-recommends \
-    nmap \
-    dirb \
-    netcat-traditional \
-    tcpdump \
-    net-tools \
-    dnsutils \
-    curl \
-    wget \
-    jq \
-    tree \
-    htop \
-    file \
-    binutils \
-    unzip \
-    zip \
-    git \
-    build-essential \
-    libpcap-dev \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libpangoft2-1.0-0 \
-    libharfbuzz0b \
-    libfontconfig1 \
-    libcairo2 \
-    libgdk-pixbuf2.0-0 \
-    libffi-dev \
-    shared-mime-info \
-    wkhtmltopdf \
-    fonts-noto-color-emoji; then
-    log_message "INFO" "PACKAGES" "Security tools and PDF libraries installed successfully" "$pkg_install_pid"
-    end_timer "PACKAGES" "Installing security tools and PDF generation libraries" "$pkg_install_pid" "SUCCESS"
-else
-    log_message "ERROR" "PACKAGES" "Failed to install security tools and PDF libraries" "$pkg_install_pid"
-    end_timer "PACKAGES" "Installing security tools and PDF generation libraries" "$pkg_install_pid" "FAILED"
-fi
-
-# Install essential security tools and PDF generation dependencies
-echo "� Installing security tools and PDF generation libraries..."
-sudo apt-get install -y --no-install-recommends \
-    nmap \
-    dirb \
-    netcat-traditional \
-    tcpdump \
-    net-tools \
-    dnsutils \
-    curl \
-    wget \
-    jq \
-    tree \
-    htop \
-    file \
-    binutils \
-    unzip \
-    zip \
-    git \
-    build-essential \
-    libpcap-dev \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libpangoft2-1.0-0 \
-    libharfbuzz0b \
-    libfontconfig1 \
-    libcairo2 \
-    libgdk-pixbuf2.0-0 \
-    libffi-dev \
-    shared-mime-info \
-    wkhtmltopdf \
-    fonts-noto-color-emoji
-# Install Git LFS
-git_lfs_pid=$(start_timer "GIT" "Installing Git LFS")
-echo "📥 Installing Git LFS..."
-log_message "INFO" "GIT" "Installing Git LFS" "$git_lfs_pid"
-
-if curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && sudo apt-get install -y git-lfs; then
-    log_message "INFO" "GIT" "Git LFS installed successfully" "$git_lfs_pid"
-    end_timer "GIT" "Installing Git LFS" "$git_lfs_pid" "SUCCESS"
-else
-    log_message "ERROR" "GIT" "Git LFS installation failed" "$git_lfs_pid"
-    end_timer "GIT" "Installing Git LFS" "$git_lfs_pid" "FAILED"
-fi
+# NOTE: apt packages (nmap, dirb, tcpdump, wkhtmltopdf, etc.) are now installed
+# at image-build time in .devcontainer/Dockerfile for faster container startup.
+# NOTE: git-lfs is now installed at image-build time in .devcontainer/Dockerfile.
 
 # Initialise Git LFS for the user
 git_init_pid=$(start_timer "GIT" "Initializing Git LFS")
@@ -193,9 +108,6 @@ fi
 dir_setup_pid=$(start_timer "DIRS" "Creating directory structure")
 echo "📁 Creating directory structure with proper permissions..."
 log_message "INFO" "DIRS" "Creating directory structure with proper permissions" "$dir_setup_pid"
-
-sudo mkdir -p /opt/security-tools
-sudo chown -R vscode:vscode /opt/security-tools
 
 # Ensure workspace directories exist and have correct permissions
 workspace_dirs=(
@@ -219,132 +131,8 @@ done
 echo "✅ Directory structure created with proper permissions"
 log_message "INFO" "DIRS" "Directory structure created successfully" "$dir_setup_pid"
 end_timer "DIRS" "Creating directory structure" "$dir_setup_pid" "SUCCESS"
-
-# Install additional security tools manually
-cd /opt/security-tools
-
-# Install Nikto
-nikto_pid=$(start_timer "TOOLS" "Installing Nikto")
-echo "📥 Installing Nikto..."
-log_message "INFO" "TOOLS" "Starting Nikto installation" "$nikto_pid"
-
-if [ ! -d "nikto" ]; then
-    for attempt in 1 2 3; do
-        echo "🔄 Nikto installation attempt $attempt"
-        log_message "INFO" "TOOLS" "Nikto installation attempt $attempt" "$nikto_pid"
-        if timeout 60 git clone https://github.com/sullo/nikto.git; then
-            echo "✅ Nikto cloned successfully"
-            log_message "INFO" "TOOLS" "Nikto cloned successfully on attempt $attempt" "$nikto_pid"
-            break
-        else
-            echo "⚠️ Nikto clone attempt $attempt failed"
-            log_message "WARN" "TOOLS" "Nikto clone attempt $attempt failed" "$nikto_pid"
-            if [ $attempt -eq 3 ]; then
-                echo "❌ All Nikto installation attempts failed"
-                log_message "ERROR" "TOOLS" "All Nikto installation attempts failed" "$nikto_pid"
-            else
-                sleep 5
-            fi
-        fi
-    done
-else
-    echo "⚙️  Nikto directory already exists, skipping clone"
-    log_message "INFO" "TOOLS" "Nikto directory already exists, skipping clone" "$nikto_pid"
-fi
-
-if [ -d "nikto/program" ]; then
-    cd nikto/program
-    chmod +x nikto.pl
-    sudo ln -sf /opt/security-tools/nikto/program/nikto.pl /usr/local/bin/nikto
-    cd /opt/security-tools
-    echo "✅ Nikto installation completed"
-    log_message "INFO" "TOOLS" "Nikto installation completed successfully" "$nikto_pid"
-    end_timer "TOOLS" "Installing Nikto" "$nikto_pid" "SUCCESS"
-else
-    echo "⚠️ Nikto installation incomplete"
-    log_message "ERROR" "TOOLS" "Nikto installation incomplete" "$nikto_pid"
-    end_timer "TOOLS" "Installing Nikto" "$nikto_pid" "FAILED"
-fi
-
-# Install Gobuster
-gobuster_pid=$(start_timer "TOOLS" "Installing Gobuster")
-echo "📥 Installing Gobuster..."
-log_message "INFO" "TOOLS" "Starting Gobuster installation" "$gobuster_pid"
-
-for attempt in 1 2 3; do
-    echo "🔄 Gobuster installation attempt $attempt"
-    log_message "INFO" "TOOLS" "Gobuster installation attempt $attempt" "$gobuster_pid"
-    if timeout 60 wget -q https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz; then
-        if tar -xzf gobuster_Linux_x86_64.tar.gz && [ -f gobuster ]; then
-            sudo mv gobuster /usr/local/bin/
-            rm -f gobuster_Linux_x86_64.tar.gz
-            echo "✅ Gobuster installation completed"
-            log_message "INFO" "TOOLS" "Gobuster installation completed on attempt $attempt" "$gobuster_pid"
-            end_timer "TOOLS" "Installing Gobuster" "$gobuster_pid" "SUCCESS"
-            break
-        else
-            echo "⚠️ Gobuster extraction failed on attempt $attempt"
-            log_message "WARN" "TOOLS" "Gobuster extraction failed on attempt $attempt" "$gobuster_pid"
-        fi
-    else
-        echo "⚠️ Gobuster download attempt $attempt failed"
-        log_message "WARN" "TOOLS" "Gobuster download attempt $attempt failed" "$gobuster_pid"
-    fi
-    
-    if [ $attempt -eq 3 ]; then
-        echo "❌ All Gobuster installation attempts failed"
-        log_message "ERROR" "TOOLS" "All Gobuster installation attempts failed" "$gobuster_pid"
-        end_timer "TOOLS" "Installing Gobuster" "$gobuster_pid" "FAILED"
-    else
-        sleep 5
-    fi
-done
-
-# Install WhatWeb
-whatweb_pid=$(start_timer "TOOLS" "Installing WhatWeb")
-echo "📥 Installing WhatWeb..."
-log_message "INFO" "TOOLS" "Starting WhatWeb installation" "$whatweb_pid"
-
-if [ ! -d "WhatWeb" ]; then
-    for attempt in 1 2 3; do
-        echo "🔄 WhatWeb installation attempt $attempt"
-        log_message "INFO" "TOOLS" "WhatWeb installation attempt $attempt" "$whatweb_pid"
-        if timeout 60 git clone https://github.com/urbanadventurer/WhatWeb.git; then
-            echo "✅ WhatWeb cloned successfully"
-            log_message "INFO" "TOOLS" "WhatWeb cloned successfully on attempt $attempt" "$whatweb_pid"
-            break
-        else
-            echo "⚠️ WhatWeb clone attempt $attempt failed"
-            log_message "WARN" "TOOLS" "WhatWeb clone attempt $attempt failed" "$whatweb_pid"
-            if [ $attempt -eq 3 ]; then
-                echo "❌ All WhatWeb installation attempts failed"
-                log_message "ERROR" "TOOLS" "All WhatWeb installation attempts failed" "$whatweb_pid"
-            else
-                sleep 5
-            fi
-        fi
-    done
-else
-    echo "⚙️  WhatWeb directory already exists, skipping clone"
-    log_message "INFO" "TOOLS" "WhatWeb directory already exists, skipping clone" "$whatweb_pid"
-fi
-
-if [ -d "WhatWeb" ]; then
-    cd WhatWeb
-    chmod +x whatweb
-    sudo ln -sf /opt/security-tools/WhatWeb/whatweb /usr/local/bin/whatweb
-    cd /opt/security-tools
-    echo "✅ WhatWeb installation completed"
-    log_message "INFO" "TOOLS" "WhatWeb installation completed successfully" "$whatweb_pid"
-    end_timer "TOOLS" "Installing WhatWeb" "$whatweb_pid" "SUCCESS"
-else
-    echo "⚠️ WhatWeb installation incomplete"
-    log_message "ERROR" "TOOLS" "WhatWeb installation incomplete" "$whatweb_pid"
-    end_timer "TOOLS" "Installing WhatWeb" "$whatweb_pid" "FAILED"
-fi
-
-
-
+# NOTE: Nikto, Gobuster and WhatWeb are now pre-installed at image-build time
+# in .devcontainer/Dockerfile (pinned versions) for faster container startup.
 
 # Update the embedded Unsecure PWA repo (force fresh clone)
 echo "🔄 Updating embedded Unsecure PWA repository..."
@@ -416,188 +204,10 @@ sudo chown -R vscode:vscode /workspaces/Secure_Architecture_Sandbox_Testing_Envi
         fi
     done
 }
-
-# Install Python security packages for development and analysis
-python_pid=$(start_timer "PYTHON" "Installing Python security packages")
-echo "🐍 Installing Python security packages..."
-log_message "INFO" "PYTHON" "Starting Python security packages installation" "$python_pid"
-
-python3 -m pip install --upgrade pip
-
-# Install from requirements.txt if it exists, otherwise install individually
-requirements_file="/workspaces/Secure_Architecture_Sandbox_Testing_Environment/requirements.txt"
-if [ -f "$requirements_file" ]; then
-    echo "📋 Installing from requirements.txt..."
-    log_message "INFO" "PYTHON" "Installing from requirements.txt" "$python_pid"
-    
-    # Try installing with a single pip command first
-    if python3 -m pip install --no-cache-dir -r "$requirements_file"; then
-        echo "✅ Python packages installed successfully from requirements.txt"
-        log_message "INFO" "PYTHON" "Python packages installed successfully from requirements.txt" "$python_pid"
-        end_timer "PYTHON" "Installing Python security packages" "$python_pid" "SUCCESS"
-    else
-        echo "⚠️  Some packages from requirements.txt failed, trying safer installation..."
-        log_message "WARN" "PYTHON" "Some packages from requirements.txt failed, trying individual installation" "$python_pid"
-        
-        # Parse requirements.txt and install essential packages individually
-        essential_packages=(
-            "pytest>=7.0.0"
-            "black>=23.0.0"
-            "flake8>=6.0.0"
-            "bandit>=1.7.5"
-            "safety>=2.3.0"
-            "flask>=2.3.0"
-            "requests>=2.31.0"
-            "beautifulsoup4>=4.12.0"
-            "jinja2>=3.1.0"
-            "reportlab>=4.0.0"
-            "pyyaml>=6.0"
-        )
-        
-        # Install essential packages one by one
-        for package in "${essential_packages[@]}"; do
-            echo "📦 Installing $package"
-            log_message "INFO" "PYTHON" "Installing package: $package" "$python_pid"
-            if python3 -m pip install --no-cache-dir "$package"; then
-                echo "✅ $package installed successfully"
-                log_message "INFO" "PYTHON" "$package installed successfully" "$python_pid"
-            else
-                echo "⚠️ Failed to install $package"
-                log_message "WARN" "PYTHON" "Failed to install $package" "$python_pid"
-            fi
-        done
-        
-        # Try optional packages with error tolerance
-        optional_packages=(
-            "python-nmap>=0.7.1"
-            "scapy>=2.5.0"
-            "weasyprint>=60.0"
-            "semgrep>=1.0.0"
-            "docker>=6.0.0"
-        )
-        
-        echo "📦 Installing optional packages (failures are acceptable)..."
-        log_message "INFO" "PYTHON" "Installing optional packages" "$python_pid"
-        for package in "${optional_packages[@]}"; do
-            echo "📦 Attempting to install $package"
-            log_message "INFO" "PYTHON" "Attempting to install optional package: $package" "$python_pid"
-            if python3 -m pip install --no-cache-dir "$package"; then
-                echo "✅ $package installed successfully"
-                log_message "INFO" "PYTHON" "Optional package $package installed successfully" "$python_pid"
-            else
-                echo "⚠️ Failed to install $package (this is optional)"
-                log_message "INFO" "PYTHON" "Optional package $package failed (acceptable)" "$python_pid"
-            fi
-        done
-        end_timer "PYTHON" "Installing Python security packages" "$python_pid" "PARTIAL_SUCCESS"
-    fi
-else
-    echo "❌ requirements.txt not found at $requirements_file"
-    log_message "ERROR" "PYTHON" "requirements.txt not found at $requirements_file" "$python_pid"
-    echo "📦 Installing essential packages individually..."
-    log_message "INFO" "PYTHON" "Installing essential packages individually" "$python_pid"
-    
-    # Install minimal essential packages
-    essential_packages=(
-        "pytest"
-        "black"
-        "flake8"
-        "bandit"
-        "safety"
-        "flask"
-        "requests"
-        "beautifulsoup4"
-        "reportlab"
-        "pyyaml"
-    )
-    
-    for package in "${essential_packages[@]}"; do
-        echo "📦 Installing $package"
-        log_message "INFO" "PYTHON" "Installing essential package: $package" "$python_pid"
-        if python3 -m pip install --no-cache-dir "$package"; then
-            echo "✅ $package installed successfully"
-            log_message "INFO" "PYTHON" "$package installed successfully" "$python_pid"
-        else
-            echo "⚠️ Failed to install $package"
-            log_message "ERROR" "PYTHON" "Failed to install essential package: $package" "$python_pid"
-        fi
-    done
-    end_timer "PYTHON" "Installing Python security packages" "$python_pid" "PARTIAL_SUCCESS"
-fi
-
-echo "✅ Python package installation completed"
-log_message "INFO" "PYTHON" "Python package installation process completed" "$python_pid"
-
-# Create a simple test script to verify security tools
-cat > /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py << 'EOF'
-#!/usr/bin/env python3
-"""
-Quick test script to verify security tools are available.
-"""
-import subprocess
-import sys
-
-def test_tool(tool_name, command):
-    """Test if a security tool is available"""
-    try:
-        result = subprocess.run(command, capture_output=True, text=True, timeout=10)
-        print(f"✅ {tool_name}: Available")
-        return True
-    except (subprocess.TimeoutExpired, FileNotFoundError):
-        print(f"❌ {tool_name}: Not available")
-        return False
-
-def main():
-    print("🔍 Testing security tools availability...\n")
-    
-    tools = [
-        ("Nmap", ["nmap", "--version"]),
-        ("Nikto", ["nikto", "-Version"]),
-        ("Gobuster", ["gobuster", "version"]),
-        ("WhatWeb", ["whatweb", "--version"]),
-        ("Python3", ["python3", "--version"]),
-        ("Bandit", ["bandit", "--version"]),
-        ("Safety", ["safety", "--version"]),
-        ("Curl", ["curl", "--version"]),
-        ("Docker", ["docker", "--version"]),
-        ("wkhtmltopdf", ["wkhtmltopdf", "--version"]),
-    ]
-    
-    available = 0
-    for tool_name, command in tools:
-        if test_tool(tool_name, command):
-            available += 1
-    
-    print(f"\n📊 {available}/{len(tools)} tools are available")
-    
-    # Test PDF generation capabilities
-    print("\n🔍 Testing PDF generation capabilities...")
-    try:
-        import weasyprint
-        print("✅ WeasyPrint: Available")
-        pdf_available = True
-    except ImportError as e:
-        print(f"❌ WeasyPrint: Not available ({e})")
-        pdf_available = False
-    
-    try:
-        import reportlab
-        print("✅ ReportLab: Available")
-    except ImportError:
-        print("❌ ReportLab: Not available")
-    
-    if available >= len(tools) - 1 and pdf_available:  # Allow for one tool to be missing
-        print("🎉 Security tools and PDF generation are ready for educational use!")
-        return 0
-    elif available >= len(tools) - 1:
-        print("🎉 Security tools are ready! PDF generation may need troubleshooting.")
-        return 0
-    else:
-        print("⚠️  Some tools may need additional setup")
-        return 1
-
-if __name__ == "__main__":
-    sys.exit(main())
+# NOTE: Python packages from requirements.txt are now installed at image-build
+# time in .devcontainer/Dockerfile for faster container startup.
+# NOTE: .devcontainer/test_tools.py is now a static, version-controlled file.
+# Edit it directly instead of regenerating it here.
 EOF
 
 chmod +x /workspaces/Secure_Architecture_Sandbox_Testing_Environment/.devcontainer/test_tools.py
@@ -612,17 +222,7 @@ if [ ! -f ~/.gitconfig ]; then
     git config --global init.defaultBranch main
     git config --global core.editor "code --wait"
 fi
-
-# Install docker-compose and start services
-compose_pid=$(start_timer "DOCKER_COMPOSE" "Installing docker-compose and starting services")
-echo "📦 Installing docker-compose..."
-log_message "INFO" "DOCKER_COMPOSE" "Installing docker-compose" "$compose_pid"
-
-if sudo apt-get update -y && sudo apt-get install -y docker-compose; then
-    log_message "INFO" "DOCKER_COMPOSE" "docker-compose installed successfully" "$compose_pid"
-else
-    log_message "ERROR" "DOCKER_COMPOSE" "docker-compose installation failed" "$compose_pid"
-fi
+# NOTE: docker-compose is now installed at image-build time in .devcontainer/Dockerfile.
 
 # Ensure Docker is ready
 echo "� Waiting for Docker to be ready..."
@@ -684,6 +284,7 @@ This environment is ready for sandbox testing for secure architecture!
 - **Nikto**: Web vulnerability scanner
 - **Gobuster**: Directory/file brute-forcer
 - **WhatWeb**: Web technology identifier
+- **httptap**: HTTP/TLS traffic visualization
 - **Bandit**: Python security linter
 - **Safety**: Python package vulnerability checker
 - **Semgrep**: Static analysis tool
